@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COMBAT DISTRICTS | HACKVERSE 2.0</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .district-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 4rem;
+        }
+
+        .district-card {
+            background: rgba(10, 0, 15, 0.85);
+            border: 1px solid rgba(255, 0, 60, 0.25);
+            border-top: 3px solid var(--primary-red);
+            padding: 2.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .district-card:hover {
+            border-color: var(--primary-red);
+            box-shadow: 0 0 25px rgba(255, 0, 60, 0.2);
+            transform: translateY(-4px);
+        }
+
+        .district-id {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            letter-spacing: 0.35em;
+            color: var(--primary-red);
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .district-name {
+            font-family: 'Orbitron', sans-serif;
+            color: #ffffff;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+        }
+
+        .district-desc {
+            font-family: 'Rajdhani', sans-serif;
+            color: #aaaaaa;
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .bottom-nav {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .district-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="announcement-banner">
+        REGISTRATIONS OPENING SOON — STAY TUNED
+    </div>
+
+    <nav>
+        <a href="index.html" class="logo">HV_2.0</a>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="mission.html">Mission</a></li>
+            <li><a href="districts.html" class="active">Districts</a></li>
+            <li><a href="bounty.html">Bounty</a></li>
+            <li><a href="timeline.html">Timeline</a></li>
+            <li><a href="command.html">Command</a></li>
+            <li><a href="faq.html">Faq</a></li>
+        </ul>
+        <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+
+    <div class="mobile-menu">
+        <span class="close-menu">&times;</span>
+        <a href="index.html">Home</a>
+        <a href="mission.html">Mission</a>
+        <a href="districts.html">Districts</a>
+        <a href="bounty.html">Bounty</a>
+        <a href="timeline.html">Timeline</a>
+        <a href="command.html">Command</a>
+        <a href="faq.html">Faq</a>
+    </div>
+
+    <main class="container">
+        <h1 class="page-title">COMBAT DISTRICTS</h1>
+        <p class="page-subtitle">Choose your battleground.</p>
+
+        <div class="district-grid">
+            <div class="district-card">
+                <span class="district-id">DISTRICT // 01</span>
+                <h3 class="district-name">AI & MACHINE LEARNING</h3>
+                <p class="district-desc">Engineer explainable AI tools to eliminate bias in high-stakes automated decision-making. Build trust in the neural networks of the future.</p>
+            </div>
+            <div class="district-card">
+                <span class="district-id">DISTRICT // 02</span>
+                <h3 class="district-name">EDUCATION TECH</h3>
+                <p class="district-desc">Design adaptive, holographic learning platforms that personalize the educational experience for students in resource-scarce environments.</p>
+            </div>
+            <div class="district-card">
+                <span class="district-id">DISTRICT // 03</span>
+                <h3 class="district-name">HEALTHCARE</h3>
+                <p class="district-desc">Forge low-cost diagnostics and mental health support systems. Use code to bridge the gap in healthcare accessibility for underserved districts.</p>
+            </div>
+            <div class="district-card">
+                <span class="district-id">DISTRICT // 04</span>
+                <h3 class="district-name">GENDER EQUALITY</h3>
+                <p class="district-desc">Develop tactical solutions promoting safety, equal opportunity, and digital inclusion. Secure the rights of all citizens in the cyber-metropolis.</p>
+            </div>
+            <div class="district-card">
+                <span class="district-id">DISTRICT // 05</span>
+                <h3 class="district-name">AGRITECH</h3>
+                <p class="district-desc">Build autonomous crop monitoring and supply-chain transparency systems. Empower smallholder farmers with the power of high-tech data.</p>
+            </div>
+            <div class="district-card">
+                <span class="district-id">DISTRICT // 06</span>
+                <h3 class="district-name">OPEN INNOVATION</h3>
+                <p class="district-desc">The wild card. Build any solution creating profound social, environmental, or civic impact. Your vision. Your rules. Your rebellion.</p>
+            </div>
+        </div>
+
+        <div class="bottom-nav">
+            <a href="mission.html" class="btn">&larr; MISSION</a>
+            <a href="bounty.html" class="btn">BOUNTY BOARD &rarr;</a>
+        </div>
+    </main>
+
+    <footer>
+        <div class="kanji-bg">終</div>
+        <p class="footer-dept">MADE BY DEPT. OF MCA</p>
+        <p class="footer-copyright">© 2026 HACKVERSE 2.0 // BMSIT&M // ALL RIGHTS RESERVED</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

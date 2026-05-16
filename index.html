@@ -1,15 +1,272 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>HACKVERSE 2.0 | TECH WITH HUMAN TOUCH</title>
-    <meta name="description" content="HACKVERSE 2.0 - A massive futuristic Neo Tokyo cyberpunk hackathon universe. Code with Honor. Build the Future." />
-    <meta name="keywords" content="Hackathon, BMSIT&M, Bangalore, Cyberpunk, Neo Tokyo, AI, ML, Tech Event" />
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HACKVERSE 2.0 | HOME</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Page-specific Hero Styles */
+        .hero-section {
+            height: 100vh;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            overflow: hidden;
+            background-color: #04000a; /* Layer 0: Base color */
+        }
+
+        .bg-layer-1 {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('bg-samurai.png') no-repeat center center;
+            background-size: cover;
+            z-index: 0;
+        }
+
+        .bg-layer-2-samurai {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            height: 50vh;
+            width: auto;
+            z-index: 2;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        .bg-layer-3-rain {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 3;
+            pointer-events: none;
+        }
+
+        .rain-drop {
+            position: absolute;
+            width: 1px;
+            background: white;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(110vh);
+            }
+        }
+
+        .bg-layer-4-fade {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent 60%, #04000a 100%);
+            z-index: 4;
+            pointer-events: none;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            max-width: 900px;
+            padding: 0 20px;
+        }
+
+        .hero-label {
+            font-family: 'JetBrains Mono', monospace;
+            letter-spacing: 0.4em;
+            color: #666666;
+            font-size: 0.7rem;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+        }
+
+        .katakana {
+            font-family: 'Orbitron', sans-serif; /* Fallback to orbitron if JP font not loaded */
+            font-size: 2rem;
+            color: var(--primary-red);
+            letter-spacing: 8px;
+            margin-bottom: 0.5rem;
+            opacity: 0.8;
+        }
+
+        .hero-title {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            color: #ffffff;
+            font-size: clamp(3rem, 10vw, 7rem);
+            line-height: 1;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 0 40px #ff003c, 0 0 80px #ff003c;
+        }
+
+        .hero-tagline {
+            font-family: 'Orbitron', sans-serif;
+            color: #ff003c;
+            font-size: 1.2rem;
+            letter-spacing: 0.25em;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        .hero-secondary {
+            font-family: 'Rajdhani', sans-serif;
+            color: #666666;
+            font-size: 0.85rem;
+            letter-spacing: 0.3em;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+        }
+
+        .hero-subtext {
+            color: #888888;
+            font-family: 'Rajdhani', sans-serif;
+            font-style: italic;
+            font-size: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .cta-container {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-large {
+            padding: 1rem 3rem;
+            font-size: 1rem;
+            border-width: 2px;
+        }
+
+        .btn-large:hover {
+            transform: scale(1.02);
+        }
+
+        /* Samurai Shape */
+        .samurai-silhouette {
+            fill: #120000;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="announcement-banner">
+        REGISTRATIONS OPENING SOON — STAY TUNED
+    </div>
+
+    <nav>
+        <a href="index.html" class="logo">HV_2.0</a>
+        <ul class="nav-links">
+            <li><a href="index.html" class="active">Home</a></li>
+            <li><a href="mission.html">Mission</a></li>
+            <li><a href="districts.html">Districts</a></li>
+            <li><a href="bounty.html">Bounty</a></li>
+            <li><a href="timeline.html">Timeline</a></li>
+            <li><a href="command.html">Command</a></li>
+            <li><a href="faq.html">Faq</a></li>
+        </ul>
+        <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+
+    <div class="mobile-menu">
+        <span class="close-menu">&times;</span>
+        <a href="index.html">Home</a>
+        <a href="mission.html">Mission</a>
+        <a href="districts.html">Districts</a>
+        <a href="bounty.html">Bounty</a>
+        <a href="timeline.html">Timeline</a>
+        <a href="command.html">Command</a>
+        <a href="faq.html">Faq</a>
+    </div>
+
+    <main>
+        <section class="hero-section">
+            <div class="bg-layer-1"></div>
+            
+            <!-- Layer 2: Samurai Silhouette -->
+            <div class="bg-layer-2-samurai">
+                <svg viewBox="0 0 100 200" height="100%" xmlns="http://www.w3.org/2000/svg">
+                    <path class="samurai-silhouette" d="M50 10 L45 20 L40 40 L35 70 L30 100 L25 140 L20 180 L20 200 L80 200 L80 180 L75 140 L70 100 L65 70 L60 40 L55 20 Z" />
+                    <!-- Simplified Samurai Shape -->
+                    <circle cx="50" cy="25" r="10" class="samurai-silhouette" />
+                    <rect x="42" y="35" width="16" height="40" class="samurai-silhouette" />
+                    <path d="M42 45 L20 100 L25 105 L42 55 Z" class="samurai-silhouette" />
+                    <path d="M58 45 L80 100 L75 105 L58 55 Z" class="samurai-silhouette" />
+                    <path d="M42 75 L35 150 L65 150 L58 75 Z" class="samurai-silhouette" />
+                    <rect x="35" y="150" width="10" height="50" class="samurai-silhouette" />
+                    <rect x="55" y="150" width="10" height="50" class="samurai-silhouette" />
+                </svg>
+            </div>
+
+            <div class="bg-layer-3-rain" id="rain-container"></div>
+            <div class="bg-layer-4-fade"></div>
+
+            <div class="hero-content">
+                <p class="hero-label">DEPT. OF MCA PRESENTS</p>
+                <div class="katakana">ハックバース 2.0</div>
+                <h1 class="hero-title">HACKVERSE 2.0</h1>
+                <p class="hero-tagline">Code with Honor. Build the Future.</p>
+                <p class="hero-secondary">TECH WITH HUMAN TOUCH</p>
+                <p class="hero-subtext">Where sleepless minds engineer tomorrow.</p>
+                
+                <div class="cta-container">
+                    <a href="mission.html" class="btn btn-large" style="box-shadow: 0 0 20px rgba(255,0,60,0.4);">INITIALIZE PROTOCOL</a>
+                </div>
+                <div class="cta-container" style="margin-top: 1.5rem;">
+                    <a href="districts.html" class="btn">VIEW DISTRICTS &rarr;</a>
+                    <a href="bounty.html" class="btn">SEE BOUNTY &rarr;</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="kanji-bg">終</div>
+        <p class="footer-dept">MADE BY DEPT. OF MCA</p>
+        <p class="footer-copyright">© 2026 HACKVERSE 2.0 // BMSIT&M // ALL RIGHTS RESERVED</p>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Hero Rain Effect
+        const rainContainer = document.getElementById('rain-container');
+        const rainCount = 30;
+
+        for (let i = 0; i < rainCount; i++) {
+            const drop = document.createElement('div');
+            drop.className = 'rain-drop';
+            
+            const left = Math.random() * 100;
+            const height = 50 + Math.random() * 70;
+            const opacity = 0.08 + Math.random() * 0.07;
+            const duration = 1.5 + Math.random() * 2.5;
+            const delay = Math.random() * 3;
+
+            drop.style.left = left + '%';
+            drop.style.height = height + 'px';
+            drop.style.opacity = opacity;
+            drop.style.top = '-150px';
+            drop.style.animationDuration = duration + 's';
+            drop.style.animationDelay = delay + 's';
+
+            rainContainer.appendChild(drop);
+        }
+    </script>
+</body>
 </html>

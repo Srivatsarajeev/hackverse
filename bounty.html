@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BOUNTY BOARD | HACKVERSE 2.0</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .bounty-container {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            max-width: 900px;
+            margin: 0 auto 4rem;
+        }
+
+        .prize-card {
+            position: relative;
+            background: rgba(10, 0, 15, 0.85);
+            display: flex;
+            flex-direction: column;
+            padding: 3rem;
+            transition: all 0.3s ease;
+        }
+
+        .prize-card.first {
+            border: 2px solid var(--primary-red);
+            box-shadow: 0 0 50px rgba(255, 0, 60, 0.35), inset 0 0 40px rgba(255, 0, 60, 0.05);
+            border-left: 4px solid var(--primary-red);
+        }
+
+        .prize-card.second {
+            border: 1px solid rgba(255, 0, 60, 0.4);
+            box-shadow: 0 0 20px rgba(255, 0, 60, 0.15);
+        }
+
+        .prize-card.third {
+            border: 1px solid rgba(255, 0, 60, 0.15);
+        }
+
+        .badge {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6rem;
+            color: var(--primary-red);
+            letter-spacing: 2px;
+        }
+
+        .prize-label {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--primary-red);
+            font-size: 0.8rem;
+            margin-bottom: 0.5rem;
+            letter-spacing: 2px;
+        }
+
+        .prize-amount {
+            font-family: 'Orbitron', sans-serif;
+            color: #ffffff;
+            font-size: clamp(3.5rem, 12vw, 6rem);
+            line-height: 1;
+            margin-bottom: 0.5rem;
+            font-weight: 900;
+        }
+
+        .prize-amount.silver {
+            font-size: clamp(2.5rem, 9vw, 4rem);
+            color: #cccccc;
+        }
+
+        .prize-amount.bronze {
+            font-size: clamp(2rem, 7vw, 3rem);
+            color: #888888;
+        }
+
+        .prize-subtitle {
+            font-family: 'JetBrains Mono', monospace;
+            color: #666666;
+            font-size: 0.7rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+        }
+
+        .bottom-nav {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="announcement-banner">
+        REGISTRATIONS OPENING SOON — STAY TUNED
+    </div>
+
+    <nav>
+        <a href="index.html" class="logo">HV_2.0</a>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="mission.html">Mission</a></li>
+            <li><a href="districts.html">Districts</a></li>
+            <li><a href="bounty.html" class="active">Bounty</a></li>
+            <li><a href="timeline.html">Timeline</a></li>
+            <li><a href="command.html">Command</a></li>
+            <li><a href="faq.html">Faq</a></li>
+        </ul>
+        <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+
+    <div class="mobile-menu">
+        <span class="close-menu">&times;</span>
+        <a href="index.html">Home</a>
+        <a href="mission.html">Mission</a>
+        <a href="districts.html">Districts</a>
+        <a href="bounty.html">Bounty</a>
+        <a href="timeline.html">Timeline</a>
+        <a href="command.html">Command</a>
+        <a href="faq.html">Faq</a>
+    </div>
+
+    <main class="container">
+        <h1 class="page-title">BOUNTY BOARD</h1>
+
+        <div class="bounty-container">
+            <!-- 1ST PLACE -->
+            <div class="prize-card first">
+                <span class="badge">TOP_PRIORITY</span>
+                <span class="prize-label">1ST PLACE</span>
+                <div class="prize-amount">₹20,000</div>
+                <span class="prize-subtitle">CHAMPION BOUNTY</span>
+            </div>
+
+            <!-- 2ND PLACE -->
+            <div class="prize-card second">
+                <span class="prize-label">2ND PLACE</span>
+                <div class="prize-amount silver">₹12,000</div>
+                <span class="prize-subtitle">SILVER PROTOCOL REWARD</span>
+            </div>
+
+            <!-- 3RD PLACE -->
+            <div class="prize-card third">
+                <span class="prize-label">3RD PLACE</span>
+                <div class="prize-amount bronze">₹8,000</div>
+                <span class="prize-subtitle">BRONZE PROTOCOL REWARD</span>
+            </div>
+        </div>
+
+        <div class="bottom-nav">
+            <a href="districts.html" class="btn">&larr; DISTRICTS</a>
+            <a href="timeline.html" class="btn">TIMELINE &rarr;</a>
+        </div>
+    </main>
+
+    <footer>
+        <div class="kanji-bg">終</div>
+        <p class="footer-dept">MADE BY DEPT. OF MCA</p>
+        <p class="footer-copyright">© 2026 HACKVERSE 2.0 // BMSIT&M // ALL RIGHTS RESERVED</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

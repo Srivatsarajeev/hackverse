@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MISSION DIRECTIVE | HACKVERSE 2.0</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .page-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('bg-samurai.png') no-repeat center center;
+            background-size: cover;
+            opacity: 0.15;
+            z-index: -1;
+        }
+
+        .mission-content {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .mission-heading {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--primary-red);
+            font-size: clamp(2rem, 5vw, 3rem);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        .heading-accent {
+            width: 60px;
+            height: 2px;
+            background: var(--primary-red);
+            margin: 0.5rem auto 2rem;
+        }
+
+        .mission-text {
+            font-family: 'Rajdhani', sans-serif;
+            color: #cccccc;
+            font-size: 1.05rem;
+            line-height: 1.8;
+            max-width: 680px;
+            margin: 0 auto 3rem;
+        }
+
+        .highlight-red {
+            color: var(--primary-red);
+            font-weight: 700;
+        }
+
+        .underline-red {
+            border-bottom: 2px solid var(--primary-red);
+        }
+
+        .sub-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .sub-card {
+            background: rgba(255, 0, 60, 0.04);
+            border: 1px solid rgba(255, 0, 60, 0.25);
+            border-top: 3px solid var(--primary-red);
+            padding: 2.5rem;
+            text-align: left;
+        }
+
+        .card-label {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--primary-red);
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            letter-spacing: 2px;
+        }
+
+        .card-text {
+            font-family: 'Rajdhani', sans-serif;
+            color: #cccccc;
+            font-size: 1rem;
+        }
+
+        .bottom-nav {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="announcement-banner">
+        REGISTRATIONS OPENING SOON — STAY TUNED
+    </div>
+
+    <nav>
+        <a href="index.html" class="logo">HV_2.0</a>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="mission.html" class="active">Mission</a></li>
+            <li><a href="districts.html">Districts</a></li>
+            <li><a href="bounty.html">Bounty</a></li>
+            <li><a href="timeline.html">Timeline</a></li>
+            <li><a href="command.html">Command</a></li>
+            <li><a href="faq.html">Faq</a></li>
+        </ul>
+        <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+
+    <div class="mobile-menu">
+        <span class="close-menu">&times;</span>
+        <a href="index.html">Home</a>
+        <a href="mission.html">Mission</a>
+        <a href="districts.html">Districts</a>
+        <a href="bounty.html">Bounty</a>
+        <a href="timeline.html">Timeline</a>
+        <a href="command.html">Command</a>
+        <a href="faq.html">Faq</a>
+    </div>
+
+    <div class="page-bg"></div>
+
+    <main class="container">
+        <div class="mission-content">
+            <h1 class="mission-heading">MISSION DIRECTIVE</h1>
+            <div class="heading-accent"></div>
+            <p class="mission-text">
+                Hackverse 2.0 is a <span class="highlight-red">two-stage inter-college hackathon</span> challenging innovators to build meaningful technology. This edition calls you to tackle real-world problems across six high-impact domains. Whether designing for a rural classroom or an urban clinic — <span class="underline-red">your code has a consequence.</span>
+            </p>
+        </div>
+
+        <div class="sub-cards">
+            <div class="sub-card">
+                <h3 class="card-label">VENUE</h3>
+                <p class="card-text">
+                    Dept. of MCA, BMSIT&M, Yelahanka. Bangalore 560064. An authorized high-security innovation zone.
+                </p>
+            </div>
+            <div class="sub-card">
+                <h3 class="card-label">ELIGIBILITY</h3>
+                <p class="card-text">
+                    Open to all current BCA and MCA students. Assemble your tactical unit (2–4 members) and prepare for deployment.
+                </p>
+            </div>
+        </div>
+
+        <div class="bottom-nav">
+            <a href="index.html" class="btn">&larr; BACK TO HOME</a>
+            <a href="districts.html" class="btn">EXPLORE DISTRICTS &rarr;</a>
+        </div>
+    </main>
+
+    <footer>
+        <div class="kanji-bg">終</div>
+        <p class="footer-dept">MADE BY DEPT. OF MCA</p>
+        <p class="footer-copyright">© 2026 HACKVERSE 2.0 // BMSIT&M // ALL RIGHTS RESERVED</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

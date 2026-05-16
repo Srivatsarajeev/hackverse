@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INITIALIZATION | HACKVERSE 2.0</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .countdown-wrap {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 5rem;
+        }
+
+        .countdown-unit {
+            background: rgba(10, 0, 15, 0.85);
+            border: 1px solid rgba(255, 0, 60, 0.3);
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .countdown-number {
+            font-family: 'Orbitron', sans-serif;
+            color: #ffffff;
+            font-size: clamp(2.5rem, 9vw, 5rem);
+            line-height: 1;
+            margin-bottom: 0.5rem;
+            animation: pulse 1s infinite alternate;
+        }
+
+        @keyframes pulse {
+            from { text-shadow: 0 0 10px rgba(255, 0, 60, 0); }
+            to { text-shadow: 0 0 20px rgba(255, 0, 60, 0.6); }
+        }
+
+        .countdown-label {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--primary-red);
+            font-size: 0.6rem;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+        }
+
+        /* Vertical Timeline */
+        .timeline-log {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto 4rem;
+            padding-left: 3rem;
+        }
+
+        .timeline-log::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: rgba(255, 0, 60, 0.3);
+        }
+
+        .timeline-entry {
+            position: relative;
+            margin-bottom: 3rem;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: -3rem;
+            top: 0.5rem;
+            width: 12px;
+            height: 12px;
+            background: var(--primary-red);
+            border-radius: 50%;
+            transform: translateX(-5px);
+            box-shadow: 0 0 10px var(--primary-red);
+        }
+
+        .timeline-card {
+            background: rgba(255, 0, 60, 0.04);
+            border-left: 3px solid var(--primary-red);
+            padding: 2rem;
+        }
+
+        .timeline-date {
+            font-family: 'Orbitron', sans-serif;
+            color: #ffffff;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-round {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--primary-red);
+            letter-spacing: 0.3em;
+            font-size: 0.8rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .timeline-desc {
+            font-family: 'Rajdhani', sans-serif;
+            color: #aaaaaa;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .bottom-nav {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .countdown-wrap {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="announcement-banner">
+        REGISTRATIONS OPENING SOON — STAY TUNED
+    </div>
+
+    <nav>
+        <a href="index.html" class="logo">HV_2.0</a>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="mission.html">Mission</a></li>
+            <li><a href="districts.html">Districts</a></li>
+            <li><a href="bounty.html">Bounty</a></li>
+            <li><a href="timeline.html" class="active">Timeline</a></li>
+            <li><a href="command.html">Command</a></li>
+            <li><a href="faq.html">Faq</a></li>
+        </ul>
+        <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+
+    <div class="mobile-menu">
+        <span class="close-menu">&times;</span>
+        <a href="index.html">Home</a>
+        <a href="mission.html">Mission</a>
+        <a href="districts.html">Districts</a>
+        <a href="bounty.html">Bounty</a>
+        <a href="timeline.html">Timeline</a>
+        <a href="command.html">Command</a>
+        <a href="faq.html">Faq</a>
+    </div>
+
+    <main class="container">
+        <h1 class="page-title">INITIALIZATION COMMENCES</h1>
+
+        <div class="countdown-wrap">
+            <div class="countdown-unit">
+                <div class="countdown-number" id="days">00</div>
+                <div class="countdown-label">DAYS</div>
+            </div>
+            <div class="countdown-unit">
+                <div class="countdown-number" id="hours">00</div>
+                <div class="countdown-label">HOURS</div>
+            </div>
+            <div class="countdown-unit">
+                <div class="countdown-number" id="minutes">00</div>
+                <div class="countdown-label">MINUTES</div>
+            </div>
+            <div class="countdown-unit">
+                <div class="countdown-number" id="seconds">00</div>
+                <div class="countdown-label">SECONDS</div>
+            </div>
+        </div>
+
+        <div class="timeline-log">
+            <div class="timeline-entry">
+                <div class="timeline-dot"></div>
+                <div class="timeline-card">
+                    <h3 class="timeline-date">27th MAY, 2026</h3>
+                    <span class="timeline-round">ONLINE ROUND</span>
+                    <p class="timeline-desc">The preliminary digital pitch phase. Present your neural concepts to the high command from anywhere in the world.</p>
+                </div>
+            </div>
+            <div class="timeline-entry">
+                <div class="timeline-dot"></div>
+                <div class="timeline-card">
+                    <h3 class="timeline-date">30th MAY, 2026</h3>
+                    <span class="timeline-round">OFFLINE FINALE</span>
+                    <p class="timeline-desc">The grand physical standoff. The top 20 chosen teams will breach the perimeter at the Dept. of MCA for the final build.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="bottom-nav">
+            <a href="bounty.html" class="btn">&larr; BOUNTY</a>
+            <a href="command.html" class="btn">COMMAND CENTER &rarr;</a>
+        </div>
+    </main>
+
+    <footer>
+        <div class="kanji-bg">終</div>
+        <p class="footer-dept">MADE BY DEPT. OF MCA</p>
+        <p class="footer-copyright">© 2026 HACKVERSE 2.0 // BMSIT&M // ALL RIGHTS RESERVED</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

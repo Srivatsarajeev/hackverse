@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INTEL QUERY | HACKVERSE 2.0</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto 4rem;
+        }
+
+        .faq-item {
+            border-bottom: 1px solid rgba(255, 0, 60, 0.3);
+            margin-bottom: 1rem;
+        }
+
+        .faq-question {
+            padding: 1.5rem 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-family: 'Rajdhani', sans-serif;
+            color: #eeeeee;
+            font-size: 1.1rem;
+            transition: color 0.3s ease;
+        }
+
+        .faq-item.open .faq-question {
+            color: var(--primary-red);
+        }
+
+        .plus-icon {
+            color: var(--primary-red);
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item.open .plus-icon {
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+            font-family: 'Rajdhani', sans-serif;
+            color: #aaaaaa;
+            line-height: 1.7;
+            padding-bottom: 0;
+        }
+
+        .faq-item.open .faq-answer {
+            max-height: 500px;
+            padding-bottom: 1.5rem;
+        }
+
+        .cta-section {
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        .btn-join {
+            font-size: 1.2rem;
+            padding: 1.5rem 4rem;
+            border-width: 2px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="announcement-banner">
+        REGISTRATIONS OPENING SOON — STAY TUNED
+    </div>
+
+    <nav>
+        <a href="index.html" class="logo">HV_2.0</a>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="mission.html">Mission</a></li>
+            <li><a href="districts.html">Districts</a></li>
+            <li><a href="bounty.html">Bounty</a></li>
+            <li><a href="timeline.html">Timeline</a></li>
+            <li><a href="command.html">Command</a></li>
+            <li><a href="faq.html" class="active">Faq</a></li>
+        </ul>
+        <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+
+    <div class="mobile-menu">
+        <span class="close-menu">&times;</span>
+        <a href="index.html">Home</a>
+        <a href="mission.html">Mission</a>
+        <a href="districts.html">Districts</a>
+        <a href="bounty.html">Bounty</a>
+        <a href="timeline.html">Timeline</a>
+        <a href="command.html">Command</a>
+        <a href="faq.html">Faq</a>
+    </div>
+
+    <main class="container">
+        <h1 class="page-title">INTEL QUERY</h1>
+
+        <div class="faq-container">
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>What exactly is Hackverse 2.0?</span>
+                    <span class="plus-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    Hackverse 2.0 is a high-octane inter-college hackathon hosted by the Dept. of MCA at BMSIT&M. It's a two-stage battle of wits where ancient discipline meets futuristic innovation. We challenge BCA and MCA students to build meaningful, human-centered technology that solves real-world problems in the cyber-metropolis.
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Who is authorized to participate?</span>
+                    <span class="plus-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    Participation is exclusively open to currently enrolled BCA and MCA students from any recognized college. Whether you are a lone-wolf coder or a tactical team player, as long as you're a student in these streams, you're eligible to join the rebellion.
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>What are the tactical constraints on team size?</span>
+                    <span class="plus-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    Tactical units must consist of 2 to 4 members. We believe in the power of synergy—diverse skill sets coming together to breach complex problems. Choose your teammates wisely.
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Will there be sustenance and connectivity provided?</span>
+                    <span class="plus-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    AFFIRMATIVE. We provide high-speed tactical Wi-Fi and full sustenance (meals and snacks) throughout the duration of the offline finale. All these resources are PROVIDED AT NO COST to the participants. Focus on your code; we'll handle the logistics.
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Where and when is the final standoff?</span>
+                    <span class="plus-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    The final offline build-off will take place on May 30, 2026, at the Dept. of MCA, BMSIT&M, Yelahanka, Bangalore. Only the top 20 teams from the preliminary online pitch will be authorized to enter the venue.
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>What is the bounty for success?</span>
+                    <span class="plus-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    The high command has authorized a total prize pool of ₹40,000. The breakdown is as follows: 1st Place - ₹20,000, 2nd Place - ₹12,000, and 3rd Place - ₹8,000. Additionally, top performers gain massive industry exposure and networking opportunities.
+                </div>
+            </div>
+        </div>
+
+        <div class="cta-section">
+            <a href="#" class="btn btn-join">JOIN THE REBELLION &rarr;</a>
+        </div>
+    </main>
+
+    <footer>
+        <div class="kanji-bg">終</div>
+        <p class="footer-dept">MADE BY DEPT. OF MCA</p>
+        <p class="footer-copyright">© 2026 HACKVERSE 2.0 // BMSIT&M // ALL RIGHTS RESERVED</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
