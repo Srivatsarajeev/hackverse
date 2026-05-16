@@ -116,7 +116,7 @@ function App() {
       </section>
 
       {/* Info Panels */}
-      <section id="countdown">
+      <section id="countdown" className="info-section">
         <div className="grid-container">
            <div className="card">
               <h3>ONLINE ROUND</h3>
@@ -141,24 +141,24 @@ function App() {
            </div>
         </div>
 
-        <div style={{ textAlign: 'center', marginTop: '100px' }}>
-          <h2 className="section-title">INITIALIZATION COMMENCES</h2>
-          <div className="countdown-wrap horizontal-countdown">
+        <div style={{ textAlign: 'center', marginTop: '80px' }}>
+          <h2 className="section-title" style={{ fontSize: '2rem', marginBottom: '3rem' }}>INITIALIZATION COMMENCES</h2>
+          <div className="countdown-wrap new-countdown">
             <div className="countdown-item">
-              <span>{timeLeft.days.toString().padStart(2, '0')}</span>
-              <span className="unit">Days</span>
+              <div className="countdown-box"><span>{timeLeft.days.toString().padStart(2, '0')}</span></div>
+              <span className="unit-label">DAYS</span>
             </div>
             <div className="countdown-item">
-              <span>{timeLeft.hours.toString().padStart(2, '0')}</span>
-              <span className="unit">Hours</span>
+              <div className="countdown-box"><span>{timeLeft.hours.toString().padStart(2, '0')}</span></div>
+              <span className="unit-label">HOURS</span>
             </div>
             <div className="countdown-item">
-              <span>{timeLeft.minutes.toString().padStart(2, '0')}</span>
-              <span className="unit">Minutes</span>
+              <div className="countdown-box"><span>{timeLeft.minutes.toString().padStart(2, '0')}</span></div>
+              <span className="unit-label">MINUTES</span>
             </div>
             <div className="countdown-item">
-              <span>{timeLeft.seconds.toString().padStart(2, '0')}</span>
-              <span className="unit">Seconds</span>
+              <div className="countdown-box"><span>{timeLeft.seconds.toString().padStart(2, '0')}</span></div>
+              <span className="unit-label">SECONDS</span>
             </div>
           </div>
         </div>

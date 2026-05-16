@@ -447,47 +447,82 @@ section {
   box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
 }
 
-/* Horizontal Countdown Override */
-.horizontal-countdown {
+/* Spacing Fixes */
+.info-section {
+  padding-top: 50px !important;
+  padding-bottom: 80px !important;
+}
+
+/* New Countdown Design (Exact Match) */
+.new-countdown {
   display: flex !important;
-  flex-direction: row !important;
-  flex-wrap: nowrap !important;
   justify-content: center;
   gap: 1.5rem;
+  flex-wrap: nowrap;
   width: 100%;
-  max-width: 100vw;
-  padding: 20px 10px;
 }
 
-.countdown-item {
-  flex: 0 0 auto;
-  min-width: 140px;
-  padding: 1.5rem 1rem;
-  background: rgba(255, 0, 0, 0.05);
-  border: 1px solid rgba(255, 0, 0, 0.2);
-  clip-path: polygon(15% 0, 100% 0, 100% 85%, 85% 100%, 0 100%, 0 15%);
+.new-countdown .countdown-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  background: transparent !important;
+  border: none !important;
+  clip-path: none !important;
+  padding: 0 !important;
+  min-width: unset !important;
 }
 
-.countdown-item span:first-child {
-  font-size: clamp(2rem, 5vw, 4.5rem);
+.countdown-box {
+  background: #0d0d0d;
+  width: 100px;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.countdown-box span {
+  font-family: 'Michroma', sans-serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #fff;
+  text-shadow: none !important;
+}
+
+.unit-label {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-gray);
+  letter-spacing: 2px;
 }
 
 @media (max-width: 768px) {
-  .horizontal-countdown {
-    gap: 0.5rem;
+  .new-countdown {
+    gap: 0.8rem;
     overflow-x: auto;
+    padding: 10px;
     justify-content: flex-start;
-    -webkit-overflow-scrolling: touch;
   }
-  .countdown-item {
-    min-width: 100px;
-    padding: 1rem 0.5rem;
+  
+  .countdown-box {
+    width: 70px;
+    height: 70px;
+    border-radius: 12px;
   }
-  .countdown-item span:first-child {
-    font-size: 2rem;
+  
+  .countdown-box span {
+    font-size: 1.5rem;
   }
-  .countdown-item .unit {
+  
+  .unit-label {
     font-size: 0.6rem;
+    letter-spacing: 1px;
   }
 }
 
