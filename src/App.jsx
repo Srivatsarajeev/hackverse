@@ -44,23 +44,16 @@ function App() {
       <div className="rain-overlay"></div>
       <div className="scanlines"></div>
 
-      {/* Notification Popup */}
+      {/* Simple Notification Banner */}
       {showNotif && (
-        <div className="popup-overlay">
-          <div className="popup-content card highlight">
-            <img src="/samurai-icon.png" alt="Samurai Icon" className="popup-icon" />
-            <h2 style={{ fontFamily: 'Orbitron', color: 'var(--primary-red)', marginBottom: '1rem' }}>SYSTEM ALERT</h2>
-            <p style={{ fontSize: '1.2rem', fontWeight: 600, letterSpacing: '2px' }}>REGISTRATIONS OPENING SOON</p>
-            <p style={{ color: 'var(--text-gray)', marginTop: '0.5rem', fontSize: '0.9rem' }}>Secure your transit pass for the Neo Tokyo breach. Stay tuned to this frequency.</p>
-            <button className="btn-initialize" style={{ marginTop: '2rem', fontSize: '1rem', padding: '10px 30px' }} onClick={() => setShowNotif(false)}>ACKNOWLEDGE & DISMISS</button>
-          </div>
+        <div className="notif-banner">
+          <span>REGISTRATIONS OPENING SOON — STAY TUNED</span>
+          <button onClick={() => setShowNotif(false)}>×</button>
         </div>
       )}
 
-      {/* Hero Section - Matching the Image */}
+      {/* Hero Section - Samurai Theme */}
       <section className="hero">
-        <img src="/samurai-icon.png" alt="Samurai Mask" style={{ width: '80px', marginBottom: '2rem', filter: 'drop-shadow(0 0 10px var(--primary-red))' }} />
-        
         {/* Holographic Screens */}
         <div className="hologram-screen screen-1">
           <p>// INITIALIZING SYSTEM...</p>
@@ -126,7 +119,7 @@ function App() {
 
         <div style={{ textAlign: 'center', marginTop: '100px' }}>
           <h2 className="section-title">INITIALIZATION COMMENCES</h2>
-          <div className="countdown-wrap">
+          <div className="countdown-wrap horizontal-countdown">
             <div className="countdown-item">
               <span>{timeLeft.days.toString().padStart(2, '0')}</span>
               <span>Days</span>
