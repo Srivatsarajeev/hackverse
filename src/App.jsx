@@ -148,15 +148,15 @@ function App() {
       </section>
 
       {/* Mission Directive */}
-      <section id="about" style={{ background: 'rgba(0,0,0,0.6)', display: 'flex', gap: '4rem', alignItems: 'center', flexWrap: 'wrap' }}>
-        <div style={{ flex: 1, minWidth: '300px' }}>
+      <section id="about" className="about-section">
+        <div className="about-text">
           <h2 className="section-title" style={{ textAlign: 'left' }}>MISSION DIRECTIVE</h2>
           <p style={{ fontSize: '1.5rem', lineHeight: 1.8, color: '#fff', fontWeight: 400, fontFamily: 'Rajdhani' }}>
             Hackverse 2.0 is a <span style={{ color: 'var(--primary-red)', fontWeight: 700 }}>two-stage inter-college hackathon</span> challenging innovators to build meaningful technology. This edition calls you to tackle real-world problems across six high-impact domains. Whether designing for a rural classroom or an urban clinic — <span style={{ borderBottom: '2px solid var(--primary-red)' }}>your code has a consequence.</span>
           </p>
         </div>
-        <div style={{ flex: 1, minWidth: '300px', textAlign: 'center' }}>
-          <img src="/samurai-standing.png" alt="Cyber Samurai Standing" style={{ width: '100%', maxWidth: '500px', clipPath: 'polygon(10% 0, 100% 0, 90% 100%, 0 100%)', border: '2px solid var(--primary-red)' }} />
+        <div className="about-image">
+          <img src="/samurai-standing.png" alt="Cyber Samurai Standing" />
         </div>
       </section>
 
@@ -237,14 +237,14 @@ function App() {
            </div>
            <div className="card">
               <h3 style={{ fontSize: '1rem', color: 'var(--text-gray)' }}>STUDENT OPS</h3>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+              <div className="ops-grid">
                  {[
                    { name: 'Srigouri', phone: '8123280889' },
                    { name: 'Chetan', phone: '9515997994' },
                    { name: 'Shehnaaz', phone: '8971388110' },
                    { name: 'Gnanesh', phone: '9535197496' }
                  ].map((stud) => (
-                   <div key={stud.name}>
+                   <div key={stud.name} className="ops-item">
                       <p style={{ fontSize: '1.2rem', fontWeight: 700 }}>{stud.name}</p>
                       <p style={{ fontSize: '0.8rem', color: 'var(--primary-red)' }}>{stud.phone}</p>
                    </div>
