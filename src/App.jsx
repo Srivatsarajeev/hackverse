@@ -9,7 +9,8 @@ function App() {
   });
 
   const [activeFaq, setActiveFaq] = useState(null);
-  const [showNotif, setShowNotif] = useState(true);
+  const [showNotif, setShowNotif] = useState(false);
+  const [isExplored, setIsExplored] = useState(false);
 
   useEffect(() => {
     const targetDate = new Date('May 30, 2026 00:00:00').getTime();
@@ -33,9 +34,32 @@ function App() {
     return () => clearInterval(timer);
   }, []);
 
+  const handleExplore = () => {
+    setIsExplored(true);
+    setTimeout(() => setShowNotif(true), 1000);
+  };
+
   const toggleFaq = (index) => {
     setActiveFaq(activeFaq === index ? null : index);
   };
+
+  if (!isExplored) {
+    return (
+      <div className="intro-screen">
+        <div className="site-bg"></div>
+        <div className="scanlines"></div>
+        <div className="intro-content">
+          <p className="intro-presents">DEPT. OF MCA PRESENTS</p>
+          <h1 className="intro-title">HACKVERSE 2.0</h1>
+          <p className="intro-powered">Powered by</p>
+          <h2 className="intro-team">HACKVERSE TEAM</h2>
+          <button className="explore-btn" onClick={handleExplore}>
+            Explore More &rarr;
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="app-container">
@@ -96,24 +120,24 @@ function App() {
         <div className="grid-container">
            <div className="card">
               <h3>ONLINE ROUND</h3>
-              <p style={{ fontSize: '2.5rem', fontWeight: 700, color: '#fff', fontFamily: 'Orbitron' }}>27th MAY</p>
+              <p style={{ fontSize: '2rem', fontWeight: 700, color: '#fff', fontFamily: 'Orbitron' }}>27th MAY</p>
               <p style={{ fontSize: '0.9rem', color: 'var(--text-gray)', marginTop: '0.5rem' }}>The preliminary digital pitch phase. Present your neural concepts to the high command from anywhere in the world.</p>
            </div>
            <div className="card">
               <h3>OFFLINE FINALE</h3>
-              <p style={{ fontSize: '2.5rem', fontWeight: 700, color: '#fff', fontFamily: 'Orbitron' }}>30th MAY</p>
+              <p style={{ fontSize: '2rem', fontWeight: 700, color: '#fff', fontFamily: 'Orbitron' }}>30th MAY</p>
               <p style={{ fontSize: '0.9rem', color: 'var(--text-gray)', marginTop: '0.5rem' }}>The grand physical standoff. The top 20 chosen teams will breach the perimeter at the Dept. of MCA for the final build.</p>
            </div>
            <div className="card">
               <h3>VENUE</h3>
-              <p style={{ fontSize: '1.8rem', fontWeight: 700, color: '#fff', fontFamily: 'Orbitron' }}>Dept. of MCA</p>
-              <p style={{ fontSize: '0.9rem', color: 'var(--text-gray)' }}>BMSIT&M, Yelahanka. Bangalore 560064. An authorized high-security innovation zone.</p>
+              <p style={{ fontSize: '1.5rem', fontWeight: 700, color: '#fff', fontFamily: 'Orbitron' }}>Dept. of MCA</p>
+              <p style={{ fontSize: '0.8rem', color: 'var(--text-gray)' }}>BMSIT&M, Yelahanka. Bangalore 560064. An authorized high-security innovation zone.</p>
               <p style={{ fontSize: '0.7rem', color: 'var(--primary-red)', marginTop: '1rem', fontWeight: 800 }}>ACCESS PROTOCOLS REQUIRED</p>
            </div>
            <div className="card">
               <h3>ELIGIBILITY</h3>
-              <p style={{ fontSize: '1.8rem', fontWeight: 700, color: '#fff', fontFamily: 'Orbitron' }}>2–4 MEMBERS</p>
-              <p style={{ fontSize: '0.9rem', color: 'var(--text-gray)', marginTop: '0.5rem' }}>Open to all current BCA and MCA students. Assemble your tactical unit and prepare for deployment.</p>
+              <p style={{ fontSize: '1.5rem', fontWeight: 700, color: '#fff', fontFamily: 'Orbitron' }}>2–4 MEMBERS</p>
+              <p style={{ fontSize: '0.8rem', color: 'var(--text-gray)', marginTop: '0.5rem' }}>Open to all current BCA and MCA students. Assemble your tactical unit and prepare for deployment.</p>
            </div>
         </div>
 
@@ -122,19 +146,19 @@ function App() {
           <div className="countdown-wrap horizontal-countdown">
             <div className="countdown-item">
               <span>{timeLeft.days.toString().padStart(2, '0')}</span>
-              <span>Days</span>
+              <span className="unit">Days</span>
             </div>
             <div className="countdown-item">
               <span>{timeLeft.hours.toString().padStart(2, '0')}</span>
-              <span>Hours</span>
+              <span className="unit">Hours</span>
             </div>
             <div className="countdown-item">
               <span>{timeLeft.minutes.toString().padStart(2, '0')}</span>
-              <span>Minutes</span>
+              <span className="unit">Minutes</span>
             </div>
             <div className="countdown-item">
               <span>{timeLeft.seconds.toString().padStart(2, '0')}</span>
-              <span>Seconds</span>
+              <span className="unit">Seconds</span>
             </div>
           </div>
         </div>
@@ -142,18 +166,15 @@ function App() {
 
       {/* Mission Directive */}
       <section id="about" className="about-section">
-        <div className="about-text">
-          <h2 className="section-title" style={{ textAlign: 'left' }}>MISSION DIRECTIVE</h2>
-          <p style={{ fontSize: '1.5rem', lineHeight: 1.8, color: '#fff', fontWeight: 400, fontFamily: 'Rajdhani' }}>
+        <div className="about-text" style={{ maxWidth: '100%', flex: 'none', textAlign: 'center' }}>
+          <h2 className="section-title">MISSION DIRECTIVE</h2>
+          <p style={{ fontSize: '1.5rem', lineHeight: 1.8, color: '#fff', fontWeight: 400, fontFamily: 'Rajdhani', margin: '0 auto', maxWidth: '900px' }}>
             Hackverse 2.0 is a <span style={{ color: 'var(--primary-red)', fontWeight: 700 }}>two-stage inter-college hackathon</span> challenging innovators to build meaningful technology. This edition calls you to tackle real-world problems across six high-impact domains. Whether designing for a rural classroom or an urban clinic — <span style={{ borderBottom: '2px solid var(--primary-red)' }}>your code has a consequence.</span>
           </p>
         </div>
-        <div className="about-image">
-          <img src="/samurai-standing.png" alt="Cyber Samurai Standing" />
-        </div>
       </section>
 
-      <section style={{ padding: '50px 10vw' }}>
+      <section style={{ padding: '50px 5vw' }}>
         <div className="grid-container">
            {[
              { id: '01', title: 'AI & MACHINE LEARNING', desc: 'Engineer explainable AI tools to eliminate bias in high-stakes automated decision-making. Build trust in the neural networks of the future.' },
@@ -166,7 +187,7 @@ function App() {
              <div key={district.id} className="card">
                 <p style={{ color: 'var(--primary-red)', fontWeight: 700, marginBottom: '1rem', fontSize: '0.8rem', letterSpacing: '2px' }}>DISTRICT // {district.id}</p>
                 <h3>{district.title}</h3>
-                <p style={{ fontSize: '1rem', color: 'var(--text-gray)', lineHeight: 1.6 }}>{district.desc}</p>
+                <p style={{ fontSize: '0.9rem', color: 'var(--text-gray)', lineHeight: 1.6 }}>{district.desc}</p>
              </div>
            ))}
         </div>
@@ -178,17 +199,17 @@ function App() {
         <div className="grid-container" style={{ maxWidth: '1000px', margin: '0 auto' }}>
           <div className="card" style={{ textAlign: 'center' }}>
             <h3>2ND PLACE</h3>
-            <p style={{ fontSize: '3rem', fontWeight: 700, color: '#fff', fontFamily: 'Orbitron' }}>₹12,000</p>
+            <p style={{ fontSize: '2.5rem', fontWeight: 700, color: '#fff', fontFamily: 'Orbitron' }}>₹12,000</p>
             <p style={{ fontSize: '0.8rem', color: 'var(--text-gray)', marginTop: '1rem' }}>SILVER PROTOCOL REWARD</p>
           </div>
           <div className="card highlight" style={{ textAlign: 'center' }}>
-            <h3 style={{ fontSize: '3rem' }}>1ST PLACE</h3>
-            <p style={{ fontSize: '5rem', fontWeight: 900, color: 'var(--primary-red)', fontFamily: 'Orbitron' }}>₹20,000</p>
+            <h3 style={{ fontSize: '2.5rem' }}>1ST PLACE</h3>
+            <p style={{ fontSize: '4rem', fontWeight: 900, color: 'var(--primary-red)', fontFamily: 'Orbitron' }}>₹20,000</p>
             <p style={{ fontSize: '1rem', color: '#fff', marginTop: '1rem', fontWeight: 800, letterSpacing: '4px' }}>CHAMPION BOUNTY</p>
           </div>
           <div className="card" style={{ textAlign: 'center' }}>
             <h3>3RD PLACE</h3>
-            <p style={{ fontSize: '3rem', fontWeight: 700, color: '#fff', fontFamily: 'Orbitron' }}>₹8,000</p>
+            <p style={{ fontSize: '2.5rem', fontWeight: 700, color: '#fff', fontFamily: 'Orbitron' }}>₹8,000</p>
             <p style={{ fontSize: '0.8rem', color: 'var(--text-gray)', marginTop: '1rem' }}>BRONZE PROTOCOL REWARD</p>
           </div>
         </div>
@@ -223,9 +244,9 @@ function App() {
         <div className="grid-container">
            <div className="card">
               <h3 style={{ fontSize: '1rem', color: 'var(--text-gray)' }}>FACULTY COMMAND</h3>
-              <p style={{ fontSize: '1.8rem', fontWeight: 700, color: 'var(--primary-red)' }}>Dr. M Sridevi</p>
+              <p style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--primary-red)' }}>Dr. M Sridevi</p>
               <p style={{ fontSize: '0.8rem', textTransform: 'uppercase' }}>Head of Department</p>
-              <p style={{ fontSize: '1.8rem', fontWeight: 700, color: 'var(--primary-red)', marginTop: '1.5rem' }}>Mr. Dwarakanath G V</p>
+              <p style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--primary-red)', marginTop: '1.5rem' }}>Mr. Dwarakanath G V</p>
               <p style={{ fontSize: '0.8rem', textTransform: 'uppercase' }}>Assistant Professor</p>
            </div>
            <div className="card">
@@ -238,7 +259,7 @@ function App() {
                    { name: 'Gnanesh', phone: '9535197496' }
                  ].map((stud) => (
                    <div key={stud.name} className="ops-item">
-                      <p style={{ fontSize: '1.2rem', fontWeight: 700 }}>{stud.name}</p>
+                      <p style={{ fontSize: '1.1rem', fontWeight: 700 }}>{stud.name}</p>
                       <p style={{ fontSize: '0.8rem', color: 'var(--primary-red)' }}>{stud.phone}</p>
                    </div>
                  ))}
@@ -248,8 +269,8 @@ function App() {
       </section>
 
       {/* CTA */}
-      <section style={{ textAlign: 'center', padding: '120px 20px', borderTop: '2px solid var(--primary-red)' }}>
-        <h2 style={{ fontSize: '4rem', color: 'var(--primary-red)', fontFamily: 'Bebas Neue', marginBottom: '3rem' }}>JOIN THE REBELLION</h2>
+      <section style={{ textAlign: 'center', padding: '80px 20px', borderTop: '2px solid var(--primary-red)' }}>
+        <h2 style={{ fontSize: '3rem', color: 'var(--primary-red)', fontFamily: 'Bebas Neue', marginBottom: '2rem' }}>JOIN THE REBELLION</h2>
         <div style={{ display: 'flex', gap: '2rem', justifyContent: 'center', flexWrap: 'wrap' }}>
           <a href="#" className="btn-initialize" style={{ background: 'var(--primary-red)', color: '#fff' }}>REGISTRATION LINK</a>
           <a href="#" className="btn-initialize">WHATSAPP GROUP</a>
