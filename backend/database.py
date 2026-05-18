@@ -3,8 +3,9 @@ import bcrypt
 from pymongo import MongoClient
 from dotenv import load_dotenv
 
-# Load env variables
-load_dotenv()
+# Load env variables from backend directory
+env_path = os.path.join(os.path.dirname(__file__), ".env")
+load_dotenv(env_path)
 
 MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017/hackverse")
 

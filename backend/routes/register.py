@@ -32,12 +32,12 @@ def register_participant(data: ParticipantRegisterSchema):
 
     # Automatically generate Participant ID in matching format (e.g. H4S-2026-4012)
     random_code = random.randint(1000, 9999)
-    participant_id = f"H4S-2026-{random_code}"
+    participant_id = f"HV-2026-{random_code}"
     
     # Make sure participantId is unique
     while registrations_col.find_one({"participantId": participant_id}):
         random_code = random.randint(1000, 9999)
-        participant_id = f"H4S-2026-{random_code}"
+        participant_id = f"HV-2026-{random_code}"
 
     # Prepare document
     new_participant = data.model_dump()
