@@ -1,4 +1,5 @@
 from pydantic import BaseModel, EmailStr, Field
+from typing import Optional
 
 class ParticipantRegisterSchema(BaseModel):
     fullName: str = Field(..., min_length=2, max_length=255)
@@ -12,15 +13,20 @@ class ParticipantRegisterSchema(BaseModel):
     state: str = Field(..., min_length=1)
     city: str = Field(..., min_length=1)
     occupation: str = Field("College Student")
-    collegeName: str = Field(..., min_length=2)
+    
+    # Optional academic details (not required if occupation is Working Professional)
+    collegeName: str = Field("", max_length=255)
     collegeCountry: str = Field("India")
-    collegeState: str = Field(...)
-    collegeCity: str = Field(...)
-    degree: str = Field(..., min_length=2)
-    stream: str = Field(..., min_length=2)
-    passoutYear: str = Field(..., description="Graduation year e.g. 2026")
-    githubUrl: str = Field(..., description="Valid GitHub URL")
-    linkedinUrl: str = Field(..., description="Valid LinkedIn URL")
+    collegeState: str = Field("")
+    collegeCity: str = Field("")
+    degree: str = Field("", max_length=100)
+    stream: str = Field("", max_length=100)
+    passoutYear: str = Field("2026", description="Graduation year e.g. 2026")
+    
+    # Optional socials (removed from UI)
+    githubUrl: str = Field("", description="GitHub URL")
+    linkedinUrl: str = Field("", description="LinkedIn URL")
+    
     termsAccepted: bool = Field(True)
     communicationsAccepted: bool = Field(True)
 

@@ -15,14 +15,14 @@ def get_current_admin(authorization: str = Header(None)):
     if not authorization or not authorization.startswith("Bearer "):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Session breach detected. Access token is missing."
+            detail="Session expired. Access token is missing."
         )
     token = authorization.split(" ")[1]
     payload = decode_access_token(token)
     if not payload:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Access key has expired or is invalid. Please re-authenticate."
+            detail="Access token has expired or is invalid. Please log in again."
         )
     return payload
 
@@ -33,7 +33,7 @@ def admin_login(data: AdminLoginSchema):
     if not admin or not bcrypt.checkpw(data.password.encode(), admin["password"].encode()):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="ACCESS DENIED: Unauthorized identity signatures."
+            detail="Access Denied: Invalid credentials."
         )
         
     # Generate token
@@ -41,7 +41,7 @@ def admin_login(data: AdminLoginSchema):
     return {
         "success": True,
         "token": token,
-        "message": "Access authorized. Initiating mainframe synchronization."
+        "message": "Access authorized. Synchronizing dashboard."
     }
 
 @router.get("/registrations")
@@ -87,7 +87,7 @@ def get_registrations(
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Mainframe database read failure: {e}"
+            detail=f"Database read failure: {e}"
         )
 
 @router.get("/stats")
@@ -126,24 +126,24 @@ def get_stats(admin: dict = Depends(get_current_admin)):
 
 @router.delete("/registrations/{participant_id}")
 def delete_registration(participant_id: str, admin: dict = Depends(get_current_admin)):
-    """De-register and erase a participant from the mainframe."""
+    """Delete a participant registration."""
     try:
         result = registrations_col.delete_one({"participantId": participant_id})
         if result.deleted_count == 0:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail="Target participant signature not found."
+                detail="Participant not found."
             )
         return {
             "success": True,
-            "message": f"Participant {participant_id} successfully deleted from mainframe database."
+            "message": f"Participant {participant_id} successfully deleted."
         }
     except Exception as e:
         if isinstance(e, HTTPException):
             raise e
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"De-registration database failure: {e}"
+            detail=f"Failed to delete registration: {e}"
         )
 
 @router.get("/export/csv")
@@ -189,7 +189,7 @@ def export_csv(admin: dict = Depends(get_current_admin)):
             ])
             
         response = StreamingResponse(iter([stream.getvalue()]), media_type="text/csv")
-        response.headers["Content-Disposition"] = "attachment; filename=hack4soc_registrations.csv"
+        response.headers["Content-Disposition"] = "attachment; filename=hackverse_registrations.csv"
         return response
     except Exception as e:
         if isinstance(e, HTTPException):
@@ -212,7 +212,7 @@ def export_excel(admin: dict = Depends(get_current_admin)):
         
         wb = Workbook()
         ws = wb.active
-        ws.title = "Hack4Soc Registrations"
+        ws.title = "Hackverse Registrations"
         
         # Header block
         ws.append([
@@ -253,7 +253,7 @@ def export_excel(admin: dict = Depends(get_current_admin)):
             output, 
             media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         )
-        response.headers["Content-Disposition"] = "attachment; filename=hack4soc_registrations.xlsx"
+        response.headers["Content-Disposition"] = "attachment; filename=hackverse_registrations.xlsx"
         return response
     except Exception as e:
         if isinstance(e, HTTPException):

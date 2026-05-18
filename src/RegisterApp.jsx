@@ -163,6 +163,7 @@ export default function RegisterApp() {
   });
 
   const [errors, setErrors] = useState({});
+  const [submitError, setSubmitError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStep, setSubmitStep] = useState(0);
   const [submitted, setSubmitted] = useState(false);
@@ -216,17 +217,6 @@ export default function RegisterApp() {
 
     if (!formData.dob) {
       newErrors.dob = 'Please enter your Date of Birth.';
-    } else {
-      const birthDate = new Date(formData.dob);
-      const today = new Date();
-      let age = today.getFullYear() - birthDate.getFullYear();
-      const m = today.getMonth() - birthDate.getMonth();
-      if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-        age--;
-      }
-      if (age < 16 || age > 24) {
-        newErrors.dob = 'Eligibility: You need to be between age group 16 to 24 to register.';
-      }
     }
 
     if (!formData.gender) newErrors.gender = 'Please select your Gender.';
@@ -242,18 +232,6 @@ export default function RegisterApp() {
       if (!formData.degree.trim()) newErrors.degree = 'Please enter your Degree.';
       if (!formData.stream.trim()) newErrors.stream = 'Please enter your Stream / Specialization.';
       if (!formData.passoutYear) newErrors.passoutYear = 'Please select your Passout Year.';
-    }
-
-    if (!formData.githubUrl.trim()) {
-      newErrors.githubUrl = 'Please enter your GitHub Profile URL.';
-    } else if (!/^https?:\/\//i.test(formData.githubUrl)) {
-      newErrors.githubUrl = 'URL must include http:// or https://';
-    }
-
-    if (!formData.linkedinUrl.trim()) {
-      newErrors.linkedinUrl = 'Please enter your LinkedIn Profile URL.';
-    } else if (!/^https?:\/\//i.test(formData.linkedinUrl)) {
-      newErrors.linkedinUrl = 'URL must include http:// or https://';
     }
 
     if (!formData.termsAccepted) newErrors.termsAccepted = 'You must accept the Terms & Conditions.';
@@ -274,10 +252,10 @@ export default function RegisterApp() {
   };
 
   const submitSequenceSteps = [
-    'CONNECTING TO HACKVERSE MAIN CORE...',
-    'REGISTERING SQUAD BIOMETRICS...',
-    'SECURING PROJECT INDEX DATA...',
-    'TRANSMISSION COMPLETED SUCCESSFULLY.'
+    'Connecting to registration database...',
+    'Saving registration details...',
+    'Generating your unique ID...',
+    'Registration completed successfully!'
   ];
 
   const handleSubmit = async (e) => {
@@ -286,6 +264,7 @@ export default function RegisterApp() {
 
     setIsSubmitting(true);
     setSubmitStep(0);
+    setSubmitError('');
 
     try {
       const res = await axios.post("http://localhost:8000/api/register", {
@@ -331,8 +310,8 @@ export default function RegisterApp() {
     } catch (err) {
       console.error(err);
       setIsSubmitting(false);
-      const errMsg = err.response?.data?.detail || "Mainframe synchronization breach. Try again later.";
-      setErrors(prev => ({ ...prev, fullName: errMsg }));
+      const errMsg = err.response?.data?.detail || "Something went wrong. Please check your connection or try again later!";
+      setSubmitError(errMsg);
     }
   };
 
@@ -362,6 +341,7 @@ export default function RegisterApp() {
       communicationsAccepted: true,
     });
     setErrors({});
+    setSubmitError('');
     setSubmitted(false);
     setTeamId('');
   };
@@ -382,7 +362,7 @@ export default function RegisterApp() {
             <div className="absolute -top-1 -right-4 w-2 h-8 bg-cyberRed transform -skew-x-12"></div>
             
             <p className="font-mono text-cyberRed text-[0.65rem] uppercase tracking-[0.3em] mb-0.5 font-bold">
-              [ SECURE MAINFRAME ENROLLMENT ]
+              [ PARTICIPANT REGISTRATION ]
             </p>
             <h1 className="font-orbitron font-black text-4xl md:text-5xl text-white tracking-widest mb-1 drop-shadow-[0_0_12px_#ff003c]">
               HACK4SOC 3.0
@@ -421,22 +401,22 @@ export default function RegisterApp() {
               </div>
 
               <h2 className="font-orbitron font-extrabold text-2xl md:text-3xl text-white tracking-widest uppercase mb-1">
-                REGISTRATION DECRYPTED
+                REGISTRATION SUCCESSFUL!
               </h2>
               <p className="font-mono text-cyberRed text-xs tracking-[0.3em] uppercase mb-5 animate-pulse">
-                // Welcome to Hack4Soc 3.0 //
+                // Welcome to Hackverse 2.0 //
               </p>
 
               <div className="border border-cyberRed/30 bg-[#04000a]/90 p-5 rounded mb-6 relative font-mono text-left text-zinc-300">
-                <div className="absolute top-2 right-3 text-[9px] text-zinc-500 font-mono">NEO TOKYO LINK SECURED</div>
-                <div className="mb-1 text-zinc-400 text-[10px] tracking-wider">YOUR PARTICIPANT SECURITY ID:</div>
+                <div className="absolute top-2 right-3 text-[9px] text-zinc-500 font-mono">REGISTRATION COMPLETED</div>
+                <div className="mb-1 text-zinc-400 text-[10px] tracking-wider">YOUR REGISTRATION ID:</div>
                 
                 <div className="font-orbitron text-2xl md:text-3xl text-cyberRed font-black tracking-widest border-b border-cyberRed/20 pb-2 mb-3 animate-pulse">
                   {teamId}
                 </div>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-y-2 gap-x-4 text-xs">
-                  <div><span className="text-zinc-500">OPERATOR:</span> <span className="text-white font-bold">{formData.fullName}</span></div>
+                  <div><span className="text-zinc-500">PARTICIPANT:</span> <span className="text-white font-bold">{formData.fullName}</span></div>
                   <div><span className="text-zinc-500">EMAIL:</span> <span className="text-white">{formData.email}</span></div>
                   <div><span className="text-zinc-500">WHATSAPP:</span> <span className="text-white">{formData.whatsapp}</span></div>
                   <div><span className="text-zinc-500">DEGREE:</span> <span className="text-white">{formData.degree || "N/A"}</span></div>
@@ -445,9 +425,22 @@ export default function RegisterApp() {
                 </div>
               </div>
 
-              <p className="text-zinc-400 text-xs md:text-sm mb-6 leading-relaxed max-w-md mx-auto">
-                Your biometrics and academic telemetry have been uploaded to the Hack4Soc mainframe. Keep your blades sharp and your code clean. Honor awaits you.
+              <p className="text-zinc-400 text-xs md:text-sm mb-4 leading-relaxed max-w-md mx-auto">
+                Your registration has been successfully received! We look forward to seeing you at the event. Stay tuned for further updates.
               </p>
+
+              <div className="mb-6 flex justify-center">
+                <a 
+                  href="https://chat.whatsapp.com/BetZx9khk8eDJeYseRxQTP" 
+                  target="_blank" 
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2 font-orbitron font-bold text-xs tracking-widest text-[#25D366] border-2 border-[#25D366] px-5 py-2.5 hover:bg-[#25D366]/10 transition-colors rounded shadow-[0_0_10px_rgba(37,211,102,0.3)]"
+                >
+                  <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133-.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                  JOIN WHATSAPP GROUP
+                </a>
+              </div>
+
 
               <div className="flex gap-4 justify-center">
                 <button
@@ -460,7 +453,7 @@ export default function RegisterApp() {
                   href="index.html"
                   className="font-orbitron text-xs tracking-widest text-zinc-400 border border-zinc-700 px-5 py-2.5 hover:bg-zinc-900 hover:text-white transition duration-300 flex items-center"
                 >
-                  Back to HQ
+                  Back to Home
                 </a>
               </div>
             </div>
@@ -474,19 +467,26 @@ export default function RegisterApp() {
             <div className="cyber-corner cyber-corner-bl"></div>
             <div className="cyber-corner cyber-corner-br"></div>
             
+            {submitError && (
+              <div className="mb-6 p-4 bg-cyberRed/15 border border-cyberRed/65 text-cyberRed text-xs font-mono rounded flex items-start gap-2 animate-[fadeIn_0.3s_ease-out]">
+                <span className="font-bold flex-shrink-0">⚠️</span>
+                <span>{submitError}</span>
+              </div>
+            )}
+            
             {/* Header Data Output Bar */}
             <div className="mb-6 pb-2 border-b border-cyberRed/20 flex justify-between items-center text-[10px] font-mono text-zinc-500 select-none">
-              <span>TERMINAL ID: H4S-3.0-REGISTRAR</span>
+              <span>HACKVERSE 2.0 REGISTRATION</span>
               <span className="text-cyberRed font-bold flex items-center gap-1">
                 <span className="w-1.5 h-1.5 bg-cyberRed rounded-full animate-ping"></span>
-                CONNECTED // ENCRYPTED_TUNNEL
+                SECURE CONNECTION ESTABLISHED
               </span>
             </div>
 
             {/* SECTION 1: PERSONAL PARTICIPANT PROFILE */}
             <div className="mb-8">
               <div className="text-cyberRed font-orbitron text-sm font-bold tracking-wider mb-4 border-l-2 border-cyberRed pl-2 uppercase">
-                I. Personal Identity Vector
+                1. Personal Details
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -729,7 +729,7 @@ export default function RegisterApp() {
             {formData.occupation === 'College Student' && (
               <div className="mb-8 animate-[fadeIn_0.4s_ease-out]">
                 <div className="text-cyberRed font-orbitron text-sm font-bold tracking-wider mb-4 border-l-2 border-cyberRed pl-2 uppercase">
-                  II. Academic & Technical Intelligence
+                  2. Academic Details
                 </div>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -878,56 +878,6 @@ export default function RegisterApp() {
                     </select>
                   </div>
 
-                  {/* Github Profile */}
-                  <div className="md:col-span-2">
-                    <label className="block text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-1.5">
-                      Github Profile Link <span className="text-cyberRed font-bold">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      name="githubUrl"
-                      value={formData.githubUrl}
-                      onChange={handleInputChange}
-                      placeholder="https://github.com/your_username"
-                      className={`w-full bg-zinc-950/80 text-white font-mono text-xs px-3.5 py-2.5 border outline-none transition-all duration-300 rounded ${
-                        errors.githubUrl ? 'border-cyberRed bg-cyberRed/5' : 'border-zinc-800 focus:border-cyberRed'
-                      }`}
-                    />
-                    <span className="block mt-1 font-mono text-[8px] text-zinc-500 uppercase tracking-wider">
-                      URL must include https or http , example: https://github.com/sample_user
-                    </span>
-                    {errors.githubUrl && (
-                      <span className="block mt-1 font-mono text-[9px] text-cyberRed uppercase tracking-wide">
-                        ⚠️ {errors.githubUrl}
-                      </span>
-                    )}
-                  </div>
-
-                  {/* LinkedIn Profile */}
-                  <div className="md:col-span-2">
-                    <label className="block text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-1.5">
-                      LinkedIn Profile Link <span className="text-cyberRed font-bold">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      name="linkedinUrl"
-                      value={formData.linkedinUrl}
-                      onChange={handleInputChange}
-                      placeholder="https://linkedin.com/in/your_username"
-                      className={`w-full bg-zinc-950/80 text-white font-mono text-xs px-3.5 py-2.5 border outline-none transition-all duration-300 rounded ${
-                        errors.linkedinUrl ? 'border-cyberRed bg-cyberRed/5' : 'border-zinc-800 focus:border-cyberRed'
-                      }`}
-                    />
-                    <span className="block mt-1 font-mono text-[8px] text-zinc-500 uppercase tracking-wider">
-                      URL must include https or http , example: https://linkedin.com/in/sample_user
-                    </span>
-                    {errors.linkedinUrl && (
-                      <span className="block mt-1 font-mono text-[9px] text-cyberRed uppercase tracking-wide">
-                        ⚠️ {errors.linkedinUrl}
-                      </span>
-                    )}
-                  </div>
-
                 </div>
               </div>
             )}
@@ -935,7 +885,7 @@ export default function RegisterApp() {
             {/* SECTION 3: CONSENT DIRECTIVES */}
             <div className="mb-8">
               <div className="text-cyberRed font-orbitron text-sm font-bold tracking-wider mb-4 border-l-2 border-cyberRed pl-2 uppercase">
-                III. Core Directives & Consents
+                3. Terms & Conditions
               </div>
               
               <div className="space-y-3 font-mono text-[10px] text-zinc-400 select-none">
@@ -951,7 +901,7 @@ export default function RegisterApp() {
                     className="accent-cyberRed w-4 h-4 mt-0.5 cursor-pointer"
                   />
                   <label htmlFor="termsAccepted" className="uppercase tracking-wider leading-relaxed cursor-pointer">
-                    * By registering you accept the <span className="text-cyberRed font-bold underline cursor-pointer">Terms & Conditions</span> of Hack4Soc 3.0
+                    * By registering you accept the <span className="text-cyberRed font-bold underline cursor-pointer">Terms & Conditions</span> of Hackverse 2.0
                   </label>
                 </div>
                 {errors.termsAccepted && (
@@ -991,12 +941,12 @@ export default function RegisterApp() {
                 className="w-full relative py-4 bg-cyberRed hover:bg-[#990024] font-orbitron font-extrabold text-base tracking-[0.2em] uppercase text-white shadow-cyberGlow hover:shadow-[0_0_40px_rgba(255,0,60,0.9)] border border-cyberRed transition-all duration-300 hover:scale-[1.01] transform active:scale-95 group overflow-hidden"
               >
                 <span className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-transparent via-white/15 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite_linear]"></span>
-                {isSubmitting ? 'ESTABLISHING CORE LINK...' : 'INITIATE REGISTRATION PROTOCOL'}
+                {isSubmitting ? 'SUBMITTING REGISTRATION...' : 'SUBMIT REGISTRATION'}
               </button>
               
               <div className="absolute -bottom-5 left-0 right-0 flex justify-between font-mono text-[8px] text-zinc-600 px-1">
-                <span>SYSTEM_STATUS: CONFIRMED</span>
-                <span>TIME: {currentTime || 'SECURE_ROUTE'}</span>
+                <span>STATUS: ONLINE</span>
+                <span>TIME: {currentTime || 'ONLINE'}</span>
               </div>
             </div>
           </form>
@@ -1015,7 +965,7 @@ export default function RegisterApp() {
 
             <div className="text-center font-mono">
               <div className="text-cyberRed text-lg font-bold font-orbitron tracking-wider mb-2 uppercase animate-pulse">
-                // COMPILING BLUEPRINT //
+                // SUBMITTING REGISTRATION //
               </div>
               
               <div className="w-full h-3 bg-zinc-900 border border-cyberRed/30 p-0.5 rounded overflow-hidden mb-4 relative">
@@ -1035,7 +985,7 @@ export default function RegisterApp() {
 
               <div className="mt-4 flex justify-center items-center gap-1.5 text-[9px] text-zinc-500 tracking-wider">
                 <span className="w-1.5 h-1.5 bg-cyberRed rounded-full animate-ping"></span>
-                <span>SECURE BROADCAST ENCRYPTED</span>
+                <span>SECURE TRANSMISSION COMPLETE</span>
               </div>
             </div>
           </div>

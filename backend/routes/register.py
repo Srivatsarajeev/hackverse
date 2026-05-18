@@ -15,12 +15,12 @@ os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 @router.post("/register", status_code=201)
 def register_participant(data: ParticipantRegisterSchema):
-    """Register a new participant for Hack4Soc 3.0 with duplicate prevention."""
+    """Register a new participant for Hackverse 2.0 with duplicate prevention."""
     # Check for duplicate email
     if registrations_col.find_one({"email": data.email}):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="This transmission contact (email) is already registered."
+            detail="This email address is already registered."
         )
         
     # Check for duplicate whatsapp
@@ -48,13 +48,13 @@ def register_participant(data: ParticipantRegisterSchema):
         registrations_col.insert_one(new_participant)
         return {
             "success": True,
-            "message": "Welcome to Hack4Soc 3.0. Registration completed successfully.",
+            "message": "Welcome to Hackverse 2.0. Registration completed successfully.",
             "teamId": participant_id
         }
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Mainframe database write failure: {e}"
+            detail=f"Database write failure: {e}"
         )
 
 @router.post("/upload")
@@ -66,7 +66,7 @@ async def upload_file(file: UploadFile = File(...)):
     if ext not in [".pdf", ".ppt", ".pptx"]:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Invalid cyber payload. Only PDF or PPT/PPTX formats are authorized."
+            detail="Invalid file format. Only PDF or PPT/PPTX formats are allowed."
         )
 
     # Validate size (10MB Max size limit)
@@ -79,12 +79,12 @@ async def upload_file(file: UploadFile = File(...)):
         if size > MAX_SIZE:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Payload size breach. File exceeds 10MB maximum limit."
+                detail="File size exceeds the 10MB limit."
             )
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Could not read upload transmission: {e}"
+            detail=f"Could not read file upload: {e}"
         )
 
     # Generate secure unique name to prevent collisions
@@ -111,10 +111,10 @@ async def upload_file(file: UploadFile = File(...)):
             "success": True,
             "filename": safe_filename,
             "url": f"/uploads/{safe_filename}",
-            "message": "Payload securely stored in mainframe."
+            "message": "File uploaded successfully."
         }
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to commit file to server disk: {e}"
+            detail=f"Failed to save file on server: {e}"
         )

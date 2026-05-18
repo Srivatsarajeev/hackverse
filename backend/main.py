@@ -16,21 +16,13 @@ from backend.routes.admin import router as admin_router
 
 app = FastAPI(
     title="HACKVERSE 2.0 Backend Core",
-    description="Futuristic secure registration and control panel mainframe for Neo Tokyo.",
+    description="Secure registration and admin control panel backend for Hack4Soc.",
     version="2.0.0"
 )
 
-# CORS Policy configuration
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",
-        "http://127.0.0.1:5173",
-        "http://localhost:5174",
-        "http://127.0.0.1:5174",
-        "http://localhost:3000",
-        "http://127.0.0.1:3000"
-    ],
+    allow_origin_regex=".*",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -39,7 +31,7 @@ app.add_middleware(
 # Startup routine
 @app.on_event("startup")
 def startup_event():
-    print("[MAINFRAME] Initializing database indexes and security credentials...")
+    print("[SYSTEM] Initializing database indexes and admin credentials...")
     init_db()
 
 # Mount uploads directory as static route
@@ -54,12 +46,12 @@ app.include_router(admin_router)
 # Custom Global Exception Handlers
 @app.exception_handler(Exception)
 def global_exception_handler(request: Request, exc: Exception):
-    print(f"[MAINFRAME CRITICAL ERROR] {request.method} {request.url.path} - Exception: {exc}")
+    print(f"[SYSTEM CRITICAL ERROR] {request.method} {request.url.path} - Exception: {exc}")
     return JSONResponse(
         status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
         content={
             "success": False,
-            "detail": "Mainframe execution breach. Command execution has been suspended."
+            "detail": "An unexpected error occurred on the server."
         }
     )
 
@@ -67,7 +59,7 @@ def global_exception_handler(request: Request, exc: Exception):
 def read_root():
     return {
         "status": "ONLINE",
-        "mainframe": "HACKVERSE 2.0 CONTROL CORE",
+        "system": "HACK4SOC 3.0 CONTROL CORE",
         "security": "JWT_ENCRYPTED"
     }
 

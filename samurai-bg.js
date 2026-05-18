@@ -89,8 +89,8 @@
     addPart(new THREE.CylinderGeometry(0.11 * s, 0.09 * s, 0.85 * s, 6), ghostMat, 0.19 * s, 0.05 * s, 0);
 
     if (isMobile) {
-        samuraiGroup.position.set(1.5, -1.2, -2.5);
-        samuraiGroup.scale.set(0.9, 0.9, 0.9);
+        samuraiGroup.position.set(0, -1.2, -3.5);
+        samuraiGroup.scale.set(1.0, 1.0, 1.0);
     } else {
         samuraiGroup.position.set(3.8, -1.6, -1.5);
         samuraiGroup.scale.set(1.7, 1.7, 1.7);
@@ -106,7 +106,7 @@
         const mat = new THREE.MeshBasicMaterial({ color: 0xff003c, transparent: true, opacity: 0.04 + Math.random() * 0.05 });
         const ring = new THREE.Mesh(geo, mat);
         ring.rotation.x = Math.PI / 2;
-        ring.position.set(isMobile ? 1 : 3, -2.8, -1.5);
+        ring.position.set(isMobile ? 0 : 3, -2.8, -1.5);
         scene.add(ring);
         mistRings.push({ mesh: ring, speed: 0.002 + Math.random() * 0.003, base: r });
     }
@@ -114,7 +114,7 @@
     /* ── Floating kanji pillars ─────────────────────────────────────── */
     const kanjis = [];
     const kanjiPositions = isMobile
-        ? [[-5, 0, -4], [5, -1, -5], [-4, 2, -6]]
+        ? [[-1.5, 0, -4], [1.5, -1, -5], [0, 2, -6]]
         : [[-6, 0, -4], [6, -1, -5], [-5, 3, -7], [4, 2, -6], [-3, -1, -3]];
     const kanjiGeo = new THREE.PlaneGeometry(0.25, 0.25);
     kanjiPositions.forEach(p => {
@@ -134,7 +134,7 @@
     for (let i = 0; i < petalCount; i++) {
         const p = new THREE.Mesh(petalGeo, petalMat);
         p.position.set(
-            (Math.random() - 0.5) * 18,
+            (Math.random() - 0.5) * (isMobile ? 6 : 18),
             (Math.random() * 16) - 3,
             (Math.random() * -6) - 0.5
         );

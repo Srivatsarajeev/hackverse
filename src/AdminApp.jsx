@@ -234,7 +234,7 @@ export default function AdminApp() {
       const downloadUrl = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = downloadUrl;
-      link.setAttribute('download', `hack4soc_roster${fileExtension}`);
+      link.setAttribute('download', `hackverse_roster${fileExtension}`);
       document.body.appendChild(link);
       link.click();
       link.remove();
@@ -255,18 +255,18 @@ export default function AdminApp() {
       {/* System alert notification */}
       {systemAlert && (
         <div className="fixed top-6 right-6 z-50 glassmorphism border border-cyberRed px-6 py-3 rounded text-xs font-mono tracking-widest text-cyberRed animate-[shimmer_1.5s_infinite_linear] shadow-cyberGlowHeavy">
-          ⚠️ // MAIN CONSOLE UPDATE //: {systemAlert}
+          Notification: {systemAlert}
         </div>
       )}
 
-      {/* ACCESS DENIED ALARM POPUP */}
+      {/* ACCESS DENIED POPUP */}
       {showAccessDenied && (
         <div className="fixed inset-0 z-50 bg-[#ff003c]/20 backdrop-blur-md flex items-center justify-center animate-pulse">
           <div className="bg-[#04000a] border-4 border-cyberRed p-8 text-center rounded-lg shadow-cyberGlowHeavy max-w-sm w-full mx-4">
             <div className="text-6xl text-cyberRed font-bold mb-4 font-orbitron animate-bounce">⚡</div>
             <h2 className="text-3xl font-orbitron font-black text-cyberRed tracking-wider mb-2">ACCESS DENIED</h2>
             <p className="font-mono text-zinc-400 text-xs uppercase tracking-widest leading-relaxed">
-              Mainframe security breach. Credentials signature invalid. Access blocked by security countermeasures.
+              Invalid credentials. Access Denied.
             </p>
           </div>
         </div>
@@ -280,10 +280,10 @@ export default function AdminApp() {
             
             <header className="text-center mb-8">
               <h1 className="font-orbitron font-black text-3xl md:text-4xl text-white tracking-widest mb-1 drop-shadow-[0_0_12px_#ff003c]">
-                HACK4SOC 3.0
+                HACKVERSE 2.0
               </h1>
               <p className="font-mono text-cyberRed text-[0.65rem] uppercase tracking-[0.3em] font-bold">
-                [ NEO TOKYO // CENTRAL MAINFRAME ]
+                [ ADMIN DASHBOARD ]
               </p>
             </header>
 
@@ -294,7 +294,7 @@ export default function AdminApp() {
               <div className="cyber-corner cyber-corner-br"></div>
 
               <div className="text-center border-b border-cyberRed/20 pb-4 mb-6 font-mono text-[10px] text-zinc-500">
-                ⚠️ SECURE LOGON SEQUENCE : SHADOW_CTRL
+                ⚠️ ADMINISTRATOR LOGIN
               </div>
 
               {loginError && (
@@ -306,7 +306,7 @@ export default function AdminApp() {
               <div className="space-y-4 mb-6">
                 <div>
                   <label className="block text-[9px] font-mono text-zinc-400 uppercase tracking-widest mb-1.5">
-                    Operator Identity
+                    Username
                   </label>
                   <input
                     type="text"
@@ -320,7 +320,7 @@ export default function AdminApp() {
 
                 <div>
                   <label className="block text-[9px] font-mono text-zinc-400 uppercase tracking-widest mb-1.5">
-                    Hologram Access Key
+                    Password
                   </label>
                   <input
                     type="password"
@@ -338,12 +338,12 @@ export default function AdminApp() {
                 disabled={loginLoading}
                 className="w-full relative py-3 bg-cyberRed hover:bg-[#990024] font-orbitron font-extrabold text-xs tracking-[0.2em] uppercase text-white shadow-cyberGlow border border-cyberRed transition-all duration-300 transform active:scale-95 overflow-hidden"
               >
-                {loginLoading ? "Synchronizing mainframe..." : "Authenticate Access"}
+                {loginLoading ? "Logging in..." : "Login"}
               </button>
             </form>
 
             <footer className="mt-8 text-center text-[9px] font-mono text-zinc-600">
-              WARNING: UNAUTHORIZED ACCESS IS LOGGED IN THE MAIN DATA CHANNELS
+              Unauthorized access attempts are strictly prohibited.
             </footer>
 
           </div>
@@ -361,22 +361,22 @@ export default function AdminApp() {
 
               <div className="mb-2 md:mb-0 text-center md:text-left select-none">
                 <div className="font-mono text-cyberRed text-[0.6rem] uppercase tracking-[0.2em] font-bold">
-                  // DEPLOYED MAIN CORE CONTROL PANEL
+                  // CONTROL PANEL DASHBOARD
                 </div>
                 <h1 className="font-orbitron font-black text-2xl text-white tracking-widest drop-shadow-[0_0_8px_#ff003c]">
-                  HACK4SOC 3.0 MAIN DECRYPTION
+                  HACKVERSE 2.0 ADMIN PANEL
                 </h1>
               </div>
 
               <div className="flex items-center gap-3">
                 <span className="font-mono text-[10px] text-zinc-500 bg-zinc-950/90 border border-zinc-800 px-3 py-1.5 rounded uppercase">
-                  📡 OPERATOR: <span className="text-cyberRed font-bold">SUPERADMIN</span>
+                  ADMIN: <span className="text-cyberRed font-bold">SUPERADMIN</span>
                 </span>
                 <button
                   onClick={handleLogout}
                   className="font-orbitron text-[10px] tracking-widest text-white border border-cyberRed px-4 py-1.5 hover:bg-cyberRed hover:shadow-cyberGlow transition duration-300"
                 >
-                  De-Authorize Session
+                  Logout
                 </button>
               </div>
             </div>
@@ -392,7 +392,7 @@ export default function AdminApp() {
                 <div className="font-orbitron text-4xl font-black text-cyberRed animate-pulse drop-shadow-[0_0_12px_#ff003c] mt-2">
                   {stats.total}
                 </div>
-                <p className="font-mono text-[9px] text-zinc-500 uppercase tracking-widest mt-1">operators connected</p>
+                <p className="font-mono text-[9px] text-zinc-500 uppercase tracking-widest mt-1">registrations received</p>
               </div>
 
               {/* Gender Breakdown Breakdown */}
@@ -410,7 +410,7 @@ export default function AdminApp() {
 
               {/* Passout Breakdown */}
               <div className="md:col-span-2 glassmorphism border border-zinc-800/80 p-4 rounded relative flex flex-col justify-between min-h-[120px]">
-                <div className="absolute top-2 left-3 font-mono text-[9px] text-zinc-500 tracking-wider">PASSOUT COHORTS</div>
+                <div className="absolute top-2 left-3 font-mono text-[9px] text-zinc-500 tracking-wider">PASSOUT YEARS</div>
                 <div className="grid grid-cols-3 gap-1 mt-5 text-center font-mono">
                   {Object.entries(stats.passout_counts || {}).slice(0, 6).map(([year, count]) => (
                     <div key={year} className="bg-zinc-950/70 p-1 border border-zinc-900 rounded">
@@ -496,11 +496,11 @@ export default function AdminApp() {
               <div className="overflow-x-auto">
                 {dataLoading ? (
                   <div className="text-center py-16 font-mono text-zinc-500 animate-pulse tracking-widest text-xs">
-                    ⚡ SYNCHRONIZING WITH CENTRAL HACK4SOC DATABASE...
+                    ⚡ LOADING REGISTRATION DATA...
                   </div>
                 ) : registrations.length === 0 ? (
                   <div className="text-center py-16 font-mono text-zinc-500 uppercase tracking-widest text-xs">
-                    📡 No participant signals detected in the mainframe.
+                    📡 No registrations found in the database.
                   </div>
                 ) : (
                   <table className="w-full text-left font-mono text-xs border-collapse">
@@ -512,7 +512,7 @@ export default function AdminApp() {
                         <th className="py-3 px-3">WhatsApp</th>
                         <th className="py-3 px-3">College</th>
                         <th className="py-3 px-3">Passout</th>
-                        <th className="py-3 px-3 text-center">Control Actions</th>
+                        <th className="py-3 px-3 text-center">Actions</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -544,7 +544,7 @@ export default function AdminApp() {
                                 onClick={() => setShowDeleteConfirm(p.participantId)}
                                 className="text-cyberRed hover:text-red-500 px-2 py-0.5 border border-cyberRed/30 hover:border-cyberRed rounded text-[10px] uppercase font-bold"
                               >
-                                Purge
+                                Delete
                               </button>
                             </div>
                           </td>
@@ -595,7 +595,7 @@ export default function AdminApp() {
                   <div className="flex justify-between items-start border-b border-cyberRed/20 pb-3 mb-5 font-mono">
                     <div>
                       <span className="text-cyberRed font-bold font-orbitron text-lg block">{activeParticipant.participantId}</span>
-                      <span className="text-zinc-500 text-[10px] uppercase tracking-widest font-bold">// Hack4Soc Mainframe dossier</span>
+                      <span className="text-zinc-500 text-[10px] uppercase tracking-widest font-bold">// Participant Details</span>
                     </div>
                     <button
                       onClick={() => setActiveParticipant(null)}
@@ -606,10 +606,10 @@ export default function AdminApp() {
                   </div>
 
                   <div className="space-y-5 text-left font-mono">
-                    {/* Basic specs */}
+                    {/* Basic details */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-zinc-950/70 p-4 border border-zinc-900 rounded text-xs leading-relaxed">
                       <div>
-                        <span className="text-zinc-500 uppercase block mb-0.5">Operator Name</span>
+                        <span className="text-zinc-500 uppercase block mb-0.5">Full Name</span>
                         <strong className="text-white text-sm">{activeParticipant.fullName}</strong>
                       </div>
                       <div>
@@ -617,11 +617,11 @@ export default function AdminApp() {
                         <strong className="text-white text-sm">{activeParticipant.dob} ({activeParticipant.gender})</strong>
                       </div>
                       <div>
-                        <span className="text-zinc-500 uppercase block mb-0.5">Location Vector</span>
+                        <span className="text-zinc-500 uppercase block mb-0.5">Location</span>
                         <strong className="text-white text-sm">{activeParticipant.city}, {activeParticipant.state}, {activeParticipant.country}</strong>
                       </div>
                       <div>
-                        <span className="text-zinc-500 uppercase block mb-0.5">Occupation Status</span>
+                        <span className="text-zinc-500 uppercase block mb-0.5">Occupation</span>
                         <strong className="text-cyberRed font-bold text-sm uppercase">{activeParticipant.occupation}</strong>
                       </div>
                     </div>
@@ -629,39 +629,39 @@ export default function AdminApp() {
                     {/* Academic Profile */}
                     {activeParticipant.occupation === 'College Student' && (
                       <div className="text-xs">
-                        <span className="text-cyberRed font-orbitron uppercase tracking-widest font-bold block mb-2">Academic Credentials:</span>
+                        <span className="text-cyberRed font-orbitron uppercase tracking-widest font-bold block mb-2">Academic Details:</span>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 bg-[#04000a]/80 p-4 border border-zinc-900 rounded">
                           <div className="md:col-span-2">
-                            <span className="text-zinc-500">COLLEGE Name:</span> <strong className="text-white block mt-0.5">{activeParticipant.collegeName}</strong>
+                            <span className="text-zinc-500">College Name:</span> <strong className="text-white block mt-0.5">{activeParticipant.collegeName}</strong>
                           </div>
                           <div>
-                            <span className="text-zinc-500">COLLEGE Location:</span> <strong className="text-zinc-300 block">{activeParticipant.collegeCity}, {activeParticipant.collegeState}, {activeParticipant.collegeCountry}</strong>
+                            <span className="text-zinc-500">College Location:</span> <strong className="text-zinc-300 block">{activeParticipant.collegeCity}, {activeParticipant.collegeState}, {activeParticipant.collegeCountry}</strong>
                           </div>
                           <div>
-                            <span className="text-zinc-500">DEGREE & Stream:</span> <strong className="text-zinc-300 block">{activeParticipant.degree} - {activeParticipant.stream}</strong>
+                            <span className="text-zinc-500">Degree & Stream:</span> <strong className="text-zinc-300 block">{activeParticipant.degree} - {activeParticipant.stream}</strong>
                           </div>
                           <div>
-                            <span className="text-zinc-500">PASSOUT GRADUATION YEAR:</span> <strong className="text-cyberRed block">{activeParticipant.passoutYear}</strong>
+                            <span className="text-zinc-500">Passout Year:</span> <strong className="text-cyberRed block">{activeParticipant.passoutYear}</strong>
                           </div>
                         </div>
                       </div>
                     )}
 
-                    {/* Contact Channels */}
+                    {/* Contact Information */}
                     <div className="text-xs">
-                      <span className="text-cyberRed font-orbitron uppercase tracking-widest font-bold block mb-2">Comms & Broadcast Channels:</span>
+                      <span className="text-cyberRed font-orbitron uppercase tracking-widest font-bold block mb-2">Contact Information:</span>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5 bg-[#04000a]/80 p-4 border border-zinc-900 rounded">
-                        <div><span className="text-zinc-500">PRIMARY EMAIL:</span> <a href={`mailto:${activeParticipant.email}`} className="text-white underline hover:text-cyberRed block mt-0.5">{activeParticipant.email}</a></div>
-                        <div><span className="text-zinc-500">WHATSAPP MOBILE:</span> <a href={`https://wa.me/${activeParticipant.whatsapp}`} target="_blank" rel="noreferrer" className="text-white underline hover:text-cyberRed block mt-0.5">{activeParticipant.whatsapp}</a></div>
+                        <div><span className="text-zinc-500">Email Address:</span> <a href={`mailto:${activeParticipant.email}`} className="text-white underline hover:text-cyberRed block mt-0.5">{activeParticipant.email}</a></div>
+                        <div><span className="text-zinc-500">WhatsApp Number:</span> <a href={`https://wa.me/${activeParticipant.whatsapp}`} target="_blank" rel="noreferrer" className="text-white underline hover:text-cyberRed block mt-0.5">{activeParticipant.whatsapp}</a></div>
                         {!activeParticipant.alternatePhoneSame && activeParticipant.alternatePhone && (
-                          <div className="md:col-span-2"><span className="text-zinc-500">ALTERNATE MOBILE:</span> <strong className="text-zinc-300 block">{activeParticipant.alternatePhone}</strong></div>
+                          <div className="md:col-span-2"><span className="text-zinc-500">Alternate Phone:</span> <strong className="text-zinc-300 block">{activeParticipant.alternatePhone}</strong></div>
                         )}
                       </div>
                     </div>
 
                     {/* Developer Profiles */}
                     <div className="text-xs">
-                      <span className="text-cyberRed font-orbitron uppercase tracking-widest font-bold block mb-2">Cyber Intelligence Vector links:</span>
+                      <span className="text-cyberRed font-orbitron uppercase tracking-widest font-bold block mb-2">Developer Profiles:</span>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {activeParticipant.githubUrl && (
                           <a
@@ -670,7 +670,7 @@ export default function AdminApp() {
                             rel="noreferrer"
                             className="p-3 border border-zinc-800 bg-zinc-950/60 hover:border-cyberRed hover:bg-cyberRed/5 transition rounded text-center block"
                           >
-                            <span className="text-zinc-500 block text-[10px] uppercase font-bold tracking-wider mb-1">GitHub Interface</span>
+                            <span className="text-zinc-500 block text-[10px] uppercase font-bold tracking-wider mb-1">GitHub</span>
                             <span className="text-white font-bold text-xs truncate block">{activeParticipant.githubUrl}</span>
                           </a>
                         )}
@@ -681,26 +681,26 @@ export default function AdminApp() {
                             rel="noreferrer"
                             className="p-3 border border-zinc-800 bg-zinc-950/60 hover:border-cyberRed hover:bg-cyberRed/5 transition rounded text-center block"
                           >
-                            <span className="text-zinc-500 block text-[10px] uppercase font-bold tracking-wider mb-1">LinkedIn Signal</span>
+                            <span className="text-zinc-500 block text-[10px] uppercase font-bold tracking-wider mb-1">LinkedIn</span>
                             <span className="text-white font-bold text-xs truncate block">{activeParticipant.linkedinUrl}</span>
                           </a>
                         )}
                       </div>
                     </div>
 
-                    {/* Consents vectors */}
+                    {/* Consents */}
                     <div className="text-[10px] text-zinc-500 border-t border-zinc-900 pt-3">
                       <div>// termsAccepted: <span className={activeParticipant.termsAccepted ? "text-green-500 font-bold" : "text-cyberRed font-bold"}>{activeParticipant.termsAccepted ? "TRUE" : "FALSE"}</span></div>
                       <div>// communicationsAccepted: <span className={activeParticipant.communicationsAccepted ? "text-green-500 font-bold" : "text-cyberRed font-bold"}>{activeParticipant.communicationsAccepted ? "TRUE" : "FALSE"}</span></div>
                     </div>
 
                     <div className="pt-4 border-t border-zinc-900 flex justify-between items-center text-[10px] font-mono text-zinc-500">
-                      <span>SIGNUP DATE PROTOCOL: {new Date(activeParticipant.timestamp).toLocaleString()}</span>
+                      <span>Registration Date: {new Date(activeParticipant.timestamp).toLocaleString()}</span>
                       <button
                         onClick={() => setShowDeleteConfirm(activeParticipant.participantId)}
                         className="text-cyberRed hover:text-red-500 border border-cyberRed/30 hover:border-cyberRed px-4 py-2 font-bold uppercase rounded transition"
                       >
-                        Purge Operator
+                        Delete Participant
                       </button>
                     </div>
 
@@ -709,26 +709,26 @@ export default function AdminApp() {
               </div>
             )}
 
-            {/* DELETE PURGE CONFIRM MODAL */}
+            {/* DELETE CONFIRM MODAL */}
             {showDeleteConfirm && (
               <div className="fixed inset-0 z-50 bg-[#04000a]/95 backdrop-blur-md flex items-center justify-center p-4">
                 <div className="bg-[#04000a] border-2 border-cyberRed p-6 text-center rounded shadow-cyberGlowHeavy max-w-sm w-full relative">
-                  <h3 className="text-lg font-orbitron font-extrabold text-cyberRed uppercase tracking-wider mb-2">Purge Request</h3>
+                  <h3 className="text-lg font-orbitron font-extrabold text-cyberRed uppercase tracking-wider mb-2">Delete Participant</h3>
                   <p className="font-mono text-xs text-zinc-400 leading-relaxed mb-6 uppercase">
-                    Are you absolutely sure you want to permanently erase operator <strong className="text-white">{showDeleteConfirm}</strong> from the database? This action is irreversible.
+                    Are you sure you want to permanently delete participant <strong className="text-white">{showDeleteConfirm}</strong>? This action cannot be undone.
                   </p>
                   <div className="flex gap-4 justify-center font-orbitron text-xs">
                     <button
                       onClick={() => handleDeleteRegistration(showDeleteConfirm)}
                       className="px-5 py-2 bg-cyberRed hover:bg-[#990024] text-white shadow-cyberGlow transition duration-300 font-bold uppercase"
                     >
-                      PURGE DATA
+                      Delete
                     </button>
                     <button
                       onClick={() => setShowDeleteConfirm(null)}
                       className="px-5 py-2 border border-zinc-700 text-zinc-400 hover:text-white transition duration-300 font-bold uppercase"
                     >
-                      ABORT
+                      Cancel
                     </button>
                   </div>
                 </div>

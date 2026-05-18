@@ -185,7 +185,7 @@
             guard.position.y = -3.5; katGrp.add(guard);
             const handle = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.12, 1.5, seg), new THREE.MeshStandardMaterial({ color: 0x2a1a00 }));
             handle.position.y = -4.3; katGrp.add(handle);
-            katGrp.position.set(isMobile ? 3 : -4.5, isMobile ? 0.5 : 0, isMobile ? -6 : -5);
+            katGrp.position.set(isMobile ? -1 : -4.5, isMobile ? 0.5 : 0, isMobile ? -6 : -5);
             katGrp.scale.set(isMobile ? 0.6 : 1, isMobile ? 0.6 : 1, 1);
             katGrp.rotation.z = 0.3;
             sc.add(katGrp);
