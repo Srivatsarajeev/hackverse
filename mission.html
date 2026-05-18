@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MISSION DIRECTIVE | HACKVERSE 2.0</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
         .page-bg {
             position: fixed;
@@ -95,9 +96,10 @@
     </style>
 </head>
 <body>
+    <canvas id="bg-canvas"></canvas>
 
     <div class="announcement-banner">
-        REGISTRATIONS OPENING SOON — STAY TUNED
+        REGISTRATIONS NOW OPEN — JOIN THE RESISTANCE
     </div>
 
     <nav>
@@ -109,7 +111,8 @@
             <li><a href="bounty.html">Bounty</a></li>
             <li><a href="timeline.html">Timeline</a></li>
             <li><a href="command.html">Command</a></li>
-            <li><a href="faq.html">Faq</a></li>
+            <li><a href="faq.html">FAQs</a></li>
+            <li><a href="register.html">Register</a></li>
         </ul>
         <div class="hamburger">
             <span></span>
@@ -126,7 +129,8 @@
         <a href="bounty.html">Bounty</a>
         <a href="timeline.html">Timeline</a>
         <a href="command.html">Command</a>
-        <a href="faq.html">Faq</a>
+        <a href="faq.html">FAQs</a>
+        <a href="register.html">Register</a>
     </div>
 
     <div class="page-bg"></div>
@@ -163,10 +167,51 @@
 
     <footer>
         <div class="kanji-bg">終</div>
-        <p class="footer-dept">MADE BY DEPT. OF MCA</p>
+        <p class="footer-dept">PRESENTED BY DEPT. OF MCA</p>
         <p class="footer-copyright">© 2026 HACKVERSE 2.0 // BMSIT&M // ALL RIGHTS RESERVED</p>
     </footer>
 
     <script type="module" src="./script.js"></script>
+    <script src="./samurai-bg.js"></script>
+    <script>
+        // mission.html addon: Floating Torii Gate + orbiting rings
+        (function() {
+            const sc = window._samuraiBgScene;
+            if (!sc) return;
+            const isMobile = window.innerWidth < 768;
+            const toriiGroup = new THREE.Group();
+            const seg = isMobile ? 4 : 8;
+            const pMat = new THREE.MeshStandardMaterial({ color: 0x8b0000, emissive: 0xff003c, emissiveIntensity: 0.15 });
+            const lp = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.15, 5, seg), pMat);
+            lp.position.set(-1.5, 0, 0); toriiGroup.add(lp);
+            const rp = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.15, 5, seg), pMat);
+            rp.position.set(1.5, 0, 0); toriiGroup.add(rp);
+            const tb = new THREE.Mesh(new THREE.BoxGeometry(4.0, 0.22, 0.3), pMat);
+            tb.position.set(0, 2.6, 0); toriiGroup.add(tb);
+            const sb = new THREE.Mesh(new THREE.BoxGeometry(3.2, 0.16, 0.25), pMat);
+            sb.position.set(0, 2.1, 0); toriiGroup.add(sb);
+            if (isMobile) { toriiGroup.position.set(-2.5, 0, -7); toriiGroup.scale.set(0.7, 0.7, 0.7); }
+            else { toriiGroup.position.set(-5, -1, -6); toriiGroup.scale.set(1.4, 1.4, 1.4); }
+            sc.add(toriiGroup);
+
+            const rSeg = isMobile ? 30 : 60;
+            const rGeo = new THREE.TorusGeometry(1.5, 0.02, 8, rSeg);
+            const rMat = new THREE.MeshBasicMaterial({ color: 0xff003c, opacity: 0.4, transparent: true });
+            const r1 = new THREE.Mesh(rGeo, rMat); toriiGroup.add(r1);
+            const r2 = new THREE.Mesh(rGeo, rMat); toriiGroup.add(r2);
+            const r3 = new THREE.Mesh(rGeo, rMat); toriiGroup.add(r3);
+
+            function extra() {
+                requestAnimationFrame(extra);
+                const t = Date.now();
+                toriiGroup.rotation.y += 0.001;
+                toriiGroup.position.y = (isMobile ? 0 : -1) + Math.sin(t * 0.0005) * 0.3;
+                pMat.emissiveIntensity = 0.12 + Math.sin(t * 0.0015) * 0.09;
+                r1.rotation.x += 0.009; r2.rotation.y += 0.013; r3.rotation.z += 0.007;
+            }
+            extra();
+        })();
+    </script>
 </body>
 </html>
+

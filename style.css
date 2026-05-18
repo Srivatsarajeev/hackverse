@@ -30,6 +30,26 @@ body {
     overflow-x: hidden;
 }
 
+.announcement-banner,
+nav,
+.mobile-menu,
+main,
+footer {
+    position: relative;
+    z-index: 1;
+}
+
+#bg-canvas {
+    position: fixed !important;
+    top: 0 !important; 
+    left: 0 !important;
+    width: 100vw !important; 
+    height: 100vh !important;
+    z-index: 0 !important;
+    pointer-events: none !important;
+    display: block !important;
+}
+
 /* Typography */
 h1, h2, h3, h4, .orbitron {
     font-family: 'Orbitron', sans-serif;

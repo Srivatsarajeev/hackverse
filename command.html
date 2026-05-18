@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>COMMAND CENTER | HACKVERSE 2.0</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
         .section-label {
             font-family: 'JetBrains Mono', monospace;
@@ -69,9 +70,10 @@
     </style>
 </head>
 <body>
+    <canvas id="bg-canvas"></canvas>
 
     <div class="announcement-banner">
-        REGISTRATIONS OPENING SOON — STAY TUNED
+        REGISTRATIONS NOW OPEN — JOIN THE RESISTANCE
     </div>
 
     <nav>
@@ -83,7 +85,8 @@
             <li><a href="bounty.html">Bounty</a></li>
             <li><a href="timeline.html">Timeline</a></li>
             <li><a href="command.html" class="active">Command</a></li>
-            <li><a href="faq.html">Faq</a></li>
+            <li><a href="faq.html">FAQs</a></li>
+            <li><a href="register.html">Register</a></li>
         </ul>
         <div class="hamburger">
             <span></span>
@@ -100,7 +103,8 @@
         <a href="bounty.html">Bounty</a>
         <a href="timeline.html">Timeline</a>
         <a href="command.html">Command</a>
-        <a href="faq.html">Faq</a>
+        <a href="faq.html">FAQs</a>
+        <a href="register.html">Register</a>
     </div>
 
     <main class="container">
@@ -152,10 +156,71 @@
 
     <footer>
         <div class="kanji-bg">終</div>
-        <p class="footer-dept">MADE BY DEPT. OF MCA</p>
+        <p class="footer-dept">PRESENTED BY DEPT. OF MCA</p>
         <p class="footer-copyright">© 2026 HACKVERSE 2.0 // BMSIT&M // ALL RIGHTS RESERVED</p>
     </footer>
 
     <script type="module" src="./script.js"></script>
+    <script src="./samurai-bg.js"></script>
+    <script>
+        // command.html addon: Abstract flying Dragon spirit
+        (function() {
+            const sc = window._samuraiBgScene;
+            if (!sc) return;
+            const isMobile = window.innerWidth < 768;
+            const dGrp = new THREE.Group();
+            const dSpheres = [];
+            const hMat = new THREE.MeshStandardMaterial({ color: 0x8b0000, emissive: 0xff0000, emissiveIntensity: 0.3, metalness: 0.3 });
+            const headM = new THREE.Mesh(new THREE.SphereGeometry(0.5, 10, 10), hMat);
+            dGrp.add(headM); dSpheres.push({ mesh: headM, i: 0 });
+            const hornM = new THREE.MeshStandardMaterial({ color: 0x8b0000 });
+            const lh = new THREE.Mesh(new THREE.ConeGeometry(0.06, 0.4, 6), hornM);
+            lh.position.set(-0.2, 0.4, 0); lh.rotation.z = 0.2; headM.add(lh);
+            const rh = new THREE.Mesh(new THREE.ConeGeometry(0.06, 0.4, 6), hornM);
+            rh.position.set(0.2, 0.4, 0); rh.rotation.z = -0.2; headM.add(rh);
+            const c1 = new THREE.Color(0x8b0000), c2 = new THREE.Color(0xff003c);
+            const seg = isMobile ? 6 : 10;
+            for(let i=1; i<18; i++) {
+                const geo = new THREE.SphereGeometry(Math.max(0.05, 0.35-i*0.012), seg, seg);
+                const mat = new THREE.MeshStandardMaterial({ color: c1.clone().lerp(c2, i/17), emissive: 0xff003c, emissiveIntensity: 0.1+i*0.015 });
+                const m = new THREE.Mesh(geo, mat); dGrp.add(m); dSpheres.push({ mesh: m, i });
+            }
+            dGrp.position.set(isMobile ? 0 : -5.5, isMobile ? 2.5 : 1, isMobile ? -7 : -6);
+            dGrp.scale.set(isMobile ? 0.7 : 1.2, isMobile ? 0.7 : 1.2, 1);
+            sc.add(dGrp);
+            const hl = new THREE.PointLight(0xff0000, 2, 8); headM.add(hl);
+            const pGeo = new THREE.SphereGeometry(0.04, 6, 6);
+            const particles = [];
+            const pCnt = isMobile ? 15 : 35;
+            for(let i=0; i<pCnt; i++) {
+                const pm = new THREE.MeshBasicMaterial({ color: 0xff003c, opacity: 0.5+Math.random()*0.3, transparent: true });
+                const p = new THREE.Mesh(pGeo, pm); dGrp.add(p);
+                particles.push({ mesh: p, r: 2+Math.random()*2, angle: Math.random()*Math.PI*2, spd: 0.008+Math.random()*0.012 });
+            }
+
+            function extra() {
+                requestAnimationFrame(extra);
+                const t = Date.now(); const time = t * 0.001;
+                dSpheres.forEach(s => {
+                    const i = s.i;
+                    s.mesh.position.x = Math.sin(time*0.5 + i*0.45) * (1.5 + i*0.08);
+                    s.mesh.position.y = Math.cos(time*0.4 + i*0.3) * 0.8 + Math.sin(time*0.7) * 0.5;
+                    s.mesh.position.z = i * 0.2;
+                });
+                dGrp.rotation.y += 0.003;
+                dGrp.position.y = (isMobile ? 2.5 : 1) + Math.sin(t * 0.0008) * 0.6;
+                hMat.emissiveIntensity = 0.3 + Math.sin(t * 0.005) * 0.3;
+                particles.forEach(p => {
+                    p.angle += p.spd;
+                    p.mesh.position.x = Math.cos(p.angle) * p.r;
+                    p.mesh.position.y = Math.sin(p.angle * 0.7) * p.r * 0.5;
+                    p.mesh.position.z = Math.sin(p.angle) * p.r;
+                });
+                hl.intensity = 1.5 + Math.sin(t * 0.004) * 0.7;
+            }
+            extra();
+        })();
+    </script>
 </body>
 </html>
+

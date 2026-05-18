@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HACKVERSE 2.0 | REGISTER</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        main {
+            min-height: 80vh;
+            position: relative;
+            z-index: 10;
+            background-color: transparent;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="bg-canvas"></canvas>
+
+    <div class="announcement-banner">
+        REGISTRATIONS NOW OPEN — JOIN THE RESISTANCE
+    </div>
+
+    <nav>
+        <a href="index.html" class="logo">HV_2.0</a>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="mission.html">Mission</a></li>
+            <li><a href="districts.html">Districts</a></li>
+            <li><a href="bounty.html">Bounty</a></li>
+            <li><a href="timeline.html">Timeline</a></li>
+            <li><a href="command.html">Command</a></li>
+            <li><a href="faq.html">FAQs</a></li>
+            <li><a href="register.html" class="active">Register</a></li>
+        </ul>
+        <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+
+    <div class="mobile-menu">
+        <span class="close-menu">&times;</span>
+        <a href="index.html">Home</a>
+        <a href="mission.html">Mission</a>
+        <a href="districts.html">Districts</a>
+        <a href="bounty.html">Bounty</a>
+        <a href="timeline.html">Timeline</a>
+        <a href="command.html">Command</a>
+        <a href="faq.html">FAQs</a>
+        <a href="register.html">Register</a>
+    </div>
+
+    <main>
+        <!-- React App root element -->
+        <div id="register-root"></div>
+    </main>
+
+    <footer>
+        <div class="kanji-bg">終</div>
+        <p class="footer-dept">Made with ❤️ by Dept. of MCA</p>
+        <p class="footer-copyright">© 2026 HACKVERSE 2.0 // BMSIT&M // ALL RIGHTS RESERVED</p>
+    </footer>
+
+    <!-- Global shared javascript for mobile nav -->
+    <script type="module" src="./script.js"></script>
+    <!-- Shared canvas 3D Samurai background script -->
+    <script src="./samurai-bg.js"></script>
+    <!-- React app code -->
+    <script type="module" src="/src/register.jsx"></script>
+</body>
+</html>

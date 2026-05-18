@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>INITIALIZATION | HACKVERSE 2.0</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
         .countdown-wrap {
             display: grid;
@@ -121,9 +122,10 @@
     </style>
 </head>
 <body>
+    <canvas id="bg-canvas"></canvas>
 
     <div class="announcement-banner">
-        REGISTRATIONS OPENING SOON — STAY TUNED
+        REGISTRATIONS NOW OPEN — JOIN THE RESISTANCE
     </div>
 
     <nav>
@@ -135,7 +137,8 @@
             <li><a href="bounty.html">Bounty</a></li>
             <li><a href="timeline.html" class="active">Timeline</a></li>
             <li><a href="command.html">Command</a></li>
-            <li><a href="faq.html">Faq</a></li>
+            <li><a href="faq.html">FAQs</a></li>
+            <li><a href="register.html">Register</a></li>
         </ul>
         <div class="hamburger">
             <span></span>
@@ -152,7 +155,8 @@
         <a href="bounty.html">Bounty</a>
         <a href="timeline.html">Timeline</a>
         <a href="command.html">Command</a>
-        <a href="faq.html">Faq</a>
+        <a href="faq.html">FAQs</a>
+        <a href="register.html">Register</a>
     </div>
 
     <main class="container">
@@ -181,7 +185,7 @@
             <div class="timeline-entry">
                 <div class="timeline-dot"></div>
                 <div class="timeline-card">
-                    <h3 class="timeline-date">27th MAY, 2026</h3>
+                    <h3 class="timeline-date">26<sup>th</sup> & 27<sup>th</sup> MAY, 2026</h3>
                     <span class="timeline-round">ONLINE ROUND</span>
                     <p class="timeline-desc">The preliminary digital pitch phase. Present your neural concepts to the high command from anywhere in the world.</p>
                 </div>
@@ -189,7 +193,7 @@
             <div class="timeline-entry">
                 <div class="timeline-dot"></div>
                 <div class="timeline-card">
-                    <h3 class="timeline-date">30th MAY, 2026</h3>
+                    <h3 class="timeline-date">30<sup>th</sup> MAY, 2026</h3>
                     <span class="timeline-round">OFFLINE FINALE</span>
                     <p class="timeline-desc">The grand physical standoff. The top 20 chosen teams will breach the perimeter at the Dept. of MCA for the final build.</p>
                 </div>
@@ -204,10 +208,61 @@
 
     <footer>
         <div class="kanji-bg">終</div>
-        <p class="footer-dept">MADE BY DEPT. OF MCA</p>
+        <p class="footer-dept">PRESENTED BY DEPT. OF MCA</p>
         <p class="footer-copyright">© 2026 HACKVERSE 2.0 // BMSIT&M // ALL RIGHTS RESERVED</p>
     </footer>
 
     <script type="module" src="./script.js"></script>
+    <script src="./samurai-bg.js"></script>
+    <script>
+        // timeline.html addon: Floating Clockface + expanding energy rings
+        (function() {
+            const sc = window._samuraiBgScene;
+            if (!sc) return;
+            const isMobile = window.innerWidth < 768;
+            const cSeg = isMobile ? 32 : 64;
+            const cMat = new THREE.MeshStandardMaterial({ color: 0x0d0000, emissive: 0xff003c, emissiveIntensity: 0.2 });
+            const hMat = new THREE.MeshStandardMaterial({ color: 0xff003c, emissive: 0xff003c, emissiveIntensity: 0.5 });
+            const clkGrp = new THREE.Group();
+            clkGrp.add(Object.assign(new THREE.Mesh(new THREE.CylinderGeometry(2,2,0.1,cSeg), cMat), { rotation: { x: Math.PI/2 }}));
+            clkGrp.add(new THREE.Mesh(new THREE.TorusGeometry(2.05, 0.06, 8, cSeg), cMat));
+            for(let i=0; i<12; i++) {
+                const t = new THREE.Mesh(new THREE.BoxGeometry(0.05,0.3,0.05), cMat);
+                const a = (i/12)*Math.PI*2; t.position.set(Math.cos(a)*1.8, Math.sin(a)*1.8, 0); t.rotation.z = a; clkGrp.add(t);
+            }
+            const hourGrp = new THREE.Group(), hourMesh = new THREE.Mesh(new THREE.BoxGeometry(0.06,1.0,0.05), hMat);
+            hourMesh.position.y = 0.5; hourGrp.add(hourMesh); clkGrp.add(hourGrp);
+            const minGrp = new THREE.Group(), minMesh = new THREE.Mesh(new THREE.BoxGeometry(0.04,1.5,0.05), hMat);
+            minMesh.position.y = 0.75; minGrp.add(minMesh); clkGrp.add(minGrp);
+            clkGrp.position.set(isMobile ? 0 : 4, isMobile ? 3 : 0, isMobile ? -7 : -5.5);
+            clkGrp.scale.set(isMobile ? 0.75 : 1.1, isMobile ? 0.75 : 1.1, 1);
+            sc.add(clkGrp);
+
+            const eRings = [];
+            const eGeo = new THREE.TorusGeometry(0.5, 0.02, 8, isMobile ? 30 : 60);
+            for (let i=0; i<4; i++) {
+                const m = new THREE.MeshBasicMaterial({ color: 0xff003c, transparent: true, opacity: 0.6 });
+                const er = new THREE.Mesh(eGeo, m); sc.add(er);
+                eRings.push({ mesh: er, offset: i * 0.75 });
+            }
+
+            function extra() {
+                requestAnimationFrame(extra);
+                const t = Date.now();
+                clkGrp.rotation.y += 0.004;
+                clkGrp.position.y = (isMobile ? 3 : 0) + Math.sin(t * 0.0007) * 0.4;
+                hourGrp.rotation.z = -(t * 0.00005);
+                minGrp.rotation.z = -(t * 0.0003);
+                cMat.emissiveIntensity = 0.15 + Math.sin(t * 0.002) * 0.1;
+                eRings.forEach(er => {
+                    const sc2 = 1 + (((t * 0.0005) + er.offset) % 3) * 1.5;
+                    er.mesh.scale.set(sc2, sc2, 1);
+                    er.mesh.material.opacity = Math.max(0, 0.6 - sc2 * 0.18);
+                });
+            }
+            extra();
+        })();
+    </script>
 </body>
 </html>
+

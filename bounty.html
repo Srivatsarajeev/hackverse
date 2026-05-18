@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BOUNTY BOARD | HACKVERSE 2.0</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
         .bounty-container {
             display: flex;
@@ -92,9 +93,10 @@
     </style>
 </head>
 <body>
+    <canvas id="bg-canvas"></canvas>
 
     <div class="announcement-banner">
-        REGISTRATIONS OPENING SOON — STAY TUNED
+        REGISTRATIONS NOW OPEN — JOIN THE RESISTANCE
     </div>
 
     <nav>
@@ -106,7 +108,8 @@
             <li><a href="bounty.html" class="active">Bounty</a></li>
             <li><a href="timeline.html">Timeline</a></li>
             <li><a href="command.html">Command</a></li>
-            <li><a href="faq.html">Faq</a></li>
+            <li><a href="faq.html">FAQs</a></li>
+            <li><a href="register.html">Register</a></li>
         </ul>
         <div class="hamburger">
             <span></span>
@@ -123,7 +126,8 @@
         <a href="bounty.html">Bounty</a>
         <a href="timeline.html">Timeline</a>
         <a href="command.html">Command</a>
-        <a href="faq.html">Faq</a>
+        <a href="faq.html">FAQs</a>
+        <a href="register.html">Register</a>
     </div>
 
     <main class="container">
@@ -161,10 +165,58 @@
 
     <footer>
         <div class="kanji-bg">終</div>
-        <p class="footer-dept">MADE BY DEPT. OF MCA</p>
+        <p class="footer-dept">PRESENTED BY DEPT. OF MCA</p>
         <p class="footer-copyright">© 2026 HACKVERSE 2.0 // BMSIT&M // ALL RIGHTS RESERVED</p>
     </footer>
 
     <script type="module" src="./script.js"></script>
+    <script src="./samurai-bg.js"></script>
+    <script>
+        // bounty.html addon: Giant Katana + falling gold coins
+        (function() {
+            const sc = window._samuraiBgScene;
+            if (!sc) return;
+            const isMobile = window.innerWidth < 768;
+            const seg = isMobile ? 4 : 8;
+            const katGrp = new THREE.Group();
+            const bladeMat = new THREE.MeshStandardMaterial({ color: 0xc0c0c0, metalness: 1, roughness: 0, emissive: 0xffffff, emissiveIntensity: 0.05 });
+            katGrp.add(new THREE.Mesh(new THREE.BoxGeometry(0.15, 8, 0.05), bladeMat));
+            const guard = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.5, 0.1, seg), new THREE.MeshStandardMaterial({ color: 0x8b6914 }));
+            guard.position.y = -3.5; katGrp.add(guard);
+            const handle = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.12, 1.5, seg), new THREE.MeshStandardMaterial({ color: 0x2a1a00 }));
+            handle.position.y = -4.3; katGrp.add(handle);
+            katGrp.position.set(isMobile ? 3 : -4.5, isMobile ? 0.5 : 0, isMobile ? -6 : -5);
+            katGrp.scale.set(isMobile ? 0.6 : 1, isMobile ? 0.6 : 1, 1);
+            katGrp.rotation.z = 0.3;
+            sc.add(katGrp);
+
+            const coins = [];
+            const cnt = isMobile ? 30 : 60;
+            const coinGeo = new THREE.CylinderGeometry(0.18, 0.18, 0.03, isMobile ? 8 : 16);
+            const coinMat = new THREE.MeshStandardMaterial({ color: 0xffd700, metalness: 0.9, roughness: 0.1, emissive: 0xff8c00, emissiveIntensity: 0.2 });
+            for (let i=0; i<cnt; i++) {
+                const coin = new THREE.Mesh(coinGeo, coinMat);
+                coin.position.set((Math.random()-0.5)*14, (Math.random()*12)+2, Math.random()*-4);
+                sc.add(coin);
+                coins.push({ mesh: coin, vy: 0.02+Math.random()*0.04, rx: 0.01+Math.random()*0.03, rz: 0.01+Math.random()*0.02 });
+            }
+            const gl = new THREE.PointLight(0xffd700, 1.5, 10); gl.position.set(0, 3, 2); sc.add(gl);
+
+            function extra() {
+                requestAnimationFrame(extra);
+                const t = Date.now();
+                katGrp.rotation.z = 0.3 + Math.sin(t * 0.0008) * 0.15;
+                katGrp.position.y = Math.sin(t * 0.0006) * 0.5;
+                bladeMat.emissiveIntensity = 0.03 + Math.sin(t * 0.003) * 0.04;
+                coins.forEach(c => {
+                    c.mesh.position.y -= c.vy; c.mesh.rotation.x += c.rx; c.mesh.rotation.z += c.rz;
+                    if (c.mesh.position.y < -4) c.mesh.position.y = 12 + Math.random() * 4;
+                });
+                gl.intensity = 1.2 + Math.sin(t * 0.003) * 0.4;
+            }
+            extra();
+        })();
+    </script>
 </body>
 </html>
+

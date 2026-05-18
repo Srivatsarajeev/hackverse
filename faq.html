@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>INTEL QUERY | HACKVERSE 2.0</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
         .faq-container {
             max-width: 800px;
@@ -70,9 +71,10 @@
     </style>
 </head>
 <body>
+    <canvas id="bg-canvas"></canvas>
 
     <div class="announcement-banner">
-        REGISTRATIONS OPENING SOON — STAY TUNED
+        REGISTRATIONS NOW OPEN — JOIN THE RESISTANCE
     </div>
 
     <nav>
@@ -84,7 +86,8 @@
             <li><a href="bounty.html">Bounty</a></li>
             <li><a href="timeline.html">Timeline</a></li>
             <li><a href="command.html">Command</a></li>
-            <li><a href="faq.html" class="active">Faq</a></li>
+            <li><a href="faq.html" class="active">FAQs</a></li>
+            <li><a href="register.html">Register</a></li>
         </ul>
         <div class="hamburger">
             <span></span>
@@ -101,7 +104,8 @@
         <a href="bounty.html">Bounty</a>
         <a href="timeline.html">Timeline</a>
         <a href="command.html">Command</a>
-        <a href="faq.html">Faq</a>
+        <a href="faq.html">FAQs</a>
+        <a href="register.html">Register</a>
     </div>
 
     <main class="container">
@@ -165,16 +169,67 @@
         </div>
 
         <div class="cta-section">
-            <a href="#" class="btn btn-join">JOIN THE REBELLION &rarr;</a>
+            <a href="register.html" class="btn btn-join">JOIN THE REBELLION &rarr;</a>
         </div>
     </main>
 
     <footer>
         <div class="kanji-bg">終</div>
-        <p class="footer-dept">MADE BY DEPT. OF MCA</p>
+        <p class="footer-dept">PRESENTED BY DEPT. OF MCA</p>
         <p class="footer-copyright">© 2026 HACKVERSE 2.0 // BMSIT&M // ALL RIGHTS RESERVED</p>
     </footer>
 
     <script type="module" src="./script.js"></script>
+    <script src="./samurai-bg.js"></script>
+    <script>
+        // faq.html addon: Floating ancient scrolls + rising runes
+        (function() {
+            const sc = window._samuraiBgScene;
+            if (!sc) return;
+            const isMobile = window.innerWidth < 768;
+            const seg = isMobile ? 8 : 16;
+            const rMat = new THREE.MeshStandardMaterial({ color: 0x1a0800, emissive: 0xff003c, emissiveIntensity: 0.05 });
+            const cMat = new THREE.MeshStandardMaterial({ color: 0x8b4513 });
+            const pMat = new THREE.MeshBasicMaterial({ color: 0x0d0600, opacity: 0.5, transparent: true, side: THREE.DoubleSide });
+            const positions = isMobile
+                ? [[0, 3.5, -6], [-2.5, 1.5, -7], [2.5, 1.5, -7]]
+                : [[-6, 1, -5], [-2, 3, -7], [2, 0.5, -4], [5, 2, -6], [0, -1, -8]];
+            const scrolls = [];
+            positions.forEach((pos, idx) => {
+                const g = new THREE.Group();
+                g.add(new THREE.Mesh(new THREE.CylinderGeometry(0.12,0.12,2.0,seg), rMat));
+                const tc = new THREE.Mesh(new THREE.CylinderGeometry(0.15,0.15,0.1,seg), cMat); tc.position.y = 1.0; g.add(tc);
+                const bc = new THREE.Mesh(new THREE.CylinderGeometry(0.15,0.15,0.1,seg), cMat); bc.position.y = -1.0; g.add(bc);
+                const p = new THREE.Mesh(new THREE.PlaneGeometry(1.8,1.4), pMat); p.position.x = 0.9; g.add(p);
+                g.position.set(pos[0], pos[1], pos[2]);
+                sc.add(g);
+                scrolls.push({ mesh: g, baseY: pos[1], rotSpd: 0.003+Math.random()*0.005, idx });
+            });
+            const rGeo = new THREE.PlaneGeometry(0.4, 0.4);
+            const runes = [];
+            for(let i=0; i<6; i++) {
+                const rm = new THREE.MeshBasicMaterial({ color: 0xff003c, opacity: 0.07+Math.random()*0.06, transparent: true });
+                const rune = new THREE.Mesh(rGeo, rm);
+                rune.position.set((Math.random()-0.5)*16, (Math.random()*12)-2, Math.random()*-5);
+                sc.add(rune); runes.push(rune);
+            }
+
+            function extra() {
+                requestAnimationFrame(extra);
+                const t = Date.now();
+                scrolls.forEach(s => {
+                    s.mesh.rotation.y += s.rotSpd;
+                    s.mesh.rotation.z = Math.sin(t * 0.001 + s.idx) * 0.1;
+                    s.mesh.position.y = s.baseY + Math.sin(t * 0.0008 + s.idx) * 0.4;
+                });
+                runes.forEach(r => {
+                    r.position.y += 0.005; r.rotation.z += 0.002;
+                    if (r.position.y > 8) r.position.y = -4;
+                });
+            }
+            extra();
+        })();
+    </script>
 </body>
 </html>
+

@@ -1,7 +1,9 @@
 import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
 import { resolve } from 'path'
 
 export default defineConfig({
+  plugins: [react()],
   build: {
     rollupOptions: {
       input: {
@@ -12,6 +14,8 @@ export default defineConfig({
         timeline: resolve(__dirname, 'timeline.html'),
         command: resolve(__dirname, 'command.html'),
         faq: resolve(__dirname, 'faq.html'),
+        register: resolve(__dirname, 'register.html'),
+        'neo-tokyo-shadow-control': resolve(__dirname, 'neo-tokyo-shadow-control.html'),
       },
     },
   },
