@@ -35,12 +35,19 @@
             bottom: 0;
             left: 50%;
             transform: translateX(-50%);
-            height: 45vh; /* Slightly smaller */
-            width: auto;
+            height: 70vh; /* Increase height for 3D model */
+            width: 100vw;
+            max-width: 1200px;
             z-index: 2;
-            opacity: 0.2; /* Much lower opacity to see background through it */
-            pointer-events: none;
-            filter: blur(2px); /* Soften the edges */
+            opacity: 0.85; /* Better visibility for 3D model */
+            pointer-events: auto; /* Allow interaction */
+        }
+
+        .bg-layer-2-samurai iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            outline: none;
         }
 
         .bg-layer-3-rain {
@@ -203,19 +210,9 @@
         <section class="hero-section">
             <div class="bg-layer-1"></div>
             
-            <!-- Layer 2: Samurai Silhouette -->
+            <!-- Layer 2: 3D Samurai Model -->
             <div class="bg-layer-2-samurai">
-                <svg viewBox="0 0 100 200" height="100%" xmlns="http://www.w3.org/2000/svg">
-                    <path class="samurai-silhouette" d="M50 10 L45 20 L40 40 L35 70 L30 100 L25 140 L20 180 L20 200 L80 200 L80 180 L75 140 L70 100 L65 70 L60 40 L55 20 Z" />
-                    <!-- Simplified Samurai Shape -->
-                    <circle cx="50" cy="25" r="10" class="samurai-silhouette" />
-                    <rect x="42" y="35" width="16" height="40" class="samurai-silhouette" />
-                    <path d="M42 45 L20 100 L25 105 L42 55 Z" class="samurai-silhouette" />
-                    <path d="M58 45 L80 100 L75 105 L58 55 Z" class="samurai-silhouette" />
-                    <path d="M42 75 L35 150 L65 150 L58 75 Z" class="samurai-silhouette" />
-                    <rect x="35" y="150" width="10" height="50" class="samurai-silhouette" />
-                    <rect x="55" y="150" width="10" height="50" class="samurai-silhouette" />
-                </svg>
+                <iframe title="Cyberpunk Ronin" frameborder="0" allowfullscreen mozallowfullscreen="true" webkitallowfullscreen="true" allow="autoplay; fullscreen; xr-spatial-tracking" xr-spatial-tracking execution-while-out-of-viewport execution-while-not-rendered web-share src="https://sketchfab.com/models/bdf158e3030c490b89d7738fd1f0b6e8/embed?autostart=1&transparent=1&ui_controls=0&ui_infos=0&ui_inspector=0&ui_stop=0&ui_watermark=0&ui_watermark_link=0&ui_hint=2&dnt=1"> </iframe>
             </div>
 
             <div class="bg-layer-3-rain" id="rain-container"></div>
