@@ -267,7 +267,8 @@ export default function RegisterApp() {
     setSubmitError('');
 
     try {
-      const res = await axios.post("http://localhost:8000/api/register", {
+      const apiUrl = import.meta.env.PROD ? "" : "http://localhost:8000";
+      const res = await axios.post(`${apiUrl}/api/register`, {
         fullName: formData.fullName,
         email: formData.email,
         whatsapp: formData.whatsapp,
@@ -365,7 +366,7 @@ export default function RegisterApp() {
               [ PARTICIPANT REGISTRATION ]
             </p>
             <h1 className="font-orbitron font-black text-4xl md:text-5xl text-white tracking-widest mb-1 drop-shadow-[0_0_12px_#ff003c]">
-              HACK4SOC 3.0
+              HACKVERSE 2.0
             </h1>
           </div>
           
