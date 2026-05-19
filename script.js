@@ -274,7 +274,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (dialogue) {
                 dialogue.innerHTML = `
                     <span class="intro-label" style="color: #ff003c; font-weight: bold; letter-spacing: 0.35em;">HV_SECURE_CHANNEL</span>
-                    <strong style="color: #ff003c; font-size: clamp(2rem, 5vw, 4rem); text-transform: uppercase;">ACCESS GRANTED</strong>
+                    <strong style="color: #ff003c; font-size: clamp(1.6rem, 4.5vw, 3rem); text-transform: uppercase; text-shadow: 0 0 15px #ff003c; display: block; margin: 5px 0;">WELCOME TO HACKVERSE</strong>
                     <small style="color: #00ffcc; letter-spacing: 0.25em; font-family: 'JetBrains Mono', monospace; font-weight: bold; text-transform: uppercase; display: flex; align-items: center; justify-content: center; gap: 4px;">
                         ENTERING HACKVERSE
                         <span style="animation: cursor-blink 0.8s infinite; background: #00ffcc; display: inline-block; width: 8px; height: 15px; margin-left: 2px; vertical-align: middle;"></span>
@@ -297,11 +297,17 @@ document.addEventListener('DOMContentLoaded', () => {
             beginIntroTimeline();
         };
 
-        // Attach listeners
+        // Attach dynamic gesture listeners to satisfy rigid mobile autoplay constraints
+        intro.addEventListener('touchstart', (e) => {
+            if (e.target.classList.contains('intro-skip-btn')) return;
+            startIntroSequence();
+        }, { passive: true });
+
         intro.addEventListener('pointerdown', (e) => {
             if (e.target.classList.contains('intro-skip-btn')) return;
             startIntroSequence();
         });
+
         intro.addEventListener('click', (e) => {
             if (e.target.classList.contains('intro-skip-btn')) return;
             startIntroSequence();

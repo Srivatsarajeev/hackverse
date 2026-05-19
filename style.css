@@ -805,7 +805,6 @@ h1, h2, h3, h4, .orbitron {
     font-family: 'JetBrains Mono', monospace;
 }
 
-/* Announcement Banner */
 .announcement-banner {
     background: var(--primary-red);
     color: white;
@@ -818,6 +817,12 @@ h1, h2, h3, h4, .orbitron {
     position: sticky;
     top: 0;
     z-index: 1001;
+    cursor: pointer;
+    transition: background-color 0.25s ease;
+}
+
+.announcement-banner:hover {
+    background: #cc0030;
 }
 
 /* Navigation */
