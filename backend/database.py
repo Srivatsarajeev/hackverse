@@ -176,9 +176,16 @@ uploads_col = db["uploads"]
 def init_db():
     """Ensure indexes and default admin user are configured in the database."""
     try:
+        # Dynamic migration: drop unique email index to support team-based entries with optional email
+        try:
+            registrations_col.drop_index("email_1")
+            print("[DATABASE] Dropped unique index 'email_1' to resolve null duplicate constraint.")
+        except Exception:
+            pass
+
         # Create indexes for fast search and unique constraints
         registrations_col.create_index("participantId", unique=True)
-        registrations_col.create_index("email", unique=True)
+        registrations_col.create_index("email")  # Recreated as non-unique index for fast searching
         registrations_col.create_index("whatsapp", unique=True)
         admins_col.create_index("username", unique=True)
         
