@@ -1,6 +1,7 @@
 import os
 import time
 import random
+import tempfile
 from datetime import datetime, timezone
 from fastapi import APIRouter, UploadFile, File, HTTPException, status
 from pydantic import EmailStr
@@ -10,24 +11,31 @@ from backend.database import registrations_col, uploads_col
 router = APIRouter(prefix="/api")
 
 # Ensure uploads directory exists
-UPLOAD_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "uploads")
+UPLOAD_DIR = os.getenv("UPLOAD_DIR", os.path.join(tempfile.gettempdir(), "hackverse_uploads"))
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 @router.post("/register", status_code=201)
 def register_participant(data: ParticipantRegisterSchema):
     """Register a new participant for Hackverse 2.0 with duplicate prevention."""
-    # Check for duplicate email
-    if registrations_col.find_one({"email": data.email}):
+    # Check for duplicate email (only if email is provided)
+    if data.email and registrations_col.find_one({"email": data.email}):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="This email address is already registered."
         )
         
-    # Check for duplicate whatsapp
+    # Check for duplicate whatsapp (leader phone)
     if registrations_col.find_one({"whatsapp": data.whatsapp}):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="This WhatsApp number is already registered."
+            detail="This WhatsApp phone number is already registered."
+        )
+
+    # Check for duplicate payment UTR (transaction fraud prevention)
+    if registrations_col.find_one({"paymentUtr": data.paymentUtr}):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="This Payment UTR code has already been registered."
         )
 
     # Automatically generate Participant ID in matching format (e.g. H4S-2026-4012)
@@ -59,14 +67,14 @@ def register_participant(data: ParticipantRegisterSchema):
 
 @router.post("/upload")
 async def upload_file(file: UploadFile = File(...)):
-    """Securely upload team slides (PPT/PDF) or lead resumes (PDF)."""
+    """Securely upload participant documents."""
     # Validate extension
     filename = file.filename
     ext = os.path.splitext(filename)[1].lower()
-    if ext not in [".pdf", ".ppt", ".pptx"]:
+    if ext not in [".pdf", ".ppt", ".pptx", ".jpg", ".jpeg", ".png", ".webp"]:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Invalid file format. Only PDF or PPT/PPTX formats are allowed."
+            detail="Invalid file format. Only PDF, PPT/PPTX, JPG, PNG, or WEBP formats are allowed."
         )
 
     # Validate size (10MB Max size limit)

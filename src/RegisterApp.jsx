@@ -1,131 +1,56 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 
-// Custom Canvas Component for Cyberpunk Rain + Embers/Particles Background
+// Cybernetic Matrix/Rain Canvas Background Animation
 const CyberCanvasBackground = () => {
   const canvasRef = useRef(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-
     const ctx = canvas.getContext('2d');
-    let animationFrameId;
+    if (!ctx) return;
 
-    let width = (canvas.width = canvas.offsetWidth);
-    let height = (canvas.height = canvas.offsetHeight);
+    let animationFrameId;
+    let width = (canvas.width = window.innerWidth);
+    let height = (canvas.height = window.innerHeight);
 
     const handleResize = () => {
       if (!canvas) return;
-      width = canvas.width = canvas.offsetWidth;
-      height = canvas.height = canvas.offsetHeight;
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
     };
-
     window.addEventListener('resize', handleResize);
 
-    const drops = [];
-    const maxDrops = 80;
-    
-    const particles = [];
-    const maxParticles = 40;
+    // Grid columns
+    const columns = Math.floor(width / 24) + 1;
+    const yPositions = Array(columns).fill(0);
 
-    class Drop {
-      constructor() {
-        this.reset();
-      }
-
-      reset() {
-        this.x = Math.random() * width;
-        this.y = Math.random() * -100 - 20;
-        this.speed = Math.random() * 6 + 5;
-        this.length = Math.random() * 20 + 10;
-        this.opacity = Math.random() * 0.35 + 0.15;
-      }
-
-      update() {
-        this.y += this.speed;
-        if (this.y > height) {
-          this.reset();
-        }
-      }
-
-      draw() {
-        ctx.strokeStyle = `rgba(255, 0, 60, ${this.opacity})`;
-        ctx.lineWidth = 1.0;
-        ctx.beginPath();
-        ctx.moveTo(this.x, this.y);
-        ctx.lineTo(this.x, this.y + this.length);
-        ctx.stroke();
-      }
-    }
-
-    class Particle {
-      constructor() {
-        this.reset();
-      }
-
-      reset() {
-        this.x = Math.random() * width;
-        this.y = height + Math.random() * 100;
-        this.size = Math.random() * 2.5 + 0.8;
-        this.speedY = Math.random() * -1.2 - 0.4;
-        this.speedX = Math.random() * 0.8 - 0.4;
-        this.opacity = Math.random() * 0.5 + 0.25;
-        this.wobble = Math.random() * 0.04;
-      }
-
-      update() {
-        this.y += this.speedY;
-        this.x += this.speedX + Math.sin(this.y * this.wobble) * 0.3;
-        
-        if (this.y < -20 || this.x < -20 || this.x > width + 20) {
-          this.reset();
-        }
-      }
-
-      draw() {
-        ctx.fillStyle = `rgba(255, 0, 60, ${this.opacity})`;
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fill();
-        
-        if (this.size > 2) {
-          ctx.shadowColor = '#ff003c';
-          ctx.shadowBlur = 4;
-          ctx.fillStyle = `rgba(255, 0, 60, ${this.opacity * 0.4})`;
-          ctx.beginPath();
-          ctx.arc(this.x, this.y, this.size * 1.5, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.shadowBlur = 0;
-        }
-      }
-    }
-
-    for (let i = 0; i < maxDrops; i++) {
-      drops.push(new Drop());
-    }
-    for (let i = 0; i < maxParticles; i++) {
-      particles.push(new Particle());
-    }
-
-    const animate = () => {
-      ctx.fillStyle = 'rgba(4, 0, 10, 0.22)';
+    const draw = () => {
+      ctx.fillStyle = 'rgba(4, 0, 8, 0.08)';
       ctx.fillRect(0, 0, width, height);
 
-      drops.forEach((drop) => {
-        drop.update();
-        drop.draw();
-      });
+      ctx.fillStyle = 'rgba(255, 0, 60, 0.15)'; // Cyberpunk neon red tint
+      ctx.font = '11px monospace';
 
-      particles.forEach((particle) => {
-        particle.update();
-        particle.draw();
-      });
+      for (let i = 0; i < yPositions.length; i++) {
+        // Render digital binary/hex codes
+        const code = Math.random() > 0.5 ? '1' : '0';
+        const x = i * 24;
+        const y = yPositions[i];
 
-      animationFrameId = requestAnimationFrame(animate);
+        ctx.fillText(code, x, y);
+
+        if (y > 100 + Math.random() * 10000) {
+          yPositions[i] = 0;
+        } else {
+          yPositions[i] += 20;
+        }
+      }
+      animationFrameId = requestAnimationFrame(draw);
     };
 
-    animate();
+    draw();
 
     return () => {
       window.removeEventListener('resize', handleResize);
@@ -138,28 +63,20 @@ const CyberCanvasBackground = () => {
 
 export default function RegisterApp() {
   const [formData, setFormData] = useState({
-    fullName: '',
-    email: '',
-    whatsapp: '',
-    alternatePhoneSame: true,
-    alternatePhone: '',
-    dob: '',
-    gender: 'Male',
-    country: 'India',
-    state: '',
-    city: '',
-    occupation: 'College Student',
     collegeName: '',
-    collegeCountry: 'India',
-    collegeState: '',
-    collegeCity: '',
-    degree: '',
-    stream: '',
-    passoutYear: '2026',
-    githubUrl: '',
-    linkedinUrl: '',
-    termsAccepted: true,
-    communicationsAccepted: true,
+    teamName: '',
+    fullName: '',
+    whatsapp: '',
+    alternatePhone: '',
+    degree: '', // BCA or MCA option
+    teamSize: 1, // min 1 max 2 option
+    member2Name: '',
+    member2Phone: '',
+    idCardFileUrl: '',
+    idCardFileName: '',
+    paymentUtr: '',
+    paymentReceiptUrl: '',
+    paymentReceiptName: '',
   });
 
   const [errors, setErrors] = useState({});
@@ -169,6 +86,9 @@ export default function RegisterApp() {
   const [submitted, setSubmitted] = useState(false);
   const [teamId, setTeamId] = useState('');
   const [currentTime, setCurrentTime] = useState('');
+  
+  const [idCardFile, setIdCardFile] = useState(null);
+  const [paymentReceiptFile, setPaymentReceiptFile] = useState(null);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -190,52 +110,89 @@ export default function RegisterApp() {
     }
   };
 
+  const handleFileChange = (e) => {
+    const file = e.target.files?.[0] || null;
+    setIdCardFile(file);
+    setFormData((prev) => ({
+      ...prev,
+      idCardFileName: file?.name || '',
+    }));
+    if (errors.idCardFile) {
+      setErrors((prev) => ({ ...prev, idCardFile: '' }));
+    }
+  };
+
+  const handleReceiptFileChange = (e) => {
+    const file = e.target.files?.[0] || null;
+    setPaymentReceiptFile(file);
+    setFormData((prev) => ({
+      ...prev,
+      paymentReceiptName: file?.name || '',
+    }));
+    if (errors.paymentReceiptFile) {
+      setErrors((prev) => ({ ...prev, paymentReceiptFile: '' }));
+    }
+  };
+
   const validateForm = () => {
     const newErrors = {};
 
-    if (!formData.fullName.trim()) newErrors.fullName = 'Please enter your Full Name.';
-    
-    if (!formData.email.trim()) {
-      newErrors.email = 'Please enter your Email Address.';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Please enter a valid email address.';
+    if (!formData.collegeName.trim()) {
+      newErrors.collegeName = 'Please enter your College Name.';
+    }
+    if (!formData.teamName.trim()) {
+      newErrors.teamName = 'Please enter a secure Team Name.';
+    }
+    if (!formData.fullName.trim()) {
+      newErrors.fullName = 'Please enter Team Leader name.';
     }
     
     if (!formData.whatsapp.trim()) {
-      newErrors.whatsapp = 'Please enter your WhatsApp Number.';
+      newErrors.whatsapp = 'Please enter Leader Phone Number.';
     } else if (!/^\+?\d{7,15}$/.test(formData.whatsapp.replace(/[\s-()]/g, ''))) {
-      newErrors.whatsapp = 'Please enter a valid WhatsApp Number.';
+      newErrors.whatsapp = 'Please enter a valid Phone Number.';
     }
 
-    if (!formData.alternatePhoneSame) {
-      if (!formData.alternatePhone.trim()) {
-        newErrors.alternatePhone = 'Please enter your Alternate Number.';
-      } else if (!/^\+?\d{7,15}$/.test(formData.alternatePhone.replace(/[\s-()]/g, ''))) {
-        newErrors.alternatePhone = 'Please enter a valid Alternate Number.';
+    if (formData.alternatePhone.trim() && !/^\+?\d{7,15}$/.test(formData.alternatePhone.replace(/[\s-()]/g, ''))) {
+      newErrors.alternatePhone = 'Please enter a valid Alternate Phone Number.';
+    }
+
+    if (!formData.degree) {
+      newErrors.degree = 'Please select BCA or MCA option.';
+    }
+
+    if (parseInt(formData.teamSize) === 2) {
+      if (!formData.member2Name.trim()) {
+        newErrors.member2Name = 'Please enter the second member\'s full name.';
+      }
+      if (!formData.member2Phone.trim()) {
+        newErrors.member2Phone = 'Please enter the second member\'s phone number.';
+      } else if (!/^\+?\d{7,15}$/.test(formData.member2Phone.replace(/[\s-()]/g, ''))) {
+        newErrors.member2Phone = 'Please enter a valid phone number.';
       }
     }
 
-    if (!formData.dob) {
-      newErrors.dob = 'Please enter your Date of Birth.';
+    if (!idCardFile) {
+      newErrors.idCardFile = 'Please upload merged college ID cards.';
+    } else if (!/\.(pdf|jpg|jpeg|png|webp)$/i.test(idCardFile.name)) {
+      newErrors.idCardFile = 'Upload IDs in PDF, JPG, PNG, or WEBP formats.';
+    } else if (idCardFile.size > 10 * 1024 * 1024) {
+      newErrors.idCardFile = 'File size limit is 10MB.';
     }
 
-    if (!formData.gender) newErrors.gender = 'Please select your Gender.';
-    if (!formData.country.trim()) newErrors.country = 'Please enter your Country.';
-    if (!formData.state.trim()) newErrors.state = 'Please enter your State.';
-    if (!formData.city.trim()) newErrors.city = 'Please enter your City.';
-    
-    if (formData.occupation === 'College Student') {
-      if (!formData.collegeName.trim()) newErrors.collegeName = 'Please enter your College Name.';
-      if (!formData.collegeCountry.trim()) newErrors.collegeCountry = 'Please enter your College Country.';
-      if (!formData.collegeState.trim()) newErrors.collegeState = 'Please enter your College State.';
-      if (!formData.collegeCity.trim()) newErrors.collegeCity = 'Please enter your College City.';
-      if (!formData.degree.trim()) newErrors.degree = 'Please enter your Degree.';
-      if (!formData.stream.trim()) newErrors.stream = 'Please enter your Stream / Specialization.';
-      if (!formData.passoutYear) newErrors.passoutYear = 'Please select your Passout Year.';
+    if (!formData.paymentUtr.trim()) {
+      newErrors.paymentUtr = 'Please enter your 12-digit transaction UTR number.';
+    } else if (formData.paymentUtr.trim().length < 6) {
+      newErrors.paymentUtr = 'Please enter a valid UTR / transaction ID.';
     }
 
-    if (!formData.termsAccepted) newErrors.termsAccepted = 'You must accept the Terms & Conditions.';
-    if (!formData.communicationsAccepted) newErrors.communicationsAccepted = 'You must accept the Communications consent.';
+    if (!paymentReceiptFile) {
+      newErrors.paymentReceiptFile = 'Please upload a transaction proof receipt.';
+    } else if (!/\.(pdf|jpg|jpeg|png|webp)$/i.test(paymentReceiptFile.name)) {
+      newErrors.paymentReceiptFile = 'Upload transaction proof in PDF, JPG, PNG, or WEBP.';
+    } else if (paymentReceiptFile.size > 10 * 1024 * 1024) {
+      newErrors.paymentReceiptFile = 'Receipt proof file must be under 10MB.';
+    }
 
     setErrors(newErrors);
 
@@ -253,9 +210,10 @@ export default function RegisterApp() {
 
   const submitSequenceSteps = [
     'Connecting to registration database...',
-    'Saving registration details...',
-    'Generating your unique ID...',
-    'Registration completed successfully!'
+    'Uploading merged student college IDs...',
+    'Uploading transaction receipt proof...',
+    'Verifying payment UTR records...',
+    'Registration successfully authorized!'
   ];
 
   const handleSubmit = async (e) => {
@@ -268,34 +226,77 @@ export default function RegisterApp() {
 
     try {
       const apiUrl = import.meta.env.PROD ? "" : "http://localhost:8000";
+      
+      let idCardFileUrl = '';
+      let idCardFileName = '';
+      let paymentReceiptUrl = '';
+      let paymentReceiptName = '';
+
+      // 1. Upload Merged College IDs
+      if (idCardFile) {
+        const uploadData = new FormData();
+        uploadData.append('file', idCardFile);
+        const uploadRes = await axios.post(`${apiUrl}/api/upload`, uploadData, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        });
+        idCardFileUrl = uploadRes.data.url || '';
+        idCardFileName = uploadRes.data.filename || idCardFile.name;
+      }
+
+      // 2. Upload Payment Proof Screenshot
+      if (paymentReceiptFile) {
+        const uploadData = new FormData();
+        uploadData.append('file', paymentReceiptFile);
+        const uploadRes = await axios.post(`${apiUrl}/api/upload`, uploadData, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        });
+        paymentReceiptUrl = uploadRes.data.url || '';
+        paymentReceiptName = uploadRes.data.filename || paymentReceiptFile.name;
+      }
+
+      // 3. Register Participant Team in backend database
       const res = await axios.post(`${apiUrl}/api/register`, {
-        fullName: formData.fullName,
-        email: formData.email,
-        whatsapp: formData.whatsapp,
-        alternatePhoneSame: formData.alternatePhoneSame,
-        alternatePhone: formData.alternatePhoneSame ? "" : formData.alternatePhone,
-        dob: formData.dob,
-        gender: formData.gender,
-        country: formData.country,
-        state: formData.state,
-        city: formData.city,
-        occupation: formData.occupation,
         collegeName: formData.collegeName,
-        collegeCountry: formData.collegeCountry,
-        collegeState: formData.collegeState,
-        collegeCity: formData.collegeCity,
+        teamName: formData.teamName,
+        fullName: formData.fullName,
+        whatsapp: formData.whatsapp,
+        alternatePhone: formData.alternatePhone,
         degree: formData.degree,
-        stream: formData.stream,
-        passoutYear: formData.passoutYear,
-        githubUrl: formData.githubUrl,
-        linkedinUrl: formData.linkedinUrl,
-        termsAccepted: formData.termsAccepted,
-        communicationsAccepted: formData.communicationsAccepted
+        teamSize: parseInt(formData.teamSize),
+        member2Name: formData.member2Name,
+        member2Phone: formData.member2Phone,
+        idCardFileUrl,
+        idCardFileName,
+        paymentUtr: formData.paymentUtr,
+        paymentReceiptUrl,
+        paymentReceiptName,
+        // Optional parameters populated with system defaults for backwards database safety
+        email: null,
+        dob: "2000-01-01",
+        gender: "Prefer not to say",
+        country: "India",
+        state: "Karnataka",
+        city: "Bangalore",
+        occupation: "College Student",
+        collegeCountry: "India",
+        collegeState: "Karnataka",
+        collegeCity: "Bangalore",
+        stream: "Computer Applications",
+        yearOfStudy: "1st Year",
+        passoutYear: "2026",
+        domain: "AI",
+        projectTitle: "Autonomous Hack",
+        problemStatement: "",
+        proposedSolution: "",
+        technologiesUsed: "",
+        githubUrl: "",
+        linkedinUrl: "",
+        termsAccepted: true,
+        communicationsAccepted: true
       });
 
       if (res.data.success) {
-        const stepIntervals = [500, 1000, 1500, 2000];
-        stepIntervals.forEach((time, index) => {
+        submitSequenceSteps.forEach((_, index) => {
           setTimeout(() => {
             setSubmitStep(index);
             if (index === submitSequenceSteps.length - 1) {
@@ -305,51 +306,44 @@ export default function RegisterApp() {
                 setSubmitted(true);
               }, 400);
             }
-          }, time);
+          }, 450 + index * 450);
         });
       }
     } catch (err) {
       console.error(err);
       setIsSubmitting(false);
-      const errMsg = err.response?.data?.detail || "Something went wrong. Please check your connection or try again later!";
+      const errMsg = err.response?.data?.detail || "Something went wrong. UTR may have already been registered, or check your internet connection.";
       setSubmitError(errMsg);
     }
   };
 
   const handleReset = () => {
     setFormData({
-      fullName: '',
-      email: '',
-      whatsapp: '',
-      alternatePhoneSame: true,
-      alternatePhone: '',
-      dob: '',
-      gender: 'Male',
-      country: 'India',
-      state: '',
-      city: '',
-      occupation: 'College Student',
       collegeName: '',
-      collegeCountry: 'India',
-      collegeState: '',
-      collegeCity: '',
+      teamName: '',
+      fullName: '',
+      whatsapp: '',
+      alternatePhone: '',
       degree: '',
-      stream: '',
-      passoutYear: '2026',
-      githubUrl: '',
-      linkedinUrl: '',
-      termsAccepted: true,
-      communicationsAccepted: true,
+      teamSize: 1,
+      member2Name: '',
+      member2Phone: '',
+      idCardFileUrl: '',
+      idCardFileName: '',
+      paymentUtr: '',
+      paymentReceiptUrl: '',
+      paymentReceiptName: '',
     });
     setErrors({});
     setSubmitError('');
     setSubmitted(false);
     setTeamId('');
+    setIdCardFile(null);
+    setPaymentReceiptFile(null);
   };
 
   return (
     <div className="relative min-h-screen py-12 px-4 md:px-8 font-rajdhani text-white overflow-hidden bg-cyberDark">
-      {/* Dynamic particles and scanline */}
       <CyberCanvasBackground />
       <div className="absolute inset-0 bg-hologram-pattern opacity-30 pointer-events-none z-0"></div>
       <div className="scanline"></div>
@@ -363,7 +357,7 @@ export default function RegisterApp() {
             <div className="absolute -top-1 -right-4 w-2 h-8 bg-cyberRed transform -skew-x-12"></div>
             
             <p className="font-mono text-cyberRed text-[0.65rem] uppercase tracking-[0.3em] mb-0.5 font-bold">
-              [ PARTICIPANT REGISTRATION ]
+              [ HACKATHON REGISTRATION ]
             </p>
             <h1 className="font-orbitron font-black text-4xl md:text-5xl text-white tracking-widest mb-1 drop-shadow-[0_0_12px_#ff003c]">
               HACKVERSE 2.0
@@ -383,7 +377,7 @@ export default function RegisterApp() {
           </p>
           <div className="flex justify-center items-center gap-1.5 text-[10px] text-cyberRed/80 tracking-widest font-mono">
             <span className="w-1.5 h-1.5 bg-cyberRed animate-ping rounded-full"></span>
-            <span>ENTER NEO TOKYO</span>
+            <span>SECURE ENCRYPTED CHANNEL</span>
           </div>
         </header>
 
@@ -410,24 +404,34 @@ export default function RegisterApp() {
 
               <div className="border border-cyberRed/30 bg-[#04000a]/90 p-5 rounded mb-6 relative font-mono text-left text-zinc-300">
                 <div className="absolute top-2 right-3 text-[9px] text-zinc-500 font-mono">REGISTRATION COMPLETED</div>
-                <div className="mb-1 text-zinc-400 text-[10px] tracking-wider">YOUR REGISTRATION ID:</div>
+                <div className="mb-1 text-zinc-400 text-[10px] tracking-wider">YOUR TEAM ID:</div>
                 
                 <div className="font-orbitron text-2xl md:text-3xl text-cyberRed font-black tracking-widest border-b border-cyberRed/20 pb-2 mb-3 animate-pulse">
                   {teamId}
                 </div>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-y-2 gap-x-4 text-xs">
-                  <div><span className="text-zinc-500">PARTICIPANT:</span> <span className="text-white font-bold">{formData.fullName}</span></div>
-                  <div><span className="text-zinc-500">EMAIL:</span> <span className="text-white">{formData.email}</span></div>
-                  <div><span className="text-zinc-500">WHATSAPP:</span> <span className="text-white">{formData.whatsapp}</span></div>
-                  <div><span className="text-zinc-500">DEGREE:</span> <span className="text-white">{formData.degree || "N/A"}</span></div>
-                  <div><span className="text-zinc-500">COLLEGE:</span> <span className="text-white">{formData.collegeName || "N/A"}</span></div>
-                  <div><span className="text-zinc-500">GRADUATION:</span> <span className="text-white">{formData.passoutYear || "N/A"}</span></div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-y-2.5 gap-x-4 text-xs font-rajdhani">
+                  <div><span className="text-zinc-500 uppercase">Team Name:</span> <span className="text-white font-bold">{formData.teamName}</span></div>
+                  <div><span className="text-zinc-500 uppercase">College:</span> <span className="text-white font-bold">{formData.collegeName}</span></div>
+                  <div><span className="text-zinc-500 uppercase">Leader Name:</span> <span className="text-white">{formData.fullName}</span></div>
+                  <div><span className="text-zinc-500 uppercase">Leader Phone:</span> <span className="text-white">{formData.whatsapp}</span></div>
+                  <div><span className="text-zinc-500 uppercase">Leader Alt Phone:</span> <span className="text-white">{formData.alternatePhone || "N/A"}</span></div>
+                  <div><span className="text-zinc-500 uppercase">Course Selection:</span> <span className="text-white font-semibold text-cyberRed">{formData.degree}</span></div>
+                  <div><span className="text-zinc-500 uppercase">Team Size:</span> <span className="text-white">{formData.teamSize} Member(s)</span></div>
+                  {parseInt(formData.teamSize) === 2 && (
+                    <>
+                      <div><span className="text-zinc-500 uppercase">Member 2 Name:</span> <span className="text-white">{formData.member2Name}</span></div>
+                      <div><span className="text-zinc-500 uppercase">Member 2 Phone:</span> <span className="text-white">{formData.member2Phone}</span></div>
+                    </>
+                  )}
+                  <div className="md:col-span-2 border-t border-cyberRed/15 pt-2 mt-1">
+                    <span className="text-zinc-500 uppercase">Payment UTR ID:</span> <span className="text-green-400 font-mono font-bold tracking-widest">{formData.paymentUtr}</span>
+                  </div>
                 </div>
               </div>
 
               <p className="text-zinc-400 text-xs md:text-sm mb-4 leading-relaxed max-w-md mx-auto">
-                Your registration has been successfully received! We look forward to seeing you at the event. Stay tuned for further updates.
+                Your group registration has been successfully encrypted and recorded in our roster database! Please join our official Discord / WhatsApp server to proceed.
               </p>
 
               <div className="mb-6 flex justify-center">
@@ -438,17 +442,16 @@ export default function RegisterApp() {
                   className="inline-flex items-center gap-2 font-orbitron font-bold text-xs tracking-widest text-[#25D366] border-2 border-[#25D366] px-5 py-2.5 hover:bg-[#25D366]/10 transition-colors rounded shadow-[0_0_10px_rgba(37,211,102,0.3)]"
                 >
                   <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133-.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-                  JOIN WHATSAPP GROUP
+                  JOIN WHATSAPP COMMUNITY
                 </a>
               </div>
-
 
               <div className="flex gap-4 justify-center">
                 <button
                   onClick={handleReset}
                   className="font-orbitron text-xs tracking-widest text-white px-6 py-2.5 bg-cyberRed shadow-cyberGlow border border-cyberRed hover:bg-transparent hover:text-cyberRed hover:shadow-cyberGlowHeavy transition duration-300 transform hover:scale-105"
                 >
-                  Register Another Account
+                  Register Another Team
                 </button>
                 <a
                   href="index.html"
@@ -461,7 +464,7 @@ export default function RegisterApp() {
           </div>
         ) : (
           
-          /* SingleCentered Focused Holographic Terminal Panel */
+          /* Focused Holographic Team Terminal Panel */
           <form onSubmit={handleSubmit} className="glassmorphism p-6 md:p-8 rounded-lg shadow-cyber relative border border-cyberRed/20 hover:border-cyberRed/35 transition-all duration-500">
             <div className="cyber-corner cyber-corner-tl"></div>
             <div className="cyber-corner cyber-corner-tr"></div>
@@ -477,32 +480,148 @@ export default function RegisterApp() {
             
             {/* Header Data Output Bar */}
             <div className="mb-6 pb-2 border-b border-cyberRed/20 flex justify-between items-center text-[10px] font-mono text-zinc-500 select-none">
-              <span>HACKVERSE 2.0 REGISTRATION</span>
+              <span>TEAM INTAKE FORM v2.1</span>
               <span className="text-cyberRed font-bold flex items-center gap-1">
                 <span className="w-1.5 h-1.5 bg-cyberRed rounded-full animate-ping"></span>
-                SECURE CONNECTION ESTABLISHED
+                SECURE CONSOLE ACTIVE
               </span>
             </div>
 
-            {/* SECTION 1: PERSONAL PARTICIPANT PROFILE */}
-            <div className="mb-8">
+            {/* SECTION 1: TEAM & COLLEGE PROFILE */}
+            <div className="mb-8 animate-[fadeIn_0.3s_ease-out]">
               <div className="text-cyberRed font-orbitron text-sm font-bold tracking-wider mb-4 border-l-2 border-cyberRed pl-2 uppercase">
-                1. Personal Details
+                1. Team & College Profile
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 
-                {/* Full Name */}
+                {/* Team Name */}
+                <div>
+                  <label className="block text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-1.5">
+                    Team Name <span className="text-cyberRed font-bold">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    name="teamName"
+                    value={formData.teamName}
+                    onChange={handleInputChange}
+                    placeholder="Enter unique team tag"
+                    className={`w-full bg-zinc-950/80 text-white font-mono text-xs px-3.5 py-2.5 border outline-none transition-all duration-300 rounded ${
+                      errors.teamName ? 'border-cyberRed bg-cyberRed/5' : 'border-zinc-800 focus:border-cyberRed'
+                    }`}
+                  />
+                  {errors.teamName && (
+                    <span className="block mt-1 font-mono text-[9px] text-cyberRed uppercase tracking-wide">
+                      ⚠️ {errors.teamName}
+                    </span>
+                  )}
+                </div>
+
+                {/* College Name */}
+                <div>
+                  <label className="block text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-1.5">
+                    College Name <span className="text-cyberRed font-bold">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    name="collegeName"
+                    value={formData.collegeName}
+                    onChange={handleInputChange}
+                    placeholder="e.g. BMSITM"
+                    className={`w-full bg-zinc-950/80 text-white font-mono text-xs px-3.5 py-2.5 border outline-none transition-all duration-300 rounded ${
+                      errors.collegeName ? 'border-cyberRed bg-cyberRed/5' : 'border-zinc-800 focus:border-cyberRed'
+                    }`}
+                  />
+                  {errors.collegeName && (
+                    <span className="block mt-1 font-mono text-[9px] text-cyberRed uppercase tracking-wide">
+                      ⚠️ {errors.collegeName}
+                    </span>
+                  )}
+                </div>
+
+                {/* BCA or MCA Select dropdown */}
                 <div className="md:col-span-2">
                   <label className="block text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-1.5">
-                    Full Name <span className="text-cyberRed font-bold">*</span>
+                    Course / Option Selection <span className="text-cyberRed font-bold">*</span>
+                  </label>
+                  <div className="grid grid-cols-2 gap-3">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setFormData(p => ({ ...p, degree: 'BCA' }));
+                        setErrors(p => ({ ...p, degree: '' }));
+                      }}
+                      className={`py-2.5 font-orbitron font-bold text-xs tracking-widest uppercase border transition-all duration-300 ${
+                        formData.degree === 'BCA'
+                          ? 'bg-cyberRed text-white border-cyberRed shadow-cyberGlow'
+                          : 'bg-zinc-950/70 text-zinc-400 border-zinc-800 hover:text-white hover:border-zinc-700'
+                      }`}
+                    >
+                      BCA Option
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setFormData(p => ({ ...p, degree: 'MCA' }));
+                        setErrors(p => ({ ...p, degree: '' }));
+                      }}
+                      className={`py-2.5 font-orbitron font-bold text-xs tracking-widest uppercase border transition-all duration-300 ${
+                        formData.degree === 'MCA'
+                          ? 'bg-cyberRed text-white border-cyberRed shadow-cyberGlow'
+                          : 'bg-zinc-950/70 text-zinc-400 border-zinc-800 hover:text-white hover:border-zinc-700'
+                      }`}
+                    >
+                      MCA Option
+                    </button>
+                  </div>
+                  {errors.degree && (
+                    <span className="block mt-1.5 font-mono text-[9px] text-cyberRed uppercase tracking-wide">
+                      ⚠️ {errors.degree}
+                    </span>
+                  )}
+                </div>
+
+              </div>
+            </div>
+
+            {/* SECTION 2: TEAM MEMBERS */}
+            <div className="mb-8 animate-[fadeIn_0.3s_ease-out]">
+              <div className="text-cyberRed font-orbitron text-sm font-bold tracking-wider mb-4 border-l-2 border-cyberRed pl-2 uppercase">
+                2. Team Members Information
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                
+                {/* Team Size Selector (min 1, max 2) */}
+                <div className="md:col-span-2">
+                  <label className="block text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-1.5">
+                    Team Size Selection <span className="text-cyberRed font-bold">*</span>
+                  </label>
+                  <select
+                    name="teamSize"
+                    value={formData.teamSize}
+                    onChange={(e) => {
+                      const val = parseInt(e.target.value);
+                      setFormData(p => ({ ...p, teamSize: val }));
+                    }}
+                    className="w-full bg-zinc-950/80 text-white font-mono text-xs px-3.5 py-2.5 border border-zinc-800 outline-none focus:border-cyberRed transition-all duration-300 rounded"
+                  >
+                    <option value={1}>1 Member (Solo Combatant)</option>
+                    <option value={2}>2 Members (Duo Operations)</option>
+                  </select>
+                </div>
+
+                {/* Team Leader Name */}
+                <div>
+                  <label className="block text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-1.5">
+                    Team Leader Name <span className="text-cyberRed font-bold">*</span>
                   </label>
                   <input
                     type="text"
                     name="fullName"
                     value={formData.fullName}
                     onChange={handleInputChange}
-                    placeholder="Enter your full name as it appears on official docs"
+                    placeholder="Enter leader full name"
                     className={`w-full bg-zinc-950/80 text-white font-mono text-xs px-3.5 py-2.5 border outline-none transition-all duration-300 rounded ${
                       errors.fullName ? 'border-cyberRed bg-cyberRed/5' : 'border-zinc-800 focus:border-cyberRed'
                     }`}
@@ -514,35 +633,13 @@ export default function RegisterApp() {
                   )}
                 </div>
 
-                {/* Email Address */}
+                {/* Leader Phone (WhatsApp) */}
                 <div>
                   <label className="block text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-1.5">
-                    Email Address <span className="text-cyberRed font-bold">*</span>
-                  </label>
-                  <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    placeholder="e.g. pilot@neotokyo.io"
-                    className={`w-full bg-zinc-950/80 text-white font-mono text-xs px-3.5 py-2.5 border outline-none transition-all duration-300 rounded ${
-                      errors.email ? 'border-cyberRed bg-cyberRed/5' : 'border-zinc-800 focus:border-cyberRed'
-                    }`}
-                  />
-                  {errors.email && (
-                    <span className="block mt-1 font-mono text-[9px] text-cyberRed uppercase tracking-wide">
-                      ⚠️ {errors.email}
-                    </span>
-                  )}
-                </div>
-
-                {/* WhatsApp Number */}
-                <div>
-                  <label className="block text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-1.5">
-                    WhatsApp Number <span className="text-cyberRed font-bold">*</span>
+                    Leader Phone Number <span className="text-cyberRed font-bold">*</span>
                   </label>
                   <div className="flex gap-2">
-                    <span className="flex items-center bg-zinc-950/85 px-3 border border-zinc-800 text-xs text-zinc-500 font-mono rounded">
+                    <span className="flex items-center bg-zinc-950/85 px-3 border border-zinc-800 text-xs text-zinc-500 font-mono rounded select-none">
                       +91
                     </span>
                     <input
@@ -550,7 +647,7 @@ export default function RegisterApp() {
                       name="whatsapp"
                       value={formData.whatsapp}
                       onChange={handleInputChange}
-                      placeholder="WhatsApp Mobile Number"
+                      placeholder="WhatsApp Mobile"
                       className={`w-full bg-zinc-950/80 text-white font-mono text-xs px-3.5 py-2.5 border outline-none transition-all duration-300 rounded ${
                         errors.whatsapp ? 'border-cyberRed bg-cyberRed/5' : 'border-zinc-800 focus:border-cyberRed'
                       }`}
@@ -563,375 +660,194 @@ export default function RegisterApp() {
                   )}
                 </div>
 
-                {/* WhatsApp Checkbox */}
-                <div className="md:col-span-2 flex items-center gap-2 py-1 select-none">
-                  <input
-                    type="checkbox"
-                    id="alternatePhoneSame"
-                    name="alternatePhoneSame"
-                    checked={formData.alternatePhoneSame}
-                    onChange={handleInputChange}
-                    className="accent-cyberRed w-4 h-4 cursor-pointer"
-                  />
-                  <label htmlFor="alternatePhoneSame" className="font-mono text-[10px] text-zinc-400 uppercase tracking-wider cursor-pointer">
-                    Alternate number is same as WhatsApp number
+                {/* Leader Alternative Phone */}
+                <div className="md:col-span-2">
+                  <label className="block text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-1.5">
+                    Alternative Phone Number of Leader <span className="text-zinc-500">(Optional)</span>
                   </label>
+                  <div className="flex gap-2">
+                    <span className="flex items-center bg-zinc-950/85 px-3 border border-zinc-800 text-xs text-zinc-500 font-mono rounded select-none">
+                      +91
+                    </span>
+                    <input
+                      type="text"
+                      name="alternatePhone"
+                      value={formData.alternatePhone}
+                      onChange={handleInputChange}
+                      placeholder="Alternate Mobile"
+                      className={`w-full bg-zinc-950/80 text-white font-mono text-xs px-3.5 py-2.5 border outline-none transition-all duration-300 rounded ${
+                        errors.alternatePhone ? 'border-cyberRed bg-cyberRed/5' : 'border-zinc-800 focus:border-cyberRed'
+                      }`}
+                    />
+                  </div>
+                  {errors.alternatePhone && (
+                    <span className="block mt-1 font-mono text-[9px] text-cyberRed uppercase tracking-wide">
+                      ⚠️ {errors.alternatePhone}
+                    </span>
+                  )}
                 </div>
 
-                {/* Alternate Number */}
-                {!formData.alternatePhoneSame && (
-                  <div className="md:col-span-2 animate-[fadeIn_0.3s_ease-out]">
-                    <label className="block text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-1.5">
-                      Alternate Phone Number <span className="text-cyberRed font-bold">*</span>
-                    </label>
-                    <div className="flex gap-2">
-                      <span className="flex items-center bg-zinc-950/85 px-3 border border-zinc-800 text-xs text-zinc-500 font-mono rounded">
-                        +91
-                      </span>
-                      <input
-                        type="text"
-                        name="alternatePhone"
-                        value={formData.alternatePhone}
-                        onChange={handleInputChange}
-                        placeholder="Alternate Mobile Number"
-                        className={`w-full bg-zinc-950/80 text-white font-mono text-xs px-3.5 py-2.5 border outline-none transition-all duration-300 rounded ${
-                          errors.alternatePhone ? 'border-cyberRed bg-cyberRed/5' : 'border-zinc-800 focus:border-cyberRed'
-                        }`}
-                      />
+                {/* CONDITIONAL SECTION: MEMBER 2 DETAILS */}
+                {parseInt(formData.teamSize) === 2 && (
+                  <div className="md:col-span-2 border border-cyberRed/20 bg-cyberRed/[0.02] p-4 rounded mt-2 space-y-4 animate-[fadeIn_0.4s_ease-out]">
+                    <div className="font-orbitron text-xs text-cyberRed font-bold uppercase tracking-wider">// Member 02 Credentials</div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {/* Member 2 Name */}
+                      <div>
+                        <label className="block text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-1.5">
+                          Other Member Name <span className="text-cyberRed font-bold">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          name="member2Name"
+                          value={formData.member2Name}
+                          onChange={handleInputChange}
+                          placeholder="Enter second member name"
+                          className={`w-full bg-zinc-950/80 text-white font-mono text-xs px-3.5 py-2.5 border outline-none transition-all duration-300 rounded ${
+                            errors.member2Name ? 'border-cyberRed bg-cyberRed/5' : 'border-zinc-800 focus:border-cyberRed'
+                          }`}
+                        />
+                        {errors.member2Name && (
+                          <span className="block mt-1 font-mono text-[9px] text-cyberRed uppercase tracking-wide">
+                            ⚠️ {errors.member2Name}
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Member 2 Phone */}
+                      <div>
+                        <label className="block text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-1.5">
+                          Other Member Phone <span className="text-cyberRed font-bold">*</span>
+                        </label>
+                        <div className="flex gap-2">
+                          <span className="flex items-center bg-zinc-950/85 px-3 border border-zinc-800 text-xs text-zinc-500 font-mono rounded select-none">
+                            +91
+                          </span>
+                          <input
+                            type="text"
+                            name="member2Phone"
+                            value={formData.member2Phone}
+                            onChange={handleInputChange}
+                            placeholder="Second member WhatsApp"
+                            className={`w-full bg-zinc-950/80 text-white font-mono text-xs px-3.5 py-2.5 border outline-none transition-all duration-300 rounded ${
+                              errors.member2Phone ? 'border-cyberRed bg-cyberRed/5' : 'border-zinc-800 focus:border-cyberRed'
+                            }`}
+                          />
+                        </div>
+                        {errors.member2Phone && (
+                          <span className="block mt-1 font-mono text-[9px] text-cyberRed uppercase tracking-wide">
+                            ⚠️ {errors.member2Phone}
+                          </span>
+                        )}
+                      </div>
                     </div>
-                    {errors.alternatePhone && (
-                      <span className="block mt-1 font-mono text-[9px] text-cyberRed uppercase tracking-wide">
-                        ⚠️ {errors.alternatePhone}
-                      </span>
-                    )}
                   </div>
                 )}
 
-                {/* Date of Birth */}
-                <div>
-                  <label className="block text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-1.5">
-                    Date of Birth <span className="text-cyberRed font-bold">*</span>
-                  </label>
-                  <input
-                    type="date"
-                    name="dob"
-                    value={formData.dob}
-                    onChange={handleInputChange}
-                    className={`w-full bg-zinc-950/80 text-white font-mono text-xs px-3.5 py-2.5 border outline-none transition-all duration-300 rounded ${
-                      errors.dob ? 'border-cyberRed bg-cyberRed/5' : 'border-zinc-800 focus:border-cyberRed'
-                    }`}
-                  />
-                  <span className="block mt-1 font-mono text-[8px] text-zinc-500 uppercase tracking-wider">
-                    Eligibility: You need to be between age group 16 to 24 to be a part of this initiative.
+              </div>
+            </div>
+
+            {/* SECTION 3: VERIFICATION & DEPOSITS */}
+            <div className="mb-8 animate-[fadeIn_0.3s_ease-out]">
+              <div className="text-cyberRed font-orbitron text-sm font-bold tracking-wider mb-4 border-l-2 border-cyberRed pl-2 uppercase">
+                3. Identity Upload & Payment Info
+              </div>
+
+              {/* College ID Upload (Merged all members) */}
+              <div className="mb-6">
+                <label className="block text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-1.5">
+                  College ID Card Upload <span className="text-cyberRed font-bold">*</span>
+                </label>
+                <input
+                  type="file"
+                  name="idCardFile"
+                  accept=".pdf,.jpg,.jpeg,.png,.webp"
+                  onChange={handleFileChange}
+                  className={`w-full bg-zinc-950/80 text-white font-mono text-xs px-3.5 py-2.5 border outline-none transition-all duration-300 rounded file:mr-4 file:border-0 file:bg-cyberRed file:px-3 file:py-1.5 file:font-orbitron file:text-[10px] file:uppercase file:tracking-widest file:text-white ${
+                    errors.idCardFile ? 'border-cyberRed bg-cyberRed/5' : 'border-zinc-800 focus:border-cyberRed'
+                  }`}
+                />
+                <span className="block mt-1 font-mono text-[8px] text-zinc-500 uppercase tracking-wider leading-relaxed">
+                  ⚠️ Note: Merges all group members' college ID cards into a single PDF or image, and upload. Accept: PDF, JPG, PNG, WEBP. Max 10MB.
+                </span>
+                {errors.idCardFile && (
+                  <span className="block mt-1.5 font-mono text-[9px] text-cyberRed uppercase tracking-wide">
+                    ⚠️ {errors.idCardFile}
                   </span>
-                  {errors.dob && (
-                    <span className="block mt-1 font-mono text-[9px] text-cyberRed uppercase tracking-wide">
-                      ⚠️ {errors.dob}
-                    </span>
-                  )}
-                </div>
+                )}
+              </div>
 
-                {/* Gender */}
+              {/* BANK DETAILS GLOWING CARD */}
+              <div className="border border-cyberRed/30 bg-[#0f0015]/95 p-5 rounded-lg mb-6 relative shadow-cyberGlow">
+                <div className="absolute top-2.5 right-3 text-[8px] font-mono text-cyberRed tracking-widest animate-pulse">[ INITIATION DEPOSIT CHANNELS ]</div>
+                <h4 className="font-orbitron text-xs font-bold text-white mb-3 uppercase tracking-wider">🏦 Indian Bank Official Details</h4>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2 text-xs font-mono text-zinc-300">
+                  <div><span className="text-zinc-500">Account Holder:</span> <span className="text-white font-bold">Principal, BMSIT&M</span></div>
+                  <div><span className="text-zinc-500">SB Account No:</span> <span className="text-white font-bold text-green-400 tracking-wider">21096732049</span></div>
+                  <div><span className="text-zinc-500">IFSC Code:</span> <span className="text-white font-bold text-green-400">IDIB000A682</span></div>
+                  <div><span className="text-zinc-500">Bank Name:</span> <span className="text-white">Indian Bank</span></div>
+                  <div><span className="text-zinc-500">Branch Name:</span> <span className="text-white">Avalahalli Bangalore - 560064</span></div>
+                  <div><span className="text-zinc-500">E-mail Contact:</span> <span className="text-white">accountsdept@bmsit.in</span></div>
+                  <div className="md:col-span-2 border-t border-cyberRed/20 pt-2 mt-1">
+                    <span className="text-cyberRed font-bold">UPI ID:</span> <span className="text-green-400 font-bold tracking-widest bg-zinc-950/80 px-2 py-0.5 rounded border border-green-500/20">BMSIT@indianbk</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* UTR Input & Screenshot Proof */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                
+                {/* UTR ID */}
                 <div>
                   <label className="block text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-1.5">
-                    Gender <span className="text-cyberRed font-bold">*</span>
-                  </label>
-                  <select
-                    name="gender"
-                    value={formData.gender}
-                    onChange={handleInputChange}
-                    className="w-full bg-zinc-950/80 text-white font-mono text-xs px-3.5 py-2.5 border border-zinc-800 outline-none focus:border-cyberRed transition-all duration-300 rounded"
-                  >
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                    <option value="Other">Other</option>
-                    <option value="Prefer not to say">Prefer not to say</option>
-                  </select>
-                </div>
-
-                {/* Country */}
-                <div>
-                  <label className="block text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-1.5">
-                    Country <span className="text-cyberRed font-bold">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    name="country"
-                    value={formData.country}
-                    onChange={handleInputChange}
-                    className="w-full bg-zinc-950/80 text-white font-mono text-xs px-3.5 py-2.5 border border-zinc-800 focus:border-cyberRed outline-none transition-all duration-300 rounded"
-                  />
-                </div>
-
-                {/* State */}
-                <div>
-                  <label className="block text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-1.5">
-                    State / Province <span className="text-cyberRed font-bold">*</span>
+                    Payment ID UTR (12-Digit code) <span className="text-cyberRed font-bold">*</span>
                   </label>
                   <input
                     type="text"
-                    name="state"
-                    value={formData.state}
+                    name="paymentUtr"
+                    value={formData.paymentUtr}
                     onChange={handleInputChange}
-                    placeholder="Enter State"
+                    placeholder="Enter 12-digit transaction UTR"
                     className={`w-full bg-zinc-950/80 text-white font-mono text-xs px-3.5 py-2.5 border outline-none transition-all duration-300 rounded ${
-                      errors.state ? 'border-cyberRed bg-cyberRed/5' : 'border-zinc-800 focus:border-cyberRed'
+                      errors.paymentUtr ? 'border-cyberRed bg-cyberRed/5' : 'border-zinc-800 focus:border-cyberRed'
                     }`}
                   />
-                  {errors.state && (
+                  {errors.paymentUtr && (
                     <span className="block mt-1 font-mono text-[9px] text-cyberRed uppercase tracking-wide">
-                      ⚠️ {errors.state}
+                      ⚠️ {errors.paymentUtr}
                     </span>
                   )}
                 </div>
 
-                {/* City */}
+                {/* Receipt Screenshot Upload */}
                 <div>
                   <label className="block text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-1.5">
-                    City <span className="text-cyberRed font-bold">*</span>
+                    Payment Receipt Proof Upload <span className="text-cyberRed font-bold">*</span>
                   </label>
                   <input
-                    type="text"
-                    name="city"
-                    value={formData.city}
-                    onChange={handleInputChange}
-                    placeholder="Enter City"
-                    className={`w-full bg-zinc-950/80 text-white font-mono text-xs px-3.5 py-2.5 border outline-none transition-all duration-300 rounded ${
-                      errors.city ? 'border-cyberRed bg-cyberRed/5' : 'border-zinc-800 focus:border-cyberRed'
+                    type="file"
+                    name="paymentReceiptFile"
+                    accept=".pdf,.jpg,.jpeg,.png,.webp"
+                    onChange={handleReceiptFileChange}
+                    className={`w-full bg-zinc-950/80 text-white font-mono text-xs px-3.5 py-2.5 border outline-none transition-all duration-300 rounded file:mr-4 file:border-0 file:bg-cyberRed file:px-3 file:py-1.5 file:font-orbitron file:text-[10px] file:uppercase file:tracking-widest file:text-white ${
+                      errors.paymentReceiptFile ? 'border-cyberRed bg-cyberRed/5' : 'border-zinc-800 focus:border-cyberRed'
                     }`}
                   />
-                  {errors.city && (
+                  {errors.paymentReceiptFile && (
                     <span className="block mt-1 font-mono text-[9px] text-cyberRed uppercase tracking-wide">
-                      ⚠️ {errors.city}
+                      ⚠️ {errors.paymentReceiptFile}
                     </span>
                   )}
-                </div>
-
-                {/* Occupation */}
-                <div>
-                  <label className="block text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-1.5">
-                    Occupation <span className="text-cyberRed font-bold">*</span>
-                  </label>
-                  <select
-                    name="occupation"
-                    value={formData.occupation}
-                    onChange={handleInputChange}
-                    className="w-full bg-zinc-950/80 text-white font-mono text-xs px-3.5 py-2.5 border border-zinc-800 outline-none focus:border-cyberRed transition-all duration-300 rounded"
-                  >
-                    <option value="College Student">College Student</option>
-                    <option value="Working Professional">Working Professional</option>
-                  </select>
                 </div>
 
               </div>
             </div>
 
-            {/* SECTION 2: ACADEMIC DETAILS */}
-            {formData.occupation === 'College Student' && (
-              <div className="mb-8 animate-[fadeIn_0.4s_ease-out]">
-                <div className="text-cyberRed font-orbitron text-sm font-bold tracking-wider mb-4 border-l-2 border-cyberRed pl-2 uppercase">
-                  2. Academic Details
-                </div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  
-                  {/* College Name */}
-                  <div className="md:col-span-2">
-                    <label className="block text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-1.5">
-                      College Name <span className="text-cyberRed font-bold">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      name="collegeName"
-                      value={formData.collegeName}
-                      onChange={handleInputChange}
-                      placeholder="Enter full college name"
-                      className={`w-full bg-zinc-950/80 text-white font-mono text-xs px-3.5 py-2.5 border outline-none transition-all duration-300 rounded ${
-                        errors.collegeName ? 'border-cyberRed bg-cyberRed/5' : 'border-zinc-800 focus:border-cyberRed'
-                      }`}
-                    />
-                    {errors.collegeName && (
-                      <span className="block mt-1 font-mono text-[9px] text-cyberRed uppercase tracking-wide">
-                        ⚠️ {errors.collegeName}
-                      </span>
-                    )}
-                  </div>
-
-                  {/* College Country */}
-                  <div>
-                    <label className="block text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-1.5">
-                      College Country <span className="text-cyberRed font-bold">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      name="collegeCountry"
-                      value={formData.collegeCountry}
-                      onChange={handleInputChange}
-                      className="w-full bg-zinc-950/80 text-white font-mono text-xs px-3.5 py-2.5 border border-zinc-800 focus:border-cyberRed outline-none transition-all duration-300 rounded"
-                    />
-                  </div>
-
-                  {/* College State */}
-                  <div>
-                    <label className="block text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-1.5">
-                      College State <span className="text-cyberRed font-bold">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      name="collegeState"
-                      value={formData.collegeState}
-                      onChange={handleInputChange}
-                      placeholder="College State"
-                      className={`w-full bg-zinc-950/80 text-white font-mono text-xs px-3.5 py-2.5 border outline-none transition-all duration-300 rounded ${
-                        errors.collegeState ? 'border-cyberRed bg-cyberRed/5' : 'border-zinc-800 focus:border-cyberRed'
-                      }`}
-                    />
-                    {errors.collegeState && (
-                      <span className="block mt-1 font-mono text-[9px] text-cyberRed uppercase tracking-wide">
-                        ⚠️ {errors.collegeState}
-                      </span>
-                    )}
-                  </div>
-
-                  {/* College City */}
-                  <div>
-                    <label className="block text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-1.5">
-                      College City <span className="text-cyberRed font-bold">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      name="collegeCity"
-                      value={formData.collegeCity}
-                      onChange={handleInputChange}
-                      placeholder="College City"
-                      className={`w-full bg-zinc-950/80 text-white font-mono text-xs px-3.5 py-2.5 border outline-none transition-all duration-300 rounded ${
-                        errors.collegeCity ? 'border-cyberRed bg-cyberRed/5' : 'border-zinc-800 focus:border-cyberRed'
-                      }`}
-                    />
-                    {errors.collegeCity && (
-                      <span className="block mt-1 font-mono text-[9px] text-cyberRed uppercase tracking-wide">
-                        ⚠️ {errors.collegeCity}
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Degree */}
-                  <div>
-                    <label className="block text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-1.5">
-                      Degree / Program <span className="text-cyberRed font-bold">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      name="degree"
-                      value={formData.degree}
-                      onChange={handleInputChange}
-                      placeholder="e.g. B.E / B.Tech / BCA"
-                      className={`w-full bg-zinc-950/80 text-white font-mono text-xs px-3.5 py-2.5 border outline-none transition-all duration-300 rounded ${
-                        errors.degree ? 'border-cyberRed bg-cyberRed/5' : 'border-zinc-800 focus:border-cyberRed'
-                      }`}
-                    />
-                    {errors.degree && (
-                      <span className="block mt-1 font-mono text-[9px] text-cyberRed uppercase tracking-wide">
-                        ⚠️ {errors.degree}
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Stream */}
-                  <div>
-                    <label className="block text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-1.5">
-                      Stream / Specialization <span className="text-cyberRed font-bold">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      name="stream"
-                      value={formData.stream}
-                      onChange={handleInputChange}
-                      placeholder="e.g. Computer Science"
-                      className={`w-full bg-zinc-950/80 text-white font-mono text-xs px-3.5 py-2.5 border outline-none transition-all duration-300 rounded ${
-                        errors.stream ? 'border-cyberRed bg-cyberRed/5' : 'border-zinc-800 focus:border-cyberRed'
-                      }`}
-                    />
-                    {errors.stream && (
-                      <span className="block mt-1 font-mono text-[9px] text-cyberRed uppercase tracking-wide">
-                        ⚠️ {errors.stream}
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Passout Year */}
-                  <div>
-                    <label className="block text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-1.5">
-                      Passout Year <span className="text-cyberRed font-bold">*</span>
-                    </label>
-                    <select
-                      name="passoutYear"
-                      value={formData.passoutYear}
-                      onChange={handleInputChange}
-                      className="w-full bg-zinc-950/80 text-white font-mono text-xs px-3.5 py-2.5 border border-zinc-800 outline-none focus:border-cyberRed transition-all duration-300 rounded"
-                    >
-                      <option value="2023">2023</option>
-                      <option value="2024">2024</option>
-                      <option value="2025">2025</option>
-                      <option value="2026">2026</option>
-                      <option value="2027">2027</option>
-                      <option value="2028">2028</option>
-                    </select>
-                  </div>
-
-                </div>
-              </div>
-            )}
-
-            {/* SECTION 3: CONSENT DIRECTIVES */}
-            <div className="mb-8">
-              <div className="text-cyberRed font-orbitron text-sm font-bold tracking-wider mb-4 border-l-2 border-cyberRed pl-2 uppercase">
-                3. Terms & Conditions
-              </div>
-              
-              <div className="space-y-3 font-mono text-[10px] text-zinc-400 select-none">
-                
-                {/* Terms and conditions */}
-                <div className="flex items-start gap-2.5">
-                  <input
-                    type="checkbox"
-                    id="termsAccepted"
-                    name="termsAccepted"
-                    checked={formData.termsAccepted}
-                    onChange={handleInputChange}
-                    className="accent-cyberRed w-4 h-4 mt-0.5 cursor-pointer"
-                  />
-                  <label htmlFor="termsAccepted" className="uppercase tracking-wider leading-relaxed cursor-pointer">
-                    * By registering you accept the <span className="text-cyberRed font-bold underline cursor-pointer">Terms & Conditions</span> of Hackverse 2.0
-                  </label>
-                </div>
-                {errors.termsAccepted && (
-                  <span className="block font-mono text-[9px] text-cyberRed uppercase tracking-wide">
-                    ⚠️ {errors.termsAccepted}
-                  </span>
-                )}
-
-                {/* Communications consent */}
-                <div className="flex items-start gap-2.5">
-                  <input
-                    type="checkbox"
-                    id="communicationsAccepted"
-                    name="communicationsAccepted"
-                    checked={formData.communicationsAccepted}
-                    onChange={handleInputChange}
-                    className="accent-cyberRed w-4 h-4 mt-0.5 cursor-pointer"
-                  />
-                  <label htmlFor="communicationsAccepted" className="uppercase tracking-wider leading-relaxed cursor-pointer">
-                    * By registering, you consent to receive updates and communications related to this initiative.
-                  </label>
-                </div>
-                {errors.communicationsAccepted && (
-                  <span className="block font-mono text-[9px] text-cyberRed uppercase tracking-wide">
-                    ⚠️ {errors.communicationsAccepted}
-                  </span>
-                )}
-
-              </div>
+            {/* Terms and Consent Checkbox */}
+            <div className="mb-6 select-none font-mono text-[10px] text-zinc-400 space-y-1">
+              <div>* By registering, your team agrees to participate with honor and maintain the ethical hacker conduct directives.</div>
             </div>
 
             {/* Red holographic submit button */}
@@ -942,12 +858,12 @@ export default function RegisterApp() {
                 className="w-full relative py-4 bg-cyberRed hover:bg-[#990024] font-orbitron font-extrabold text-base tracking-[0.2em] uppercase text-white shadow-cyberGlow hover:shadow-[0_0_40px_rgba(255,0,60,0.9)] border border-cyberRed transition-all duration-300 hover:scale-[1.01] transform active:scale-95 group overflow-hidden"
               >
                 <span className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-transparent via-white/15 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite_linear]"></span>
-                {isSubmitting ? 'SUBMITTING REGISTRATION...' : 'SUBMIT REGISTRATION'}
+                {isSubmitting ? 'SECURELY RECORDING TEAM...' : 'AUTHORIZE REGISTRATION'}
               </button>
               
               <div className="absolute -bottom-5 left-0 right-0 flex justify-between font-mono text-[8px] text-zinc-600 px-1">
-                <span>STATUS: ONLINE</span>
-                <span>TIME: {currentTime || 'ONLINE'}</span>
+                <span>SYSTEM STATUS: CONSOLE SECURED</span>
+                <span>SYSTEM TIME: {currentTime || 'ESTABLISHED'}</span>
               </div>
             </div>
           </form>
@@ -955,7 +871,7 @@ export default function RegisterApp() {
 
       </div>
 
-      {/* Submission compilation overlay screen */}
+      {/* Submission Compilation Progress Indicator Overlay */}
       {isSubmitting && (
         <div className="fixed inset-0 bg-cyberDark/95 backdrop-blur-md flex items-center justify-center z-50 p-6">
           <div className="glassmorphism max-w-sm w-full p-6 rounded-lg border border-cyberRed relative shadow-cyberGlowHeavy">
@@ -966,13 +882,13 @@ export default function RegisterApp() {
 
             <div className="text-center font-mono">
               <div className="text-cyberRed text-lg font-bold font-orbitron tracking-wider mb-2 uppercase animate-pulse">
-                // SUBMITTING REGISTRATION //
+                // COMPILING TRANSMISSION //
               </div>
               
               <div className="w-full h-3 bg-zinc-900 border border-cyberRed/30 p-0.5 rounded overflow-hidden mb-4 relative">
                 <div 
                   className="h-full bg-cyberRed transition-all duration-300 ease-out shadow-[0_0_6px_#ff003c]" 
-                  style={{ width: `${(submitStep + 1) * 25}%` }}
+                  style={{ width: `${((submitStep + 1) / submitSequenceSteps.length) * 100}%` }}
                 ></div>
               </div>
 
@@ -986,7 +902,7 @@ export default function RegisterApp() {
 
               <div className="mt-4 flex justify-center items-center gap-1.5 text-[9px] text-zinc-500 tracking-wider">
                 <span className="w-1.5 h-1.5 bg-cyberRed rounded-full animate-ping"></span>
-                <span>SECURE TRANSMISSION COMPLETE</span>
+                <span>TRANSMITTING VIA ENCRYPTED HACKVERSE VPN</span>
               </div>
             </div>
           </div>

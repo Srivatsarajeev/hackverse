@@ -160,31 +160,26 @@ def export_csv(admin: dict = Depends(get_current_admin)):
         stream = io.StringIO()
         writer = csv.writer(stream)
         writer.writerow([
-            "Participant ID", "Full Name", "Email", "WhatsApp Number", "Alternate Phone", 
-            "Date of Birth", "Gender", "Country", "State", "City", "Occupation",
-            "College Name", "Degree", "Stream", "Passout Year", "GitHub URL", "LinkedIn URL", "Registration Time"
+            "Participant ID", "Team Name", "College Name", "Leader Name", "Leader Phone (WhatsApp)", "Alternate Phone", 
+            "Course / Degree", "Team Size", "Member 2 Name", "Member 2 Phone", 
+            "Payment UTR", "ID Card File URL", "Payment Receipt URL", "Registration Time"
         ])
         
         for p in participants:
-            alt_phone = p.get("alternatePhone") if not p.get("alternatePhoneSame") else p.get("whatsapp")
             writer.writerow([
                 p.get("participantId"),
-                p.get("fullName"),
-                p.get("email"),
-                p.get("whatsapp"),
-                alt_phone,
-                p.get("dob"),
-                p.get("gender"),
-                p.get("country"),
-                p.get("state"),
-                p.get("city"),
-                p.get("occupation"),
+                p.get("teamName", ""),
                 p.get("collegeName"),
+                p.get("fullName"),
+                p.get("whatsapp"),
+                p.get("alternatePhone", ""),
                 p.get("degree"),
-                p.get("stream"),
-                p.get("passoutYear"),
-                p.get("githubUrl"),
-                p.get("linkedinUrl"),
+                p.get("teamSize", 1),
+                p.get("member2Name", ""),
+                p.get("member2Phone", ""),
+                p.get("paymentUtr", ""),
+                p.get("idCardFileUrl", ""),
+                p.get("paymentReceiptUrl", ""),
                 p.get("timestamp")
             ])
             
@@ -216,32 +211,27 @@ def export_excel(admin: dict = Depends(get_current_admin)):
         
         # Header block
         ws.append([
-            "Participant ID", "Full Name", "Email", "WhatsApp Number", "Alternate Phone", 
-            "Date of Birth", "Gender", "Country", "State", "City", "Occupation",
-            "College Name", "Degree", "Stream", "Passout Year", "GitHub URL", "LinkedIn URL", "Registration Time"
+            "Participant ID", "Team Name", "College Name", "Leader Name", "Leader Phone (WhatsApp)", "Alternate Phone", 
+            "Course / Degree", "Team Size", "Member 2 Name", "Member 2 Phone", 
+            "Payment UTR", "ID Card File URL", "Payment Receipt URL", "Registration Time"
         ])
         
         # Appends records
         for p in participants:
-            alt_phone = p.get("alternatePhone") if not p.get("alternatePhoneSame") else p.get("whatsapp")
             ws.append([
                 p.get("participantId"),
-                p.get("fullName"),
-                p.get("email"),
-                p.get("whatsapp"),
-                alt_phone,
-                p.get("dob"),
-                p.get("gender"),
-                p.get("country"),
-                p.get("state"),
-                p.get("city"),
-                p.get("occupation"),
+                p.get("teamName", ""),
                 p.get("collegeName"),
+                p.get("fullName"),
+                p.get("whatsapp"),
+                p.get("alternatePhone", ""),
                 p.get("degree"),
-                p.get("stream"),
-                p.get("passoutYear"),
-                p.get("githubUrl"),
-                p.get("linkedinUrl"),
+                p.get("teamSize", 1),
+                p.get("member2Name", ""),
+                p.get("member2Phone", ""),
+                p.get("paymentUtr", ""),
+                p.get("idCardFileUrl", ""),
+                p.get("paymentReceiptUrl", ""),
                 p.get("timestamp")
             ])
             
