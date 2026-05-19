@@ -392,33 +392,25 @@ export default function AdminApp() {
                 <div className="font-orbitron text-4xl font-black text-cyberRed animate-pulse drop-shadow-[0_0_12px_#ff003c] mt-2">
                   {stats.total}
                 </div>
-                <p className="font-mono text-[9px] text-zinc-500 uppercase tracking-widest mt-1">registrations received</p>
+                <p className="font-mono text-[9px] text-zinc-500 uppercase tracking-widest mt-1">authorized teams</p>
               </div>
 
-              {/* Gender Breakdown Breakdown */}
-              <div className="md:col-span-2 glassmorphism border border-zinc-800/80 p-4 rounded relative flex flex-col justify-between min-h-[120px]">
-                <div className="absolute top-2 left-3 font-mono text-[9px] text-zinc-500 tracking-wider">GENDER BREAKDOWN</div>
-                <div className="grid grid-cols-2 gap-2 mt-5 text-center font-mono">
-                  {Object.entries(stats.gender_counts || {}).map(([g, count]) => (
-                    <div key={g} className="bg-zinc-950/70 p-1 border border-zinc-900 rounded">
-                      <span className="text-[8px] text-zinc-500 block truncate uppercase">{g}</span>
-                      <strong className="text-xs text-white font-orbitron">{count}</strong>
-                    </div>
-                  ))}
+              {/* System Node Info Card */}
+              <div className="md:col-span-2 glassmorphism border border-zinc-800/80 p-4 rounded relative flex flex-col justify-center items-center min-h-[120px]">
+                <div className="absolute top-2 left-3 font-mono text-[9px] text-zinc-500 tracking-wider">DEPLOYED STAGE</div>
+                <div className="font-orbitron text-2xl font-black text-white mt-2">
+                  PHASE ONE
                 </div>
+                <p className="font-mono text-[9px] text-zinc-500 uppercase tracking-widest mt-1">preliminary pitch active</p>
               </div>
 
-              {/* Passout Breakdown */}
-              <div className="md:col-span-2 glassmorphism border border-zinc-800/80 p-4 rounded relative flex flex-col justify-between min-h-[120px]">
-                <div className="absolute top-2 left-3 font-mono text-[9px] text-zinc-500 tracking-wider">PASSOUT YEARS</div>
-                <div className="grid grid-cols-3 gap-1 mt-5 text-center font-mono">
-                  {Object.entries(stats.passout_counts || {}).slice(0, 6).map(([year, count]) => (
-                    <div key={year} className="bg-zinc-950/70 p-1 border border-zinc-900 rounded">
-                      <span className="text-[8px] text-zinc-500 block">{year}</span>
-                      <strong className="text-[10px] text-cyberRed font-bold font-orbitron">{count}</strong>
-                    </div>
-                  ))}
+              {/* Firewall / Security Card */}
+              <div className="md:col-span-2 glassmorphism border border-zinc-800/80 p-4 rounded relative flex flex-col justify-center items-center min-h-[120px]">
+                <div className="absolute top-2 left-3 font-mono text-[9px] text-zinc-500 tracking-wider">SYSTEM INTEGRITY</div>
+                <div className="font-orbitron text-2xl font-black text-green-400 drop-shadow-[0_0_8px_rgba(74,222,128,0.4)] mt-2">
+                  SECURE (100%)
                 </div>
+                <p className="font-mono text-[9px] text-zinc-500 uppercase tracking-widest mt-1">active firewall node</p>
               </div>
 
             </div>
@@ -439,37 +431,9 @@ export default function AdminApp() {
                     type="text"
                     value={search}
                     onChange={(e) => { setSearch(e.target.value); setPage(1); }}
-                    placeholder="Search name, email, WhatsApp, college..."
-                    className="bg-zinc-950/90 text-white font-mono text-xs px-3 py-2 border border-zinc-800 focus:border-cyberRed outline-none transition rounded w-full md:w-64"
+                    placeholder="Search team, college, leader..."
+                    className="bg-zinc-950/90 text-white font-mono text-xs px-3 py-2 border border-zinc-800 focus:border-cyberRed outline-none transition rounded w-full md:w-80"
                   />
-
-                  {/* Gender filter */}
-                  <select
-                    value={selectedGender}
-                    onChange={(e) => { setSelectedGender(e.target.value); setPage(1); }}
-                    className="bg-zinc-950/90 text-white font-mono text-xs px-3 py-2 border border-zinc-800 focus:border-cyberRed outline-none transition rounded cursor-pointer"
-                  >
-                    <option value="">All Genders</option>
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                    <option value="Other">Other</option>
-                    <option value="Prefer not to say">Prefer not to say</option>
-                  </select>
-
-                  {/* Passout year filter */}
-                  <select
-                    value={selectedPassoutYear}
-                    onChange={(e) => { setSelectedPassoutYear(e.target.value); setPage(1); }}
-                    className="bg-zinc-950/90 text-white font-mono text-xs px-3 py-2 border border-zinc-800 focus:border-cyberRed outline-none transition rounded cursor-pointer"
-                  >
-                    <option value="">All Passout Years</option>
-                    <option value="2023">2023</option>
-                    <option value="2024">2024</option>
-                    <option value="2025">2025</option>
-                    <option value="2026">2026</option>
-                    <option value="2027">2027</option>
-                    <option value="2028">2028</option>
-                  </select>
                 </div>
 
                 {/* Export Buttons */}
@@ -506,12 +470,14 @@ export default function AdminApp() {
                   <table className="w-full text-left font-mono text-xs border-collapse">
                     <thead>
                       <tr className="border-b border-cyberRed/30 text-cyberRed text-[9px] uppercase tracking-widest">
-                        <th className="py-3 px-3">Participant ID</th>
-                        <th className="py-3 px-3">Full Name</th>
-                        <th className="py-3 px-3">Email</th>
-                        <th className="py-3 px-3">WhatsApp</th>
+                        <th className="py-3 px-3">Team ID</th>
+                        <th className="py-3 px-3">Team Name</th>
                         <th className="py-3 px-3">College</th>
-                        <th className="py-3 px-3">Passout</th>
+                        <th className="py-3 px-3">Degree</th>
+                        <th className="py-3 px-3">Size</th>
+                        <th className="py-3 px-3">Leader</th>
+                        <th className="py-3 px-3">Leader Phone</th>
+                        <th className="py-3 px-3 font-mono">UTR Number</th>
                         <th className="py-3 px-3 text-center">Actions</th>
                       </tr>
                     </thead>
@@ -523,15 +489,17 @@ export default function AdminApp() {
                           onClick={() => setActiveParticipant(p)}
                         >
                           <td className="py-3.5 px-3 text-cyberRed font-bold font-orbitron">{p.participantId}</td>
-                          <td className="py-3.5 px-3 font-semibold text-white">{p.fullName}</td>
-                          <td className="py-3.5 px-3 text-zinc-300">{p.email}</td>
-                          <td className="py-3.5 px-3 text-zinc-400">{p.whatsapp}</td>
+                          <td className="py-3.5 px-3 font-semibold text-white">{p.teamName || "N/A"}</td>
                           <td className="py-3.5 px-3 text-zinc-300 truncate max-w-[150px]">{p.collegeName || "N/A"}</td>
                           <td className="py-3.5 px-3">
                             <span className="inline-block px-2 py-0.5 border border-zinc-800 bg-zinc-950/60 rounded text-[9px] uppercase tracking-wider font-bold">
-                              {p.passoutYear || "N/A"}
+                              {p.degree || "N/A"}
                             </span>
                           </td>
+                          <td className="py-3.5 px-3 text-zinc-300 font-bold">{p.teamSize || 2}</td>
+                          <td className="py-3.5 px-3 text-zinc-300 font-bold">{p.fullName || "N/A"}</td>
+                          <td className="py-3.5 px-3 text-zinc-400 font-mono">{p.whatsapp || "N/A"}</td>
+                          <td className="py-3.5 px-3 text-zinc-400 font-mono">{p.paymentUtr || "N/A"}</td>
                           <td className="py-3.5 px-3 text-center" onClick={(e) => e.stopPropagation()}>
                             <div className="flex justify-center items-center gap-3">
                               <button
@@ -595,7 +563,7 @@ export default function AdminApp() {
                   <div className="flex justify-between items-start border-b border-cyberRed/20 pb-3 mb-5 font-mono">
                     <div>
                       <span className="text-cyberRed font-bold font-orbitron text-lg block">{activeParticipant.participantId}</span>
-                      <span className="text-zinc-500 text-[10px] uppercase tracking-widest font-bold">// Participant Details</span>
+                      <span className="text-zinc-500 text-[10px] uppercase tracking-widest font-bold">// TEAM OVERVIEW SCHEMA</span>
                     </div>
                     <button
                       onClick={() => setActiveParticipant(null)}
@@ -607,100 +575,170 @@ export default function AdminApp() {
 
                   <div className="space-y-5 text-left font-mono">
                     {/* Basic details */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-zinc-950/70 p-4 border border-zinc-900 rounded text-xs leading-relaxed">
-                      <div>
-                        <span className="text-zinc-500 uppercase block mb-0.5">Full Name</span>
-                        <strong className="text-white text-sm">{activeParticipant.fullName}</strong>
-                      </div>
-                      <div>
-                        <span className="text-zinc-500 uppercase block mb-0.5">Date of Birth / Gender</span>
-                        <strong className="text-white text-sm">{activeParticipant.dob} ({activeParticipant.gender})</strong>
-                      </div>
-                      <div>
-                        <span className="text-zinc-500 uppercase block mb-0.5">Location</span>
-                        <strong className="text-white text-sm">{activeParticipant.city}, {activeParticipant.state}, {activeParticipant.country}</strong>
-                      </div>
-                      <div>
-                        <span className="text-zinc-500 uppercase block mb-0.5">Occupation</span>
-                        <strong className="text-cyberRed font-bold text-sm uppercase">{activeParticipant.occupation}</strong>
+                    <div>
+                      <span className="text-cyberRed font-orbitron uppercase tracking-widest font-bold block mb-2">Team & College Profile:</span>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 bg-zinc-950/70 p-4 border border-zinc-900 rounded text-xs leading-relaxed">
+                        <div>
+                          <span className="text-zinc-500 uppercase block mb-0.5">Team Name</span>
+                          <strong className="text-white text-sm">{activeParticipant.teamName || "N/A"}</strong>
+                        </div>
+                        <div>
+                          <span className="text-zinc-500 uppercase block mb-0.5">College Name</span>
+                          <strong className="text-white text-sm">{activeParticipant.collegeName || "N/A"}</strong>
+                        </div>
+                        <div>
+                          <span className="text-zinc-500 uppercase block mb-0.5">Course Selection</span>
+                          <strong className="text-cyberRed font-bold text-sm uppercase">{activeParticipant.degree || "N/A"}</strong>
+                        </div>
                       </div>
                     </div>
 
-                    {/* Academic Profile */}
-                    {activeParticipant.occupation === 'College Student' && (
-                      <div className="text-xs">
-                        <span className="text-cyberRed font-orbitron uppercase tracking-widest font-bold block mb-2">Academic Details:</span>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 bg-[#04000a]/80 p-4 border border-zinc-900 rounded">
-                          <div className="md:col-span-2">
-                            <span className="text-zinc-500">College Name:</span> <strong className="text-white block mt-0.5">{activeParticipant.collegeName}</strong>
+                    {/* Team Members Information */}
+                    <div>
+                      <span className="text-cyberRed font-orbitron uppercase tracking-widest font-bold block mb-2">Team Members Information (Size: {activeParticipant.teamSize || 2}):</span>
+                      <div className="space-y-3">
+                        {/* Member 1: Leader */}
+                        <div className="bg-[#04000a]/80 p-4 border border-zinc-900 rounded text-xs">
+                          <span className="text-cyberRed font-bold uppercase tracking-wider block mb-2">Member 01 (Team Leader) *</span>
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                            <div>
+                              <span className="text-zinc-500">Full Name:</span> <strong className="text-white block mt-0.5">{activeParticipant.fullName || "N/A"}</strong>
+                            </div>
+                            <div>
+                              <span className="text-zinc-500">Phone (WhatsApp):</span> <strong className="text-white block mt-0.5">{activeParticipant.whatsapp || "N/A"}</strong>
+                            </div>
+                            <div>
+                              <span className="text-zinc-500">Alternate Phone:</span> <strong className="text-zinc-300 block mt-0.5">{activeParticipant.alternatePhone || "N/A"}</strong>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Member 2 */}
+                        <div className="bg-[#04000a]/80 p-4 border border-zinc-900 rounded text-xs">
+                          <span className="text-cyberRed font-bold uppercase tracking-wider block mb-2">Member 02 *</span>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            <div>
+                              <span className="text-zinc-500">Full Name:</span> <strong className="text-white block mt-0.5">{activeParticipant.member2Name || "N/A"}</strong>
+                            </div>
+                            <div>
+                              <span className="text-zinc-500">Phone (WhatsApp):</span> <strong className="text-white block mt-0.5">{activeParticipant.member2Phone || "N/A"}</strong>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Member 3 */}
+                        {parseInt(activeParticipant.teamSize) >= 3 && (
+                          <div className="bg-[#04000a]/80 p-4 border border-zinc-900 rounded text-xs">
+                            <span className="text-cyberRed font-bold uppercase tracking-wider block mb-2">Member 03</span>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                              <div>
+                                <span className="text-zinc-500">Full Name:</span> <strong className="text-white block mt-0.5">{activeParticipant.member3Name || "N/A"}</strong>
+                              </div>
+                              <div>
+                                <span className="text-zinc-500">Phone (WhatsApp):</span> <strong className="text-white block mt-0.5">{activeParticipant.member3Phone || "N/A"}</strong>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Member 4 */}
+                        {parseInt(activeParticipant.teamSize) >= 4 && (
+                          <div className="bg-[#04000a]/80 p-4 border border-zinc-900 rounded text-xs">
+                            <span className="text-cyberRed font-bold uppercase tracking-wider block mb-2">Member 04</span>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                              <div>
+                                <span className="text-zinc-500">Full Name:</span> <strong className="text-white block mt-0.5">{activeParticipant.member4Name || "N/A"}</strong>
+                              </div>
+                              <div>
+                                <span className="text-zinc-500">Phone (WhatsApp):</span> <strong className="text-white block mt-0.5">{activeParticipant.member4Phone || "N/A"}</strong>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Project Concept Details */}
+                    <div>
+                      <span className="text-cyberRed font-orbitron uppercase tracking-widest font-bold block mb-2">Project Concept & Target Domain:</span>
+                      <div className="space-y-3 mb-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-zinc-950/70 p-4 border border-zinc-900 rounded text-xs leading-relaxed">
+                          <div>
+                            <span className="text-zinc-500 uppercase block mb-0.5">Target District / Domain</span>
+                            <strong className="text-cyberRed font-bold text-sm uppercase">{activeParticipant.domain || "N/A"}</strong>
                           </div>
                           <div>
-                            <span className="text-zinc-500">College Location:</span> <strong className="text-zinc-300 block">{activeParticipant.collegeCity}, {activeParticipant.collegeState}, {activeParticipant.collegeCountry}</strong>
+                            <span className="text-zinc-500 uppercase block mb-0.5">Project / Solution Title</span>
+                            <strong className="text-white text-sm">{activeParticipant.projectTitle || "N/A"}</strong>
+                          </div>
+                        </div>
+
+                        <div className="bg-[#04000a]/80 p-4 border border-zinc-900 rounded text-xs space-y-3">
+                          <div>
+                            <span className="text-zinc-500 uppercase block mb-1">Domain Problem Statement:</span>
+                            <p className="text-zinc-300 font-mono bg-zinc-950 p-2.5 rounded border border-zinc-900 whitespace-pre-wrap leading-relaxed max-h-[150px] overflow-y-auto">
+                              {activeParticipant.problemStatement || "No problem statement submitted."}
+                            </p>
                           </div>
                           <div>
-                            <span className="text-zinc-500">Degree & Stream:</span> <strong className="text-zinc-300 block">{activeParticipant.degree} - {activeParticipant.stream}</strong>
-                          </div>
-                          <div>
-                            <span className="text-zinc-500">Passout Year:</span> <strong className="text-cyberRed block">{activeParticipant.passoutYear}</strong>
+                            <span className="text-zinc-500 uppercase block mb-1">Proposed Futuristic Solution:</span>
+                            <p className="text-zinc-300 font-mono bg-zinc-950 p-2.5 rounded border border-zinc-900 whitespace-pre-wrap leading-relaxed max-h-[200px] overflow-y-auto">
+                              {activeParticipant.proposedSolution || "No proposed solution submitted."}
+                            </p>
                           </div>
                         </div>
                       </div>
-                    )}
-
-                    {/* Contact Information */}
-                    <div className="text-xs">
-                      <span className="text-cyberRed font-orbitron uppercase tracking-widest font-bold block mb-2">Contact Information:</span>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5 bg-[#04000a]/80 p-4 border border-zinc-900 rounded">
-                        <div><span className="text-zinc-500">Email Address:</span> <a href={`mailto:${activeParticipant.email}`} className="text-white underline hover:text-cyberRed block mt-0.5">{activeParticipant.email}</a></div>
-                        <div><span className="text-zinc-500">WhatsApp Number:</span> <a href={`https://wa.me/${activeParticipant.whatsapp}`} target="_blank" rel="noreferrer" className="text-white underline hover:text-cyberRed block mt-0.5">{activeParticipant.whatsapp}</a></div>
-                        {!activeParticipant.alternatePhoneSame && activeParticipant.alternatePhone && (
-                          <div className="md:col-span-2"><span className="text-zinc-500">Alternate Phone:</span> <strong className="text-zinc-300 block">{activeParticipant.alternatePhone}</strong></div>
-                        )}
-                      </div>
                     </div>
 
-                    {/* Developer Profiles */}
-                    <div className="text-xs">
-                      <span className="text-cyberRed font-orbitron uppercase tracking-widest font-bold block mb-2">Developer Profiles:</span>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {activeParticipant.githubUrl && (
-                          <a
-                            href={activeParticipant.githubUrl}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="p-3 border border-zinc-800 bg-zinc-950/60 hover:border-cyberRed hover:bg-cyberRed/5 transition rounded text-center block"
-                          >
-                            <span className="text-zinc-500 block text-[10px] uppercase font-bold tracking-wider mb-1">GitHub</span>
-                            <span className="text-white font-bold text-xs truncate block">{activeParticipant.githubUrl}</span>
-                          </a>
-                        )}
-                        {activeParticipant.linkedinUrl && (
-                          <a
-                            href={activeParticipant.linkedinUrl}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="p-3 border border-zinc-800 bg-zinc-950/60 hover:border-cyberRed hover:bg-cyberRed/5 transition rounded text-center block"
-                          >
-                            <span className="text-zinc-500 block text-[10px] uppercase font-bold tracking-wider mb-1">LinkedIn</span>
-                            <span className="text-white font-bold text-xs truncate block">{activeParticipant.linkedinUrl}</span>
-                          </a>
-                        )}
-                      </div>
-                    </div>
+                    {/* Identity & Payment Info */}
+                    <div>
+                      <span className="text-cyberRed font-orbitron uppercase tracking-widest font-bold block mb-2">Identity Upload & Payment Info:</span>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                        {/* College ID Cards */}
+                        <div className="p-4 border border-zinc-800 bg-zinc-950/60 rounded">
+                          <span className="text-zinc-500 block text-[10px] uppercase font-bold tracking-wider mb-2">Merged College ID Cards *</span>
+                          {activeParticipant.idCardFileUrl ? (
+                            <a
+                              href={`${API_BASE || "/api"}${activeParticipant.idCardFileUrl}`}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="inline-flex items-center justify-center w-full py-2.5 bg-cyberRed hover:bg-[#990024] text-white font-bold uppercase text-[10px] tracking-wider transition rounded"
+                            >
+                              📄 View Uploaded IDs
+                            </a>
+                          ) : (
+                            <span className="text-cyberRed block font-bold">No file uploaded</span>
+                          )}
+                        </div>
 
-                    {/* Consents */}
-                    <div className="text-[10px] text-zinc-500 border-t border-zinc-900 pt-3">
-                      <div>// termsAccepted: <span className={activeParticipant.termsAccepted ? "text-green-500 font-bold" : "text-cyberRed font-bold"}>{activeParticipant.termsAccepted ? "TRUE" : "FALSE"}</span></div>
-                      <div>// communicationsAccepted: <span className={activeParticipant.communicationsAccepted ? "text-green-500 font-bold" : "text-cyberRed font-bold"}>{activeParticipant.communicationsAccepted ? "TRUE" : "FALSE"}</span></div>
+                        {/* Payment Verification */}
+                        <div className="p-4 border border-zinc-800 bg-zinc-950/60 rounded">
+                          <span className="text-zinc-500 block text-[10px] uppercase font-bold tracking-wider mb-1">Payment ID UTR Number *</span>
+                          <strong className="text-white text-sm font-mono block mb-2">{activeParticipant.paymentUtr || "N/A"}</strong>
+                          
+                          {activeParticipant.paymentReceiptUrl ? (
+                            <a
+                              href={`${API_BASE || "/api"}${activeParticipant.paymentReceiptUrl}`}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="inline-flex items-center justify-center w-full py-2 bg-zinc-900 border border-zinc-700 hover:border-cyberRed hover:bg-[#ff003c]/5 text-white font-bold uppercase text-[10px] tracking-wider transition rounded"
+                            >
+                              🧾 View Payment Receipt
+                            </a>
+                          ) : (
+                            <span className="text-cyberRed block font-bold">No receipt proof</span>
+                          )}
+                        </div>
+                      </div>
                     </div>
 
                     <div className="pt-4 border-t border-zinc-900 flex justify-between items-center text-[10px] font-mono text-zinc-500">
-                      <span>Registration Date: {new Date(activeParticipant.timestamp).toLocaleString()}</span>
+                      <span>Authorized Entry Date: {new Date(activeParticipant.timestamp).toLocaleString()}</span>
                       <button
                         onClick={() => setShowDeleteConfirm(activeParticipant.participantId)}
                         className="text-cyberRed hover:text-red-500 border border-cyberRed/30 hover:border-cyberRed px-4 py-2 font-bold uppercase rounded transition"
                       >
-                        Delete Participant
+                        Purge Records
                       </button>
                     </div>
 

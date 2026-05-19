@@ -66,7 +66,7 @@ export default function RegisterApp() {
     whatsapp: '',
     alternatePhone: '',
     degree: '', // BCA or MCA option
-    teamSize: 1, // min 1 max 4 option
+    teamSize: 2, // min 2 max 4 option
     member2Name: '',
     member2Phone: '',
     member3Name: '',
@@ -78,6 +78,10 @@ export default function RegisterApp() {
     paymentUtr: '',
     paymentReceiptUrl: '',
     paymentReceiptName: '',
+    domain: 'AI IN OPEN INNOVATION',
+    projectTitle: '',
+    problemStatement: '',
+    proposedSolution: '',
   });
 
   const [errors, setErrors] = useState({});
@@ -220,6 +224,24 @@ export default function RegisterApp() {
       newErrors.paymentReceiptFile = 'Receipt proof file must be under 10MB.';
     }
 
+    // Project Concept Validations
+    if (!formData.domain) {
+      newErrors.domain = 'Please select a hackathon domain.';
+    }
+    if (!formData.projectTitle || !formData.projectTitle.trim()) {
+      newErrors.projectTitle = 'Please enter your project title.';
+    }
+    if (!formData.problemStatement || !formData.problemStatement.trim()) {
+      newErrors.problemStatement = 'Please enter your domain problem statement.';
+    } else if (formData.problemStatement.trim().length < 10) {
+      newErrors.problemStatement = 'Problem statement description is too short (min 10 chars).';
+    }
+    if (!formData.proposedSolution || !formData.proposedSolution.trim()) {
+      newErrors.proposedSolution = 'Please describe your proposed solution.';
+    } else if (formData.proposedSolution.trim().length < 10) {
+      newErrors.proposedSolution = 'Proposed solution description is too short (min 10 chars).';
+    }
+
     setErrors(newErrors);
 
     const firstError = Object.keys(newErrors)[0];
@@ -314,10 +336,10 @@ export default function RegisterApp() {
         stream: "Computer Applications",
         yearOfStudy: "1st Year",
         passoutYear: "2026",
-        domain: "AI",
-        projectTitle: "Autonomous Hack",
-        problemStatement: "",
-        proposedSolution: "",
+        domain: formData.domain,
+        projectTitle: formData.projectTitle,
+        problemStatement: formData.problemStatement,
+        proposedSolution: formData.proposedSolution,
         technologiesUsed: "",
         githubUrl: "",
         linkedinUrl: "",
@@ -355,7 +377,7 @@ export default function RegisterApp() {
       whatsapp: '',
       alternatePhone: '',
       degree: '',
-      teamSize: 1,
+      teamSize: 2,
       member2Name: '',
       member2Phone: '',
       member3Name: '',
@@ -367,6 +389,10 @@ export default function RegisterApp() {
       paymentUtr: '',
       paymentReceiptUrl: '',
       paymentReceiptName: '',
+      domain: 'AI IN OPEN INNOVATION',
+      projectTitle: '',
+      problemStatement: '',
+      proposedSolution: '',
     });
     setErrors({});
     setSubmitError('');
@@ -655,7 +681,6 @@ export default function RegisterApp() {
                     }}
                     className="w-full bg-zinc-950/80 text-white font-mono text-xs px-3.5 py-2.5 border border-zinc-800 outline-none focus:border-cyberRed transition-all duration-300 rounded"
                   >
-                    <option value={1}>1 Member (Solo Combatant)</option>
                     <option value={2}>2 Members (Duo Operations)</option>
                     <option value={3}>3 Members (Trio Operations)</option>
                     <option value={4}>4 Members (Squad Operations)</option>
@@ -909,10 +934,104 @@ export default function RegisterApp() {
               </div>
             </div>
 
-            {/* SECTION 3: VERIFICATION & DEPOSITS */}
+            {/* SECTION 3: PROJECT CONCEPT DETAILS */}
             <div className="mb-8 animate-[fadeIn_0.3s_ease-out]">
               <div className="text-cyberRed font-orbitron text-sm font-bold tracking-wider mb-4 border-l-2 border-cyberRed pl-2 uppercase">
-                3. Identity Upload & Payment Info
+                3. Project Concept Details
+              </div>
+
+              <div className="grid grid-cols-1 gap-4">
+                {/* Domain Selection */}
+                <div>
+                  <label className="block text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-1.5">
+                    Combat Domain / District Selection <span className="text-cyberRed font-bold">*</span>
+                  </label>
+                  <select
+                    name="domain"
+                    value={formData.domain}
+                    onChange={handleInputChange}
+                    className="w-full bg-zinc-950/80 text-white font-mono text-xs px-3.5 py-2.5 border border-zinc-800 outline-none focus:border-cyberRed transition-all duration-300 rounded"
+                  >
+                    <option value="AI IN AGRICULTURE">DISTRICT // 01 : AI IN AGRICULTURE</option>
+                    <option value="AI IN HEALTHCARE">DISTRICT // 02 : AI IN HEALTHCARE</option>
+                    <option value="AI IN EDUCATION TECH">DISTRICT // 03 : AI IN EDUCATION TECH</option>
+                    <option value="AI IN GENDER EQUALITY">DISTRICT // 04 : AI IN GENDER EQUALITY</option>
+                    <option value="AI IN OPEN INNOVATION">DISTRICT // 05 : AI IN OPEN INNOVATION</option>
+                  </select>
+                </div>
+
+                {/* Project Title */}
+                <div>
+                  <label className="block text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-1.5">
+                    Project / Solution Title <span className="text-cyberRed font-bold">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    name="projectTitle"
+                    value={formData.projectTitle}
+                    onChange={handleInputChange}
+                    placeholder="Enter project name or tactical project handle"
+                    className={`w-full bg-zinc-950/80 text-white font-mono text-xs px-3.5 py-2.5 border outline-none transition-all duration-300 rounded ${
+                      errors.projectTitle ? 'border-cyberRed bg-cyberRed/5' : 'border-zinc-800 focus:border-cyberRed'
+                    }`}
+                  />
+                  {errors.projectTitle && (
+                    <span className="block mt-1 font-mono text-[9px] text-cyberRed uppercase tracking-wide">
+                      ⚠️ {errors.projectTitle}
+                    </span>
+                  )}
+                </div>
+
+                {/* Problem Statement */}
+                <div>
+                  <label className="block text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-1.5">
+                    Domain Problem Statement <span className="text-cyberRed font-bold">*</span>
+                  </label>
+                  <textarea
+                    name="problemStatement"
+                    value={formData.problemStatement}
+                    onChange={handleInputChange}
+                    rows="3"
+                    placeholder="Identify the core social, environmental, or civic problem statement you are tackling..."
+                    className={`w-full bg-zinc-950/80 text-white font-mono text-xs px-3.5 py-2.5 border outline-none transition-all duration-300 rounded resize-none ${
+                      errors.problemStatement ? 'border-cyberRed bg-cyberRed/5' : 'border-zinc-800 focus:border-cyberRed'
+                    }`}
+                  />
+                  {errors.problemStatement && (
+                    <span className="block mt-1 font-mono text-[9px] text-cyberRed uppercase tracking-wide">
+                      ⚠️ {errors.problemStatement}
+                    </span>
+                  )}
+                </div>
+
+                {/* Proposed Solution */}
+                <div>
+                  <label className="block text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-1.5">
+                    Proposed Futuristic Solution <span className="text-cyberRed font-bold">*</span>
+                  </label>
+                  <textarea
+                    name="proposedSolution"
+                    value={formData.proposedSolution}
+                    onChange={handleInputChange}
+                    rows="4"
+                    placeholder="Provide a breakdown of your proposed tech tool, adaptive logic, or architecture solution..."
+                    className={`w-full bg-zinc-950/80 text-white font-mono text-xs px-3.5 py-2.5 border outline-none transition-all duration-300 rounded resize-none ${
+                      errors.proposedSolution ? 'border-cyberRed bg-cyberRed/5' : 'border-zinc-800 focus:border-cyberRed'
+                    }`}
+                  />
+                  {errors.proposedSolution && (
+                    <span className="block mt-1 font-mono text-[9px] text-cyberRed uppercase tracking-wide">
+                      ⚠️ {errors.proposedSolution}
+                    </span>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* SECTION 4: VERIFICATION & DEPOSITS */}
+            <div className="mb-8 animate-[fadeIn_0.3s_ease-out]">
+              <div className="text-cyberRed font-orbitron text-sm font-bold tracking-wider mb-4 border-l-2 border-cyberRed pl-2 uppercase">
+                4. Identity Upload & Payment Info
               </div>
 
               {/* College ID Upload (Merged all members) */}
@@ -945,7 +1064,10 @@ export default function RegisterApp() {
                 <h4 className="font-orbitron text-xs font-bold text-white mb-3 uppercase tracking-wider">🏦 Indian Bank Official Details</h4>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2 text-xs font-mono text-zinc-300">
-                  <div><span className="text-zinc-500">Account Holder:</span> <span className="text-white font-bold">Principal, BMSIT&M</span></div>
+                  <div className="md:col-span-2 border-b border-cyberRed/20 pb-2 mb-1">
+                    <span className="text-cyberRed font-bold text-sm uppercase">Registration Fee:</span> <span className="text-green-400 font-black text-sm tracking-wider bg-zinc-950 px-2.5 py-1 rounded border border-green-500/30">₹500 / Team</span>
+                  </div>
+                  <div><span className="text-zinc-500">Account Holder:</span> <span className="text-white font-bold">Principal, BMSITM</span></div>
                   <div><span className="text-zinc-500">SB Account No:</span> <span className="text-white font-bold text-green-400 tracking-wider">21096732049</span></div>
                   <div><span className="text-zinc-500">IFSC Code:</span> <span className="text-white font-bold text-green-400">IDIB000A682</span></div>
                   <div><span className="text-zinc-500">Bank Name:</span> <span className="text-white">Indian Bank</span></div>

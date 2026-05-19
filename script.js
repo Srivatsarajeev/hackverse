@@ -7,8 +7,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const pageName = window.location.pathname.split('/').pop();
         const isHomePage = pageName === '' || pageName === 'index.html';
         if (!isHomePage) return;
-        // Commented out to ensure welcome intro plays on every refresh
-        // if (localStorage.getItem('hackverse_intro_complete') === 'true') return;
+        // Use sessionStorage to ensure welcome intro plays once per session (not on internal page returns)
+        if (sessionStorage.getItem('hackverse_intro_complete') === 'true') return;
         if (document.querySelector('.hackverse-intro')) return;
 
         // Dynamic style injection for custom cursor blinking and button hover states
@@ -92,8 +92,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 audioContext.close().catch(() => {});
             }
 
-            // Save in localStorage so it plays strictly once
-            localStorage.setItem('hackverse_intro_complete', 'true');
+            // Save in sessionStorage so it plays strictly once per browser session
+            sessionStorage.setItem('hackverse_intro_complete', 'true');
 
             intro.classList.add('hackverse-intro--exit');
             document.body.classList.remove('hackverse-intro-active');
@@ -293,7 +293,11 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         const startIntroSequence = () => {
-            if (introStarted || closed) return;
+            if (introStarted) {
+                finishIntro();
+                return;
+            }
+            if (closed) return;
             beginIntroTimeline();
         };
 

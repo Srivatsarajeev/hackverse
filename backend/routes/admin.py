@@ -163,7 +163,8 @@ def export_csv(admin: dict = Depends(get_current_admin)):
             "Participant ID", "Team Name", "College Name", "Leader Name", "Leader Phone (WhatsApp)", "Alternate Phone", 
             "Course / Degree", "Team Size", "Member 2 Name", "Member 2 Phone", 
             "Member 3 Name", "Member 3 Phone", "Member 4 Name", "Member 4 Phone",
-            "Payment UTR", "ID Card File URL", "Payment Receipt URL", "Registration Time"
+            "Payment UTR", "ID Card File URL", "Payment Receipt URL", 
+            "Domain", "Project Title", "Problem Statement", "Proposed Solution", "Registration Time"
         ])
         
         for p in participants:
@@ -185,6 +186,10 @@ def export_csv(admin: dict = Depends(get_current_admin)):
                 p.get("paymentUtr", ""),
                 p.get("idCardFileUrl", ""),
                 p.get("paymentReceiptUrl", ""),
+                p.get("domain", ""),
+                p.get("projectTitle", ""),
+                p.get("problemStatement", ""),
+                p.get("proposedSolution", ""),
                 p.get("timestamp")
             ])
             
@@ -219,7 +224,8 @@ def export_excel(admin: dict = Depends(get_current_admin)):
             "Participant ID", "Team Name", "College Name", "Leader Name", "Leader Phone (WhatsApp)", "Alternate Phone", 
             "Course / Degree", "Team Size", "Member 2 Name", "Member 2 Phone", 
             "Member 3 Name", "Member 3 Phone", "Member 4 Name", "Member 4 Phone",
-            "Payment UTR", "ID Card File URL", "Payment Receipt URL", "Registration Time"
+            "Payment UTR", "ID Card File URL", "Payment Receipt URL", 
+            "Domain", "Project Title", "Problem Statement", "Proposed Solution", "Registration Time"
         ])
         
         # Appends records
@@ -242,6 +248,10 @@ def export_excel(admin: dict = Depends(get_current_admin)):
                 p.get("paymentUtr", ""),
                 p.get("idCardFileUrl", ""),
                 p.get("paymentReceiptUrl", ""),
+                p.get("domain", ""),
+                p.get("projectTitle", ""),
+                p.get("problemStatement", ""),
+                p.get("proposedSolution", ""),
                 p.get("timestamp")
             ])
             
