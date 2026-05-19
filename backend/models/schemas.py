@@ -11,9 +11,13 @@ class ParticipantRegisterSchema(BaseModel):
     degree: str = Field(..., min_length=2, max_length=100, description="BCA or MCA")
     
     # Team members info
-    teamSize: int = Field(1, description="Min 1, Max 2 option")
+    teamSize: int = Field(1, description="Min 1, Max 4 option")
     member2Name: Optional[str] = Field("", max_length=255)
     member2Phone: Optional[str] = Field("", max_length=20)
+    member3Name: Optional[str] = Field("", max_length=255)
+    member3Phone: Optional[str] = Field("", max_length=20)
+    member4Name: Optional[str] = Field("", max_length=255)
+    member4Phone: Optional[str] = Field("", max_length=20)
     
     # Uploads & UTR
     idCardFileUrl: str = Field(..., min_length=5, max_length=500, description="Merged college IDs URL")

@@ -1,45 +1,42 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 
-// Cybernetic Matrix/Rain Canvas Background Animation
+// Procedural Matrix Digital Rain Component for Immersive Background
 const CyberCanvasBackground = () => {
   const canvasRef = useRef(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
+
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
     let animationFrameId;
-    let width = (canvas.width = window.innerWidth);
-    let height = (canvas.height = window.innerHeight);
 
     const handleResize = () => {
-      if (!canvas) return;
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
     };
     window.addEventListener('resize', handleResize);
+    handleResize();
 
-    // Grid columns
-    const columns = Math.floor(width / 24) + 1;
+    const columns = Math.floor(canvas.width / 20) + 1;
     const yPositions = Array(columns).fill(0);
 
     const draw = () => {
-      ctx.fillStyle = 'rgba(4, 0, 8, 0.08)';
-      ctx.fillRect(0, 0, width, height);
+      ctx.fillStyle = 'rgba(4, 0, 10, 0.15)'; // Dark purple space trail
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      ctx.fillStyle = 'rgba(255, 0, 60, 0.15)'; // Cyberpunk neon red tint
-      ctx.font = '11px monospace';
+      ctx.fillStyle = 'rgba(255, 0, 60, 0.35)'; // Red neon rain drops
+      ctx.font = '12px monospace';
 
       for (let i = 0; i < yPositions.length; i++) {
-        // Render digital binary/hex codes
-        const code = Math.random() > 0.5 ? '1' : '0';
-        const x = i * 24;
+        const text = String.fromCharCode(33 + Math.floor(Math.random() * 93));
+        const x = i * 20;
         const y = yPositions[i];
 
-        ctx.fillText(code, x, y);
+        ctx.fillText(text, x, y);
 
         if (y > 100 + Math.random() * 10000) {
           yPositions[i] = 0;
@@ -69,9 +66,13 @@ export default function RegisterApp() {
     whatsapp: '',
     alternatePhone: '',
     degree: '', // BCA or MCA option
-    teamSize: 1, // min 1 max 2 option
+    teamSize: 1, // min 1 max 4 option
     member2Name: '',
     member2Phone: '',
+    member3Name: '',
+    member3Phone: '',
+    member4Name: '',
+    member4Phone: '',
     idCardFileUrl: '',
     idCardFileName: '',
     paymentUtr: '',
@@ -161,14 +162,39 @@ export default function RegisterApp() {
       newErrors.degree = 'Please select BCA or MCA option.';
     }
 
-    if (parseInt(formData.teamSize) === 2) {
+    const tSize = parseInt(formData.teamSize);
+
+    // Dynamic Team Member Validations based on Selected Size
+    if (tSize >= 2) {
       if (!formData.member2Name.trim()) {
-        newErrors.member2Name = 'Please enter the second member\'s full name.';
+        newErrors.member2Name = 'Please enter second member name.';
       }
       if (!formData.member2Phone.trim()) {
-        newErrors.member2Phone = 'Please enter the second member\'s phone number.';
+        newErrors.member2Phone = 'Please enter second member phone number.';
       } else if (!/^\+?\d{7,15}$/.test(formData.member2Phone.replace(/[\s-()]/g, ''))) {
         newErrors.member2Phone = 'Please enter a valid phone number.';
+      }
+    }
+
+    if (tSize >= 3) {
+      if (!formData.member3Name.trim()) {
+        newErrors.member3Name = 'Please enter third member name.';
+      }
+      if (!formData.member3Phone.trim()) {
+        newErrors.member3Phone = 'Please enter third member phone number.';
+      } else if (!/^\+?\d{7,15}$/.test(formData.member3Phone.replace(/[\s-()]/g, ''))) {
+        newErrors.member3Phone = 'Please enter a valid phone number.';
+      }
+    }
+
+    if (tSize >= 4) {
+      if (!formData.member4Name.trim()) {
+        newErrors.member4Name = 'Please enter fourth member name.';
+      }
+      if (!formData.member4Phone.trim()) {
+        newErrors.member4Phone = 'Please enter fourth member phone number.';
+      } else if (!/^\+?\d{7,15}$/.test(formData.member4Phone.replace(/[\s-()]/g, ''))) {
+        newErrors.member4Phone = 'Please enter a valid phone number.';
       }
     }
 
@@ -265,6 +291,10 @@ export default function RegisterApp() {
         teamSize: parseInt(formData.teamSize),
         member2Name: formData.member2Name,
         member2Phone: formData.member2Phone,
+        member3Name: formData.member3Name,
+        member3Phone: formData.member3Phone,
+        member4Name: formData.member4Name,
+        member4Phone: formData.member4Phone,
         idCardFileUrl,
         idCardFileName,
         paymentUtr: formData.paymentUtr,
@@ -328,6 +358,10 @@ export default function RegisterApp() {
       teamSize: 1,
       member2Name: '',
       member2Phone: '',
+      member3Name: '',
+      member3Phone: '',
+      member4Name: '',
+      member4Phone: '',
       idCardFileUrl: '',
       idCardFileName: '',
       paymentUtr: '',
@@ -342,6 +376,8 @@ export default function RegisterApp() {
     setPaymentReceiptFile(null);
   };
 
+  const tSize = parseInt(formData.teamSize);
+
   return (
     <div className="relative min-h-screen py-12 px-4 md:px-8 font-rajdhani text-white overflow-hidden bg-cyberDark">
       <CyberCanvasBackground />
@@ -350,7 +386,7 @@ export default function RegisterApp() {
 
       <div className="relative max-w-3xl mx-auto z-10">
         
-        {/* Simple & Clean Premium Futuristic Header */}
+        {/* Header Section */}
         <header className="text-center mb-10 select-none">
           <div className="inline-block relative">
             <div className="absolute -top-1 -left-4 w-2 h-8 bg-cyberRed transform -skew-x-12"></div>
@@ -418,10 +454,23 @@ export default function RegisterApp() {
                   <div><span className="text-zinc-500 uppercase">Leader Alt Phone:</span> <span className="text-white">{formData.alternatePhone || "N/A"}</span></div>
                   <div><span className="text-zinc-500 uppercase">Course Selection:</span> <span className="text-white font-semibold text-cyberRed">{formData.degree}</span></div>
                   <div><span className="text-zinc-500 uppercase">Team Size:</span> <span className="text-white">{formData.teamSize} Member(s)</span></div>
-                  {parseInt(formData.teamSize) === 2 && (
+                  
+                  {tSize >= 2 && (
                     <>
                       <div><span className="text-zinc-500 uppercase">Member 2 Name:</span> <span className="text-white">{formData.member2Name}</span></div>
                       <div><span className="text-zinc-500 uppercase">Member 2 Phone:</span> <span className="text-white">{formData.member2Phone}</span></div>
+                    </>
+                  )}
+                  {tSize >= 3 && (
+                    <>
+                      <div><span className="text-zinc-500 uppercase">Member 3 Name:</span> <span className="text-white">{formData.member3Name}</span></div>
+                      <div><span className="text-zinc-500 uppercase">Member 3 Phone:</span> <span className="text-white">{formData.member3Phone}</span></div>
+                    </>
+                  )}
+                  {tSize >= 4 && (
+                    <>
+                      <div><span className="text-zinc-500 uppercase">Member 4 Name:</span> <span className="text-white">{formData.member4Name}</span></div>
+                      <div><span className="text-zinc-500 uppercase">Member 4 Phone:</span> <span className="text-white">{formData.member4Phone}</span></div>
                     </>
                   )}
                   <div className="md:col-span-2 border-t border-cyberRed/15 pt-2 mt-1">
@@ -431,7 +480,7 @@ export default function RegisterApp() {
               </div>
 
               <p className="text-zinc-400 text-xs md:text-sm mb-4 leading-relaxed max-w-md mx-auto">
-                Your group registration has been successfully encrypted and recorded in our roster database! Please join our official Discord / WhatsApp server to proceed.
+                Your group registration has been successfully encrypted and recorded in our database! Join the official community server to complete onboarding.
               </p>
 
               <div className="mb-6 flex justify-center">
@@ -480,7 +529,7 @@ export default function RegisterApp() {
             
             {/* Header Data Output Bar */}
             <div className="mb-6 pb-2 border-b border-cyberRed/20 flex justify-between items-center text-[10px] font-mono text-zinc-500 select-none">
-              <span>TEAM INTAKE FORM v2.1</span>
+              <span>TEAM INTAKE FORM v2.2</span>
               <span className="text-cyberRed font-bold flex items-center gap-1">
                 <span className="w-1.5 h-1.5 bg-cyberRed rounded-full animate-ping"></span>
                 SECURE CONSOLE ACTIVE
@@ -539,7 +588,7 @@ export default function RegisterApp() {
                   )}
                 </div>
 
-                {/* BCA or MCA Select dropdown */}
+                {/* BCA or MCA Select Option */}
                 <div className="md:col-span-2">
                   <label className="block text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-1.5">
                     Course / Option Selection <span className="text-cyberRed font-bold">*</span>
@@ -592,7 +641,7 @@ export default function RegisterApp() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 
-                {/* Team Size Selector (min 1, max 2) */}
+                {/* Team Size Selector (min 1, max 4 option) */}
                 <div className="md:col-span-2">
                   <label className="block text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-1.5">
                     Team Size Selection <span className="text-cyberRed font-bold">*</span>
@@ -608,6 +657,8 @@ export default function RegisterApp() {
                   >
                     <option value={1}>1 Member (Solo Combatant)</option>
                     <option value={2}>2 Members (Duo Operations)</option>
+                    <option value={3}>3 Members (Trio Operations)</option>
+                    <option value={4}>4 Members (Squad Operations)</option>
                   </select>
                 </div>
 
@@ -688,12 +739,11 @@ export default function RegisterApp() {
                 </div>
 
                 {/* CONDITIONAL SECTION: MEMBER 2 DETAILS */}
-                {parseInt(formData.teamSize) === 2 && (
+                {tSize >= 2 && (
                   <div className="md:col-span-2 border border-cyberRed/20 bg-cyberRed/[0.02] p-4 rounded mt-2 space-y-4 animate-[fadeIn_0.4s_ease-out]">
                     <div className="font-orbitron text-xs text-cyberRed font-bold uppercase tracking-wider">// Member 02 Credentials</div>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {/* Member 2 Name */}
                       <div>
                         <label className="block text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-1.5">
                           Other Member Name <span className="text-cyberRed font-bold">*</span>
@@ -715,7 +765,6 @@ export default function RegisterApp() {
                         )}
                       </div>
 
-                      {/* Member 2 Phone */}
                       <div>
                         <label className="block text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-1.5">
                           Other Member Phone <span className="text-cyberRed font-bold">*</span>
@@ -738,6 +787,118 @@ export default function RegisterApp() {
                         {errors.member2Phone && (
                           <span className="block mt-1 font-mono text-[9px] text-cyberRed uppercase tracking-wide">
                             ⚠️ {errors.member2Phone}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* CONDITIONAL SECTION: MEMBER 3 DETAILS */}
+                {tSize >= 3 && (
+                  <div className="md:col-span-2 border border-cyberRed/20 bg-cyberRed/[0.02] p-4 rounded mt-2 space-y-4 animate-[fadeIn_0.4s_ease-out]">
+                    <div className="font-orbitron text-xs text-cyberRed font-bold uppercase tracking-wider">// Member 03 Credentials</div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-1.5">
+                          Third Member Name <span className="text-cyberRed font-bold">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          name="member3Name"
+                          value={formData.member3Name}
+                          onChange={handleInputChange}
+                          placeholder="Enter third member name"
+                          className={`w-full bg-zinc-950/80 text-white font-mono text-xs px-3.5 py-2.5 border outline-none transition-all duration-300 rounded ${
+                            errors.member3Name ? 'border-cyberRed bg-cyberRed/5' : 'border-zinc-800 focus:border-cyberRed'
+                          }`}
+                        />
+                        {errors.member3Name && (
+                          <span className="block mt-1 font-mono text-[9px] text-cyberRed uppercase tracking-wide">
+                            ⚠️ {errors.member3Name}
+                          </span>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="block text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-1.5">
+                          Third Member Phone <span className="text-cyberRed font-bold">*</span>
+                        </label>
+                        <div className="flex gap-2">
+                          <span className="flex items-center bg-zinc-950/85 px-3 border border-zinc-800 text-xs text-zinc-500 font-mono rounded select-none">
+                            +91
+                          </span>
+                          <input
+                            type="text"
+                            name="member3Phone"
+                            value={formData.member3Phone}
+                            onChange={handleInputChange}
+                            placeholder="Third member WhatsApp"
+                            className={`w-full bg-zinc-950/80 text-white font-mono text-xs px-3.5 py-2.5 border outline-none transition-all duration-300 rounded ${
+                              errors.member3Phone ? 'border-cyberRed bg-cyberRed/5' : 'border-zinc-800 focus:border-cyberRed'
+                            }`}
+                          />
+                        </div>
+                        {errors.member3Phone && (
+                          <span className="block mt-1 font-mono text-[9px] text-cyberRed uppercase tracking-wide">
+                            ⚠️ {errors.member3Phone}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* CONDITIONAL SECTION: MEMBER 4 DETAILS */}
+                {tSize >= 4 && (
+                  <div className="md:col-span-2 border border-cyberRed/20 bg-cyberRed/[0.02] p-4 rounded mt-2 space-y-4 animate-[fadeIn_0.4s_ease-out]">
+                    <div className="font-orbitron text-xs text-cyberRed font-bold uppercase tracking-wider">// Member 04 Credentials</div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-1.5">
+                          Fourth Member Name <span className="text-cyberRed font-bold">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          name="member4Name"
+                          value={formData.member4Name}
+                          onChange={handleInputChange}
+                          placeholder="Enter fourth member name"
+                          className={`w-full bg-zinc-950/80 text-white font-mono text-xs px-3.5 py-2.5 border outline-none transition-all duration-300 rounded ${
+                            errors.member4Name ? 'border-cyberRed bg-cyberRed/5' : 'border-zinc-800 focus:border-cyberRed'
+                          }`}
+                        />
+                        {errors.member4Name && (
+                          <span className="block mt-1 font-mono text-[9px] text-cyberRed uppercase tracking-wide">
+                            ⚠️ {errors.member4Name}
+                          </span>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="block text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-1.5">
+                          Fourth Member Phone <span className="text-cyberRed font-bold">*</span>
+                        </label>
+                        <div className="flex gap-2">
+                          <span className="flex items-center bg-zinc-950/85 px-3 border border-zinc-800 text-xs text-zinc-500 font-mono rounded select-none">
+                            +91
+                          </span>
+                          <input
+                            type="text"
+                            name="member4Phone"
+                            value={formData.member4Phone}
+                            onChange={handleInputChange}
+                            placeholder="Fourth member WhatsApp"
+                            className={`w-full bg-zinc-950/80 text-white font-mono text-xs px-3.5 py-2.5 border outline-none transition-all duration-300 rounded ${
+                              errors.member4Phone ? 'border-cyberRed bg-cyberRed/5' : 'border-zinc-800 focus:border-cyberRed'
+                            }`}
+                          />
+                        </div>
+                        {errors.member4Phone && (
+                          <span className="block mt-1 font-mono text-[9px] text-cyberRed uppercase tracking-wide">
+                            ⚠️ {errors.member4Phone}
                           </span>
                         )}
                       </div>
@@ -850,7 +1011,7 @@ export default function RegisterApp() {
               <div>* By registering, your team agrees to participate with honor and maintain the ethical hacker conduct directives.</div>
             </div>
 
-            {/* Red holographic submit button */}
+            {/* Red Submit Button */}
             <div className="pt-4 relative select-none">
               <button
                 type="submit"
@@ -871,7 +1032,7 @@ export default function RegisterApp() {
 
       </div>
 
-      {/* Submission Compilation Progress Indicator Overlay */}
+      {/* Submission Compilation Progress Overlay */}
       {isSubmitting && (
         <div className="fixed inset-0 bg-cyberDark/95 backdrop-blur-md flex items-center justify-center z-50 p-6">
           <div className="glassmorphism max-w-sm w-full p-6 rounded-lg border border-cyberRed relative shadow-cyberGlowHeavy">

@@ -7,7 +7,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const pageName = window.location.pathname.split('/').pop();
         const isHomePage = pageName === '' || pageName === 'index.html';
         if (!isHomePage) return;
-        if (localStorage.getItem('hackverse_intro_complete') === 'true') return;
+        // Commented out to ensure welcome intro plays on every refresh
+        // if (localStorage.getItem('hackverse_intro_complete') === 'true') return;
         if (document.querySelector('.hackverse-intro')) return;
 
         // Dynamic style injection for custom cursor blinking and button hover states
@@ -324,7 +325,7 @@ document.addEventListener('DOMContentLoaded', () => {
         intro.addEventListener('animationend', event => {
             if (event.animationName === 'samurai-arrive' && introStarted && !closed) {
                 window.clearTimeout(closeTimer);
-                closeTimer = window.setTimeout(finishIntro, reduceMotion ? 900 : 2200);
+                closeTimer = window.setTimeout(finishIntro, 3500); // Keep samurai visible for at least 3.5 seconds
             }
         });
     };

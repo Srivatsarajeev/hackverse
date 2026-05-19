@@ -162,6 +162,7 @@ def export_csv(admin: dict = Depends(get_current_admin)):
         writer.writerow([
             "Participant ID", "Team Name", "College Name", "Leader Name", "Leader Phone (WhatsApp)", "Alternate Phone", 
             "Course / Degree", "Team Size", "Member 2 Name", "Member 2 Phone", 
+            "Member 3 Name", "Member 3 Phone", "Member 4 Name", "Member 4 Phone",
             "Payment UTR", "ID Card File URL", "Payment Receipt URL", "Registration Time"
         ])
         
@@ -177,6 +178,10 @@ def export_csv(admin: dict = Depends(get_current_admin)):
                 p.get("teamSize", 1),
                 p.get("member2Name", ""),
                 p.get("member2Phone", ""),
+                p.get("member3Name", ""),
+                p.get("member3Phone", ""),
+                p.get("member4Name", ""),
+                p.get("member4Phone", ""),
                 p.get("paymentUtr", ""),
                 p.get("idCardFileUrl", ""),
                 p.get("paymentReceiptUrl", ""),
@@ -213,6 +218,7 @@ def export_excel(admin: dict = Depends(get_current_admin)):
         ws.append([
             "Participant ID", "Team Name", "College Name", "Leader Name", "Leader Phone (WhatsApp)", "Alternate Phone", 
             "Course / Degree", "Team Size", "Member 2 Name", "Member 2 Phone", 
+            "Member 3 Name", "Member 3 Phone", "Member 4 Name", "Member 4 Phone",
             "Payment UTR", "ID Card File URL", "Payment Receipt URL", "Registration Time"
         ])
         
@@ -229,6 +235,10 @@ def export_excel(admin: dict = Depends(get_current_admin)):
                 p.get("teamSize", 1),
                 p.get("member2Name", ""),
                 p.get("member2Phone", ""),
+                p.get("member3Name", ""),
+                p.get("member3Phone", ""),
+                p.get("member4Name", ""),
+                p.get("member4Phone", ""),
                 p.get("paymentUtr", ""),
                 p.get("idCardFileUrl", ""),
                 p.get("paymentReceiptUrl", ""),
