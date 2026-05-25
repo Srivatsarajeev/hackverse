@@ -65,7 +65,7 @@ export default function RegisterApp() {
     fullName: '',
     whatsapp: '',
     alternatePhone: '',
-    degree: '', // BCA or MCA option
+    degree: '', // Course selection option
     teamSize: 2, // min 2 max 4 option
     member2Name: '',
     member2Phone: '',
@@ -163,7 +163,7 @@ export default function RegisterApp() {
     }
 
     if (!formData.degree) {
-      newErrors.degree = 'Please select BCA or MCA option.';
+      newErrors.degree = 'Please select a course/degree option.';
     }
 
     const tSize = parseInt(formData.teamSize);
@@ -272,6 +272,19 @@ export default function RegisterApp() {
     setSubmitStep(0);
     setSubmitError('');
 
+    // Pre-flight file size checks to prevent Vercel 413 (Payload Too Large) error
+    const MAX_FILE_SIZE = 4 * 1024 * 1024; // 4MB limit for Vercel Serverless
+    if (idCardFile && idCardFile.size > MAX_FILE_SIZE) {
+      setSubmitError("College ID file is too large! Vercel server limits file uploads to 4MB. Please compress your PDF/image or upload a smaller file.");
+      setIsSubmitting(false);
+      return;
+    }
+    if (paymentReceiptFile && paymentReceiptFile.size > MAX_FILE_SIZE) {
+      setSubmitError("Payment Receipt screenshot is too large! Vercel server limits file uploads to 4MB. Please compress your image or upload a smaller file.");
+      setIsSubmitting(false);
+      return;
+    }
+
     try {
       const apiUrl = import.meta.env.PROD ? "" : "http://localhost:8000";
       
@@ -364,7 +377,41 @@ export default function RegisterApp() {
     } catch (err) {
       console.error(err);
       setIsSubmitting(false);
-      const errMsg = err.response?.data?.detail || "Something went wrong. UTR may have already been registered, or check your internet connection.";
+      
+      let errMsg = "";
+      const serverDetail = err.response?.data?.detail;
+      
+      if (typeof serverDetail === "string") {
+        errMsg = serverDetail;
+        if (serverDetail.includes("Payment UTR") || serverDetail.includes("already been registered")) {
+          errMsg = "This Payment UTR (Transaction ID) has already been successfully registered in our system! If your previous registration didn't show confirmation, or if you need to fix an uploaded document, please ask the organizers to view/fix it in the Admin Console. Do not submit duplicate registrations.";
+        }
+      } else if (Array.isArray(serverDetail)) {
+        // Parse Pydantic validation array errors (e.g. [{msg: "...", loc: [...]}, ...])
+        errMsg = serverDetail.map(e => e.msg || JSON.stringify(e)).join(", ");
+      } else if (err.response) {
+        // The server responded with a non-2xx status code
+        const status = err.response.status;
+        const data = err.response.data;
+        if (status === 413) {
+          errMsg = "One of your files is too large! Vercel limits file uploads to 4MB. Please compress your PDF or screenshot and try again.";
+        } else if (typeof data === "string" && data.includes("Payload Too Large")) {
+          errMsg = "One of your files is too large! Vercel limits file uploads to 4MB. Please compress your PDF or screenshot and try again.";
+        } else if (typeof data === "string") {
+          errMsg = `Server Error (${status}): ${data.substring(0, 150)}`;
+        } else if (data && typeof data === "object") {
+          errMsg = data.message || data.error || JSON.stringify(data);
+        } else {
+          errMsg = `Server error (${status}): ${err.response.statusText || "Unknown error"}`;
+        }
+      } else if (err.request) {
+        // Request made but no response received
+        errMsg = "Could not connect to the registration server. Please check your internet connection or try again shortly.";
+      } else {
+        // Setup error
+        errMsg = err.message || "An unexpected error occurred during form submission.";
+      }
+      
       setSubmitError(errMsg);
     }
   };
@@ -614,12 +661,12 @@ export default function RegisterApp() {
                   )}
                 </div>
 
-                {/* BCA or MCA Select Option */}
+                {/* Course Selection Options */}
                 <div className="md:col-span-2">
                   <label className="block text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-1.5">
                     Course / Option Selection <span className="text-cyberRed font-bold">*</span>
                   </label>
-                  <div className="grid grid-cols-2 gap-3">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
                     <button
                       type="button"
                       onClick={() => {
@@ -632,7 +679,7 @@ export default function RegisterApp() {
                           : 'bg-zinc-950/70 text-zinc-400 border-zinc-800 hover:text-white hover:border-zinc-700'
                       }`}
                     >
-                      BCA Option
+                      BCA
                     </button>
                     <button
                       type="button"
@@ -646,7 +693,49 @@ export default function RegisterApp() {
                           : 'bg-zinc-950/70 text-zinc-400 border-zinc-800 hover:text-white hover:border-zinc-700'
                       }`}
                     >
-                      MCA Option
+                      MCA
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setFormData(p => ({ ...p, degree: 'B.Tech' }));
+                        setErrors(p => ({ ...p, degree: '' }));
+                      }}
+                      className={`py-2.5 font-orbitron font-bold text-xs tracking-widest uppercase border transition-all duration-300 ${
+                        formData.degree === 'B.Tech'
+                          ? 'bg-cyberRed text-white border-cyberRed shadow-cyberGlow'
+                          : 'bg-zinc-950/70 text-zinc-400 border-zinc-800 hover:text-white hover:border-zinc-700'
+                      }`}
+                    >
+                      B.Tech
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setFormData(p => ({ ...p, degree: 'M.Tech' }));
+                        setErrors(p => ({ ...p, degree: '' }));
+                      }}
+                      className={`py-2.5 font-orbitron font-bold text-xs tracking-widest uppercase border transition-all duration-300 ${
+                        formData.degree === 'M.Tech'
+                          ? 'bg-cyberRed text-white border-cyberRed shadow-cyberGlow'
+                          : 'bg-zinc-950/70 text-zinc-400 border-zinc-800 hover:text-white hover:border-zinc-700'
+                      }`}
+                    >
+                      M.Tech
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setFormData(p => ({ ...p, degree: 'B.Sc' }));
+                        setErrors(p => ({ ...p, degree: '' }));
+                      }}
+                      className={`py-2.5 font-orbitron font-bold text-xs tracking-widest uppercase border transition-all duration-300 ${
+                        formData.degree === 'B.Sc'
+                          ? 'bg-cyberRed text-white border-cyberRed shadow-cyberGlow'
+                          : 'bg-zinc-950/70 text-zinc-400 border-zinc-800 hover:text-white hover:border-zinc-700'
+                      }`}
+                    >
+                      B.Sc
                     </button>
                   </div>
                   {errors.degree && (
