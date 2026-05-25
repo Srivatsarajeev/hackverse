@@ -17,27 +17,6 @@ os.makedirs(UPLOAD_DIR, exist_ok=True)
 @router.post("/register", status_code=201)
 def register_participant(data: ParticipantRegisterSchema):
     """Register a new participant for Hackverse 2.0 with duplicate prevention."""
-    # Check for duplicate email (only if email is provided)
-    if data.email and registrations_col.find_one({"email": data.email}):
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="This email address is already registered."
-        )
-        
-    # Check for duplicate whatsapp (leader phone)
-    if registrations_col.find_one({"whatsapp": data.whatsapp}):
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="This WhatsApp phone number is already registered."
-        )
-
-    # Check for duplicate payment UTR (transaction fraud prevention)
-    if registrations_col.find_one({"paymentUtr": data.paymentUtr}):
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="This Payment UTR code has already been registered."
-        )
-
     # Automatically generate Participant ID in matching format (e.g. H4S-2026-4012)
     random_code = random.randint(1000, 9999)
     participant_id = f"HV-2026-{random_code}"
@@ -104,13 +83,17 @@ async def upload_file(file: UploadFile = File(...)):
         with open(destination_path, "wb") as buffer:
             buffer.write(contents)
             
+        import base64
+        file_base64 = base64.b64encode(contents).decode("utf-8")
+
         # Log to upload database
         upload_record = {
             "original_name": filename,
             "saved_name": safe_filename,
             "file_size": size,
             "mime_type": file.content_type,
-            "uploaded_at": datetime.now(timezone.utc).isoformat()
+            "uploaded_at": datetime.now(timezone.utc).isoformat(),
+            "data_base64": file_base64
         }
         uploads_col.insert_one(upload_record)
         

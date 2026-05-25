@@ -81,6 +81,28 @@ class _FileCollection:
                 documents.append(self._project(document, projection))
         return _FileCursor(documents)
 
+    def update_one(self, query, update):
+        with self.database.lock:
+            data = self.database._read_unlocked()
+            collection = data.setdefault(self.name, [])
+            for index, document in enumerate(collection):
+                if self._matches(document, query):
+                    set_data = update.get("$set", {})
+                    for k, v in set_data.items():
+                        document[k] = v
+                    collection[index] = document
+                    self.database._write_unlocked(data)
+                    class UpdateResult:
+                        def __init__(self, matched_count, modified_count):
+                            self.matched_count = matched_count
+                            self.modified_count = modified_count
+                    return UpdateResult(1, 1)
+            class UpdateResult:
+                def __init__(self, matched_count, modified_count):
+                    self.matched_count = matched_count
+                    self.modified_count = modified_count
+            return UpdateResult(0, 0)
+
     def delete_one(self, query):
         with self.database.lock:
             data = self.database._read_unlocked()
@@ -179,14 +201,17 @@ def init_db():
         # Dynamic migration: drop unique email index to support team-based entries with optional email
         try:
             registrations_col.drop_index("email_1")
-            print("[DATABASE] Dropped unique index 'email_1' to resolve null duplicate constraint.")
+        except Exception:
+            pass
+        try:
+            registrations_col.drop_index("whatsapp_1")
         except Exception:
             pass
 
         # Create indexes for fast search and unique constraints
         registrations_col.create_index("participantId", unique=True)
         registrations_col.create_index("email")  # Recreated as non-unique index for fast searching
-        registrations_col.create_index("whatsapp", unique=True)
+        registrations_col.create_index("whatsapp")  # Recreated as non-unique index
         admins_col.create_index("username", unique=True)
         
         # Initialize default admin

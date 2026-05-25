@@ -9,6 +9,14 @@
     {
       "source": "/uploads/(.*)",
       "destination": "/api"
+    },
+    {
+      "source": "/admin",
+      "destination": "/neo-tokyo-shadow-control"
+    },
+    {
+      "source": "/admin/",
+      "destination": "/neo-tokyo-shadow-control"
     }
   ]
 }

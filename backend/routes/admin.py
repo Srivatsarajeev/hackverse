@@ -273,4 +273,31 @@ def export_excel(admin: dict = Depends(get_current_admin)):
             detail=f"Excel compilation error: {e}"
         )
 
+@router.patch("/registrations/{participant_id}")
+def update_registration(participant_id: str, data: dict, admin: dict = Depends(get_current_admin)):
+    """Update specific registration parameters (such as file attachment references)."""
+    try:
+        data.pop("participantId", None)  # Prevent mutating structural identification key
+        
+        result = registrations_col.update_one(
+            {"participantId": participant_id},
+            {"$set": data}
+        )
+        if result.matched_count == 0:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Participant registration not found."
+            )
+        return {
+            "success": True,
+            "message": f"Participant {participant_id} successfully updated."
+        }
+    except Exception as e:
+        if isinstance(e, HTTPException):
+            raise e
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Mainframe database update error: {e}"
+        )
+
 

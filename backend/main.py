@@ -35,19 +35,63 @@ def startup_event():
     print("[SYSTEM] Initializing database indexes and admin credentials...")
     init_db()
 
-# Mount uploads directory as static route
+# Persistent persistent route for uploads to support serverless environment
 UPLOAD_DIR = os.getenv("UPLOAD_DIR", os.path.join(tempfile.gettempdir(), "hackverse_uploads"))
 os.makedirs(UPLOAD_DIR, exist_ok=True)
-app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
-app.mount("/api/uploads", StaticFiles(directory=UPLOAD_DIR), name="api_uploads")
+
+from backend.database import uploads_col
+import base64
+import io
+from fastapi.responses import StreamingResponse, FileResponse
+from fastapi import HTTPException
+
+@app.get("/uploads/{filename}")
+@app.get("/api/uploads/{filename}")
+def get_upload_file(filename: str):
+    """Retrieve uploaded documents from MongoDB or local ephemeral fallback."""
+    # 1. Search in MongoDB (persistent database storage)
+    record = uploads_col.find_one({"saved_name": filename})
+    if record and "data_base64" in record:
+        try:
+            file_data = base64.b64decode(record["data_base64"].encode("utf-8"))
+            mime_type = record.get("mime_type", "application/octet-stream")
+            return StreamingResponse(io.BytesIO(file_data), media_type=mime_type)
+        except Exception as e:
+            print(f"[SYSTEM WARNING] Base64 decode failed for {filename}: {e}")
+            
+    # 2. Ephemeral disk fallback (useful for local development or fast local reads)
+    local_path = os.path.join(UPLOAD_DIR, filename)
+    if os.path.exists(local_path):
+        return FileResponse(local_path)
+        
+    raise HTTPException(status_code=404, detail="File not found or has expired on serverless instance.")
 
 # Include Routers
 app.include_router(register_router)
 app.include_router(admin_router)
 
 # Custom Global Exception Handlers
+from fastapi.exceptions import RequestValidationError
+from starlette.exceptions import HTTPException as StarletteHTTPException
+
 @app.exception_handler(Exception)
 def global_exception_handler(request: Request, exc: Exception):
+    if isinstance(exc, StarletteHTTPException):
+        return JSONResponse(
+            status_code=exc.status_code,
+            content={
+                "success": False,
+                "detail": exc.detail
+            }
+        )
+    if isinstance(exc, RequestValidationError):
+        return JSONResponse(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            content={
+                "success": False,
+                "detail": exc.errors()
+            }
+        )
     print(f"[SYSTEM CRITICAL ERROR] {request.method} {request.url.path} - Exception: {exc}")
     return JSONResponse(
         status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,

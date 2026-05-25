@@ -245,6 +245,42 @@ export default function AdminApp() {
     }
   };
 
+  // 7. Admin Re-upload and Persistent File Fixer
+  const handleAdminFileUpload = async (e, fieldName) => {
+    const file = e.target.files[0];
+    if (!file || !activeParticipant) return;
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    triggerAlert("Uploading and persistently storing document...");
+    try {
+      const uploadRes = await axios.post(`${API_BASE}/api/upload`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+      if (uploadRes.data.success && uploadRes.data.url) {
+        const fileUrl = uploadRes.data.url;
+        
+        // Update database record
+        const updateRes = await axios.patch(`${API_BASE}/api/admin/registrations/${activeParticipant.participantId}`, {
+          [fieldName]: fileUrl
+        }, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+
+        if (updateRes.data.success) {
+          triggerAlert("Document successfully updated and stored in database.");
+          const updatedParticipant = { ...activeParticipant, [fieldName]: fileUrl };
+          setActiveParticipant(updatedParticipant);
+          fetchDashboardData();
+        }
+      }
+    } catch (err) {
+      console.error(err);
+      triggerAlert(err.response?.data?.detail || "Upload sequence failed. Mainframe breach.");
+    }
+  };
+
   return (
     <div className="relative min-h-screen py-8 px-4 md:px-8 font-rajdhani text-white bg-cyberDark overflow-hidden select-none">
       {/* Background elements */}
@@ -709,6 +745,17 @@ export default function AdminApp() {
                           ) : (
                             <span className="text-cyberRed block font-bold">No file uploaded</span>
                           )}
+                          <div className="mt-3">
+                            <label className="inline-flex items-center justify-center w-full py-1.5 border border-dashed border-zinc-800 hover:border-cyberRed bg-zinc-950/80 hover:bg-[#ff003c]/5 text-[9px] uppercase tracking-wider font-bold text-zinc-400 hover:text-white cursor-pointer rounded transition-all">
+                              🔄 Re-upload / Fix ID Card
+                              <input 
+                                type="file" 
+                                className="hidden" 
+                                accept=".pdf,.png,.jpg,.jpeg,.webp" 
+                                onChange={(e) => handleAdminFileUpload(e, 'idCardFileUrl')} 
+                              />
+                            </label>
+                          </div>
                         </div>
 
                         {/* Payment Verification */}
@@ -721,13 +768,24 @@ export default function AdminApp() {
                               href={`${API_BASE || "/api"}${activeParticipant.paymentReceiptUrl}`}
                               target="_blank"
                               rel="noreferrer"
-                              className="inline-flex items-center justify-center w-full py-2 bg-zinc-900 border border-zinc-700 hover:border-cyberRed hover:bg-[#ff003c]/5 text-white font-bold uppercase text-[10px] tracking-wider transition rounded"
+                              className="inline-flex items-center justify-center w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold uppercase text-[10px] tracking-wider transition rounded shadow-lg"
                             >
                               🧾 View Payment Receipt
                             </a>
                           ) : (
                             <span className="text-cyberRed block font-bold">No receipt proof</span>
                           )}
+                          <div className="mt-3">
+                            <label className="inline-flex items-center justify-center w-full py-1.5 border border-dashed border-zinc-800 hover:border-cyberRed bg-zinc-950/80 hover:bg-[#ff003c]/5 text-[9px] uppercase tracking-wider font-bold text-zinc-400 hover:text-white cursor-pointer rounded transition-all">
+                              🔄 Re-upload / Fix Receipt
+                              <input 
+                                type="file" 
+                                className="hidden" 
+                                accept=".pdf,.png,.jpg,.jpeg,.webp" 
+                                onChange={(e) => handleAdminFileUpload(e, 'paymentReceiptUrl')} 
+                              />
+                            </label>
+                          </div>
                         </div>
                       </div>
                     </div>
